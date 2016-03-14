@@ -41,14 +41,11 @@ function SendAzureData( )
                 "iothub-to": "/devices/myFirstDevice/messages/events",
                 "Authorization": "SharedAccessSignature sr=myIotHubYavuz.azure-devices.net/devices/myFirstDevice&sig=I6szWS%2fW2I1gICF%2bVTJrK73rKCXj4uSY%2fpaTFkd7iPI%3d&se=1457980264&skn=",
             },
-            error      : function(response)     // success call back
+            success      : function(response)     // success call back
             {
-                if( response != null )
-                {
-                    PrintLog(1, "Azure: Success: " + JSON.stringify(response)); 
-                }
+                PrintLog(1, "Azure: Success: " + JSON.stringify(response)); 
             },
-            success     : function(response)                      // error call back
+            error     : function(response)                      // error call back
             {
                 PringLog(1, "Azure: Response error: " + JSON.stringify(response) );
             },
