@@ -10,6 +10,59 @@
 var isNetworkConnected = null;
 
 
+// SendAzureData............................................................................................
+function SendAzureData( )
+{
+
+    var nType = "POST";
+    var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
+    var nContentType = "application/octet-stream";
+    var nData = "{'deviceId': 'myFirstDevice','windSpeed': 0}";
+    var nRespFormat = "";
+
+
+    PrintLog(1, "Azure: " + nType + " to " + nUrl );
+    
+    // Verify that we have network connectivity....
+    isNetworkConnected = NorthBoundConnectionActive();
+
+    if( isNetworkConnected )
+    {
+        // Send data to the cloud using a jQuery ajax call...        
+        $.ajax({
+            type       : nType,
+            url        : nUrl,
+            contentType: nContentType,
+            data       : nData,
+            crossDomain: true,                  // Needed to set to true to talk to Nextivity server.
+            dataType   : nRespFormat,           // Response format
+            
+            headers: {
+                "iothub-to": "/devices/myFirstDevice/messages/events",
+                "Authorization": "SharedAccessSignature sr=myIotHubYavuz.azure-devices.net/devices/myFirstDevice&sig=6cOPLtWfbranaOTouhmITDIpvSmLCDvvS6vyP2BOjLU%3d&se=1457978397&skn=",
+            },
+            error      : function(response)     // success call back
+            {
+                if( response != null )
+                {
+                    PrintLog(1, "Azure: Success: " + JSON.stringify(response)); 
+                }
+            },
+            success     : function(response)                      // error call back
+            {
+                PringLog(1, "Azure: Response error: " + JSON.stringify(response) );
+            },
+            
+            timeout    : 5000                   // sets timeout to 5 seconds
+        });
+    }
+    else
+    {
+        PrintLog( 99, "SendAzureData: No network connection (WiFi or Cell)." );
+    }
+}
+
+
 // SendNorthBoundData............................................................................................
 function SendNorthBoundData( nType, nUrl, nContentType, nData, nRespFormat, successCb, errorCb )
 {
