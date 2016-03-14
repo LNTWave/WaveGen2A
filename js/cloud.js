@@ -15,7 +15,8 @@ function SendAzureData( )
 {
 
     var nType = "POST";
-    var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
+//    var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
+    var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events"
     var nContentType = "application/octet-stream";
     var nData = "{'deviceId': 'myFirstDevice','App Speed': 0}";
     var nRespFormat = "";
@@ -43,7 +44,7 @@ function SendAzureData( )
             },
             success      : function(response)     // success call back
             {
-                PrintLog(1, "Azure: Success: " + JSON.stringify(response)); 
+                PrintLog(1, "Azure: Success" ); 
             },
             error     : function(response)                      // error call back
             {
