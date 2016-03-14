@@ -17,7 +17,7 @@ function SendAzureData( )
     var nType = "POST";
     var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
     var nContentType = "application/octet-stream";
-    var nData = "{'deviceId': 'myFirstDevice','windSpeed': 0}";
+    var nData = "{'deviceId': 'myFirstDevice','App Speed': 0}";
     var nRespFormat = "";
 
 
@@ -39,7 +39,7 @@ function SendAzureData( )
             
             headers: {
                 "iothub-to": "/devices/myFirstDevice/messages/events",
-                "Authorization": "SharedAccessSignature sr=myIotHubYavuz.azure-devices.net/devices/myFirstDevice&sig=6cOPLtWfbranaOTouhmITDIpvSmLCDvvS6vyP2BOjLU%3d&se=1457978397&skn=",
+                "Authorization": "SharedAccessSignature sr=myIotHubYavuz.azure-devices.net/devices/myFirstDevice&sig=I6szWS%2fW2I1gICF%2bVTJrK73rKCXj4uSY%2fpaTFkd7iPI%3d&se=1457980264&skn=",
             },
             error      : function(response)     // success call back
             {
