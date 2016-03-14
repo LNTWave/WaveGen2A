@@ -1,0 +1,493 @@
+Wave Gen2 Version Information
+
+01.00.07 (12/1/15)
+  - Pulled from LNT's public GitHub and placed in Nextivity's private GitHub
+  
+01.00.08
+  - Removed several unnecessary files such as app.js, config.js and all images for previous UI.
+  - Bluetooth.js: 
+    - Max devices of 5 check was using var guiDeviceList[], changed to using numDevFound. 
+    - Reduced log file load by setting msg BT Tx: buffersLoaded from level 1 to level 2.
+    - Updated jQuery from 1.8.2 to 2.1.0 in index.html to match L&T's version.
+      - Had to update response text from Axeda in ajax call.   jQuery 2.1.0 has better processing for determining response text
+        so if response text was 'json' and actual response text was not json then an error was printed even though the msg was processed.
+    - Updated call to Axeda for sending all versions to first check if version is null. 
+  - Bug 1518. bluetooth.js:  If not able to get SN from list of MAC addresses then show error
+  - Bug 1521: tech.js.  Set guiRadios[] to default if no band info so all radios not "A".
+  - Added DumpDataTables() to function showHelpMenu() to allow the data tables to be dumped when user presses help.    
+  - Bug 1522: Retry 3 times if Nextivity server error for GetNxtyPartNumber(), GetNxtyOperatorList() and GetNxtyOperatorCode()...
+  - Changed "Cnx to Update" to "Connect to Update" per GW.
+
+
+
+01.00.09
+  - Bug 1542: tech.js:  ProcessTechData(): Converted the frequency values to proper resolution based on units.
+  - Bug 1538: Corrected ordering of guiSwCelFiVers[].
+
+01.00.10
+  - Bug 1520: bluetooth.js:  Added call to ClearNxtyMsgPending() when Bluetooth connects so that FindMyCelfi() does not get stuck waiting.
+
+   
+01.00.11  - Dec-08-2015 (LNT)
+    gui.js - Bug fixes
+    common.css - bug fixes
+    config.xml - added email composer plugin
+  
+
+01.00.12	- 09-Dec-2015 (LNT)
+		common.css	-	Added style info of progress popup
+		gui.js		-	software update feature
+		download.js	-	software update feature
+
+01.00.13 12/9/15
+  - tech.js:  Corrected handling of freq data in CU Radio portion: CU 5G DL and CU 5G UL
+  - main.js:  
+    - Increased MAIN_LOOP_COUNTER_MAX from 40 to 60 to increase timeout.
+    - Do not start Tech Mode if switching to REG mode.  Was causing REG to fail.
+    - Reformatted print data in function RequestModeChange().
+  - gui.js:
+    - Removed commented out code from previous UI.
+   
+
+01.00.14	- 10-Dec-2015 (LNT)
+		common.css	-	Style changes
+		gui.js		-	Bug fixes
+		index.html	-	meta tag character set
+		settings.js	-	commented antenna flag update method
+		bigSlide.min.js	-	bug fix
+		
+01.00.15
+		-11-Dec-2015 (LNT)
+		common.css	-	bug fixes
+		gui.js		-	bug fixes
+		bigSlide.min.js	-	menu should be closed on click on outside of menu. so added that property to the elements
+		
+01.05.00 12/11/15
+  - Updated version info.
+  
+  
+01.05.01 12/11/15
+  - Bug 1553: main.js: Change SW Ver names if 1-box.  (LNT needs to not display CU SW names for 1-Box).
+  - Bug 1554: gui.js: 
+    - Changed DL and UL Tx Power keys to use Tx Power and not UNII power.
+    - Changed Donor RSRQ units from dBm to dB.
+    - Changed Uplink Tx Power units from blank to dBm.
+  - tech.js:  
+    - Added "Up" or "Down" to set "NU UNII State" to support WuUniiState.
+    - Added "True" or "False" for "Remote Shutdown" 
+  - gui.js:
+    - Corrected spelling of WuUnniState to WuUniiState.
+    - Removed units for WuUniiState.
+    - Changed Donor RSRQ to use data item "Max DL ECIO".
+   
+01.05.02 12/12/2015
+	- bluetoothle.js: removed search animation and cleartimeout, added a flag to support UI
+	- gui.js: updated for search animation, menu highlighter
+	- main.js: updated for search animation
+	
+01.05.03 12/14/15
+  - Bug 1565: bluetoothle.js: Corrected reconnect timer logic when multiple BT devices discovered.
+  - Bug 1581: bluetoothle.js: Force FindMyCelfi() to wait on Rx Cnx msg from BT chip.
+  - Bug 1570: guiData.js: Function SetSoftwareUpdate() added mode change to DOWNLOAD.
+  
+01.05.04 12/15/2015 (LNT)
+	- gui.js : Dynamic panels update
+	- bluetoothle.js : removed commented lines
+	- download.js : added number of installation count
+	- registration.js & tech.js : commented application close call
+	
+01.05.05 12/15/15
+    - tech.js: SINR resolution changed from Q8 to whole number dB from CelFi.
+    - main.js: Dump data tables when RequestModeChange() called.
+    - download.js:  Reset timeout counter when restarting due to PIC message.	
+    - main.js:  Print SW version at startup.
+    - gui.js:  Added more print statements at top menu.
+    - Created StartSettingsLoop() and StopSettingsLoop() to clean up the start and stop.
+    
+01.05.06 12/16/2015 (LNT)
+	- gui.js : Dynamic panels update and bug fixes
+	- common.css : SW update popup css
+	- download.js : Check for mode on editing the status line
+	- main.js : bug fixes
+	- app images in res folders (only for ios)
+	
+01.05.07 12/16/15
+    - Bug 1591:  Set guiBoost valid only when relaying, else set guiBoost to 0.
+    
+01.05.08 12/16/15
+    - Bug 1556: Drop number of phone buffers to 4 if BT write error.  (One Android phone had this problem.)
+      - Remove calls to increase number of phone buffers for download. 
+    - Added StartGatheringTechData() when in Advanced screen.  
+    - Added StartGatheringTechData() when going back to dashboard.
+      - dashboard:  Gather tech data
+      - settings:   Do not gather tech data.
+      - advanced:   Gather tech data
+    - Enabled: Force a SW update if build ID < SW5_1_45
+    
+01.05.09 12/17/15
+    - Set guiBoost to 0 if -1.    
+
+01.05.10 12/18/15 (LNT)
+	- gui.js - Error codes for DUO and PRO products
+	- changed app icons for ios and android
+
+01.05.11 12/18/15 (Nextivity)
+    - Bug 1597:  download.js:  Set guiSoftwareStatus back to SW_STATUS_PLEASE_UPDATE in DownloadError().
+
+01.05.12 12/21/15 (LNT)
+	- gui.js - Error code, trouble shooting, installation guides update
+	- common.css - Bug fixes
+	- settings.js - removed "no external antenna" popup
+	
+01.05.13 12/22/15 (LNT)
+	- gui.js - Bug fixes
+	- download.js - SW installation count mismatch issue fix
+	
+01.05.14 12/23/15 (LNT)
+	- gui.js - Bug fixes
+	- settings.js - Antenna setting change popup
+	- common.css - Bug fixes
+
+01.05.16 12/28/15 (Nextivity)
+    - Bug 1609:  tech.js:  guifreqArrayMHz[] had an incorrect divide by 10.
+    - Bug 1610:  Set new Bluetooth error flag, bSouthBoundWriteError, and check every BT write 
+                 to clear any wait for pending Rx msg.
+             
+01.05.17 12/29/15 (LNT)
+    - gui.js - Bug fixes
+                  
+01.05.18 12/29/15 (Nextivity)
+    - Bug 1618:  gui.js:  If product is mobile and boost is zero and relaying then say "Things look ok" instead of "Fix it now".
+    - Modified cellStates[] to change from NU top states to ['Not Boosting', 'Boosting'] since guiCellState[] is only 0 or 1.
+    - Bug 1628:  download.js:  Added call to RefreshSouthBoundIf() to try to disconnect and reconnect after a unit has been reset during a download process.
+      Also increased DLD_NAK_COUNT_MAX from 2 to 3.
+
+01.05.19 12/30/15 (LNT)
+    - gui.js - Cosmetic issues fixes
+    - common.css - Cosmetic issues fixes
+    - main.js - Cosmetic issues fixes
+    
+01.05.20 12/30/15 (Nextivity)
+    - download.js:  Added logic to allow the 1 second resync to trigger up to 5 times instead of just once.   It seems with Android 5.x.x and 6.x.x there are more BT issues.
+    
+01.05.21 12/30/15 (Nextivity)
+    - Bug 1633:  Modified download order so NU reset does not occur before bluetooth on a 1-box.            
+    
+01.05.22 12/31/15 (LNT)
+    - gui.js - Bug fixes
+    - common.css - Bug fixes
+    - main.js - Bug fixes
+    
+01.05.23 12/31/15 (Nextivity)
+    - Bug 1633:  Corrected logic to reset after BT download if on a one-box. 
+   
+01.05.24 01/04/16 (LNT)
+    - gui.js - Bug fixes
+    - msg_axeda.js - Added a alter box for GPS error
+    
+01.05.25 01/04/16 (Nextivity)
+    - Phonegap 3.7.0 has IOS issues with long term BT downloads.  Phonegap version 3.6.3 worked ok.  
+    - Upgrade to latest Phonegap, 5.2.0, to see if problem goes away.  (IOS problem resolved with Phonegap 5.2.0)
+    - PG 3.7.0 --> PG 5.2.0.
+    - Requires File npm
+    - Requires File Transfer npm 
+    - Had to add a white list plugin due to new network structure for Phonegap.  
+    - Allow wave.log on IOS.
+    - Cleaned comments in config.xml  
+    
+
+Post 01.05.25 01/04/16 (Nextivity HB)
+    - Added PC changes to bring PC logic up to date.
+    
+01.05.26 01/05/16 (LNT)
+    - gui.js - Bug fixes
+    - download.js - Removed starting update popup and added spiiner dialog
+    - msg_axeda.js - Bug fixes
+    - common.css - Adjusted device selection popup box height
+
+01.05.27 01/05/16 (Nextivity)
+    - Added check for json string data to cloud.
+    - Bug 1635: Added function SendCloudDataCheckRsp() for critical messages to the cloud, getUserInfoAction, getOperatorInfoAction, and isUpdateAvailable.  
+   
+
+01.05.28 01/04/16 (Nextivity)
+    - Stop statemachine when USB connected to 2box NU  (HB)
+    - Reset counter in SendCloudDataCheckRsp() if failed more than 3 times.   Housekeeping.
+    - Added check in DldBluetoothTimeout() to make sure in DOWNLOAD mode before aborting due to no Bluetooth.   Problem was that BT was lost
+      during initial check for SW versions from cloud and Update Aborted message was displayed.    
+    - Delete unused function SetDeviceSelection().
+    
+01.05.29 01/06/16 (LNT)
+    - gui.js - Bug fixes
+    - common.css - Bug fixes
+    - Added assets - Splash screen for iPhone4 and iPhone 6+
+
+
+01.05.30 01/07/16 (LNT)
+    - gui.js - Bug fixes
+
+
+01.05.31 01/07/16 (Nextivity)
+    - Changes to bolster V1_ICD PIC update.
+      - Add disable of Auto Lock if downloading PIC.
+      - startFileDownload():  Disable BT timeout since may be between states.
+    - Convert from CelFiTest server to production server.
+    - Convert from Axeda Sandbox to Axeda Production
+
+01.05.32 01/08/16 (Nextivity)
+    - Set newOperatorSku to mySku as a default until user selects a new operator, i.e. new SKU.
+
+01.05.33 01/11/16 (Nextivity)
+    - Changes for V1_ICD PIC update.
+      - If on a one-box only update NU_PIC.
+      - Added bForceSwUpdate so that after PIC update, restart main loop.
+      - Corrected update count message.
+      - Allow 1 second resync for NAK.
+    - Changes if build ID < SW5_1_45:
+      - Set guiSoftwareStatus = SW_STATUS_UNKNOWN to start looking for any updates in INIT...
+      - Added bForceSwUpdate so that after update, restart main loop.
+
+
+01.05.34 01/12/16 (Nextivity)
+    - Changes to allow GetNxtyConfigFile() to be called with a SKU rev.  See nxtySwVerNuSCfgCldRev.
+      - Rev is placed in description field of Axeda package as SwVerNU_SCFG_CldRev:RB. 
+
+01.05.35 01/13/16 (Nextivity)
+    - Bug 1637:  Added additional check in BT reconnect logic to make sure connection address is not NULL as shown in the log file.
+    - Set internal PIC version to 02.98 when downloading instead of 99.99.   
+    - Bug 1656:  When CU's Build ID < SW5_1_45 and an update is forced, the NU's build ID is not filled in but checked in DLD_STATE_5_1_9_CHECK_VER.
+    - Bug 1661:  Only show LTE if radio is also relaying.
+
+01.05.36 01/13/16 (Nextivity)
+    - Reduced some of the repetitive log messages for tech mode when PrintLog set to 1.
+    - Added check for resets after secured config downloads.
+
+01.05.37 01/14/16 (Nextivity)
+    - Bug 1662: Disable phone's auto lock feature so phone does not go to sleep for forced SW update, old PIC or old Ares.
+
+01.05.38 01/14/16 (Nextivity)
+    - Send SKU to cloud before old SW check since cloud needs SKU to determine SW ver.
+
+01.05.39 01/14/16 (Nextivity)
+    - Moved isUpdateAvailable trigger to the end of the cloud request after all SW versions.
+
+01.05.40 01/15/16 (Nextivity)
+    - Old SW check:  Added ver info to cloud and delayed msg for 5 seconds to allow ver info to be populated in cloud.
+   
+01.05.41 01/19/16 (L&T)
+    - Bug fixes
+		- Added network search progress bar while registration
+		- Added additional info in ADVANCED menu.
+
+01.05.42 01/19/16 (Nextivity)
+    - Bug 1677: Allow Tx messages to continue even after BT error for registration percent complete.
+
+01.05.43 01/19/16 (Nextivity)
+    - Increased BT download timeout from 5 to 15 seconds.
+
+01.05.44 01/20/16 (L&T)
+	- common.css - bug fixes
+	- gui.js - bug fixes
+
+01.05.45 01/21/16 (L&T)
+	- common.css - bug fixes
+	- gui.js - bug fixes
+
+01.05.46 01/22/16 (L&T)
+	- gui.js - bug fixes
+	
+01.05.47 01/22/16 (Nextivity)
+    - Increased Registration timeout while waiting on cloud from 20 to 60 seconds.
+
+   
+01.05.49 01/25/16 (L&T)
+	- gui.js - bug fixes
+
+01.05.50 01/26/16 (Nextivity)
+    - Removed unused file index.js
+    - Added pcapp changes pull request #11.
+
+01.05.51 01/27/16 (L&T)
+	- gui.js - bug fix
+	- registration.js - bug fix
+
+01.05.52 01/29/16 (L&T)
+	- gui.js
+		- Device state units fix
+		- Distance metric unit fix
+		- Cell state RSRP and RSRQ values for LTE and LTE rows issue fix
+
+01.05.53 01/29/16 (Nextivity)
+    - Added V1 protocol back into app to allow app to communicate with old PIC and old SW.
+      - Allows registeration.
+      - Dashboard always says "Things look Ok" since no Tech data.
+      - Settings and Advanced tab not allowed, dialog says "Disabled: This tab is disabled for the App version."
+    - Added logic to skip trying to get SN of BT devices with RSSI less than -95.   Only applicable if more than one found.   
+    - Added logic to automatically connect if only one device SN found. 
+    - Modified text if unable to synce: "Unable to sync.  Move closer to unit and restart App"
+
+01.05.54 01/29/16 (Nextivity)
+    - Set guiRegistrationLockBits so dialog "Skip" would be set correctly.
+    - Deleted duplicate variables in v1_icd.js which caused white screen on some Androids.
+    - Declared variable deviceType which I thought was causing white screen.
+    - Called set event to call onDeviceReady from index.html after doc ready.  Was just hanging around in gui.js.
+
+01.05.55 02/02/16 (L&T)
+	- gui.js, bluetoothle.js, main.js
+		- Scroll to correct error code issue
+		- Restart the search process if there is a sync timeout issue
+		- Restart the search process if there is a bluetooth range issue
+
+01.05.56 02/02/16 (Nextivity)
+    - Added NU EVM start download xfer buffer data.
+    - Added check for SW packages if V1 ICD and current SKU, i.e. 20 characters in size.
+
+01.05.57 02/03/16 (Nextivity)
+    - Added wait for UNII if any NU image downloaded, i.e. NU EVM.
+    - Commented out PIC name for forced download in function startFileDownload().
+
+01.05.58 02/04/16 (L&T)
+	- gui.js
+		- Update the PRIME Installation Guide
+		- Update the PRIME Trouble Shooting help page
+		- Update "Why Register help
+		- NU/CU Temp not correct
+ 
+01.05.59 02/04/16 (Nextivity)
+    - Bug 1728:  Moved check for location loc so that dashboard would be called.  L&T to pretty up the display.
+    - Changed registration help text for GW.
+    - Added logic to store the SKU/Model number locally on the phone just in case the Nextivity server could not
+      be contacted.   Do not want to break the app if cannot get to Nextivity server.
+
+01.05.60 02/06/16 (Nextivity)
+    - Corrected V1 SW download.
+    - Added logic to get NU unique ID in case V1 Sec Config update required.
+      
+01.05.61 02/09/16 (Nextivity)
+    - Corrected NU V1 SW download.
+    - Only allow NU_CF, CU_CF, NU_PIC and CU_PIC downloads for V1.
+
+01.05.62 02/09/16 (Nextivity)
+    - Corrected V1 SW download (again)
+    - Changed CABLE string from "T34" to "Q34"
+
+01.05.63 02/09/16 (Nextivity)
+    - Changed V1 text when user selects advanced or settings tab.
+    - Corrected V1 download for PC (HB)
+ 
+ 
+ 01.05.64 by LNT backed out in version 01.05.66.  Was not allowing GO booster settings 
+          to be changed from Auto.
+          
+ 01.05.65 02/11/16 (Nextivity)
+    - Set guiProductType default to PRO to correct error message at startup when product type unknown.
+    - V1 Download start response NAK timeout: Do not check UNII up which could throw the UART redirect if
+      on an NU and cause CU issues.
+ 
+ 01.05.66 02/12/16 (Nextivity)
+    - Backed out 01.05.64 LNT changes.  Was not allowing GO booster settings 
+          to be changed from Auto.
+ 
+ 01.05.67 02/18/16 (L&T)
+    -gui.js	- Made those changes again, Incomplete distance metric, Registration gets stuck, Change Fahrenheit to celsius
+ 
+ 01.05.68 02/22/16 (L&T)
+    -gui.js	- Added Asian office details, Change WuUniiState title
+ 
+ 01.05.69 02/22/16 (L&T)
+    -gui.js	- Progress bar update change
+    -download.js- Progress bar update change
+ 
+01.05.70 02/22/16 (Nextivity)
+    - Added Progress bar for V1 ICD while checking for updates.
+      - Timeout is set to 6 minutes.
+      - Progress based on time over 6 minute duration and packages received as follows:
+          - Calculate a percentage based on the total number of versions and packages.
+          - Example:  
+            -  4 versions                = 100/5 = 20%
+            -  4 versions and 1 package  = 200/5 = 40%
+            -  4 versions and 4 packages = 500/5 = 100%
+    - Corrected null SW version information sent to cloud, see VB email 2/19.
+    - Only send SKU_Number to cloud if none currently existing.  
+      - Needed check to not overwrite SKU_Number of user selects new operator.
+    - Bug 1763:  NU update can corrupt CU if UNII goes down during NU update.
+
+01.05.71 02/24/16 (Nextivity)
+    - Corrected Progress bar formatting.
+ 
+01.05.72 02/25/16 (Nextivity)
+    - Corrected registration using SW5.1.10 which used V1 json data.
+
+01.05.73 03/03/16 (Nextivity)
+    - Bug 1740: If Location Lock bit set, make sure that cell search has completed.
+      - Read cell search status at startup to make a decision before calling the registration form.
+      - If location lock bit is set:
+        - Start a periodic task, LocationLockLoop(), to read the reg support data which contains cell-search status.
+        - Once cell-search has completed, evaluate the reg lock bits.
+        - If registration is required:
+          - If user has remained on the Dashboard and no SW update is in progress, automatically proceed to the registration form and display a dialog with the following text:
+            "Registration required", "Please register product to use."
+          - If user is on the Settings or Advanced page or currently updating software, then do not go to registration form.  Display a dialog with the following text:
+            "Registration required", "Unable to register.  Please restart app in a few minutes to register."
+      
+    - Add additional delay at startup to account for Uart Redirect and make sure that the status
+      message has been received before making a decision.
+    - Add function GetBoardConfig() to retrieve the board config.
+    - Call GetBoardConfig() before starting download to verify that UART redirect is correctly pointing at correct unit.
+    - Changed text on "Booster Update Required" for V1 ICD per WT.
+
+    
+01.05.74 03/03/16 (Nextivity)     
+    - Corrected registration fall through from bug 1740 changes.      
+
+01.05.75 03/08/16 (Nextivity & L&T)     
+    - Added text to SW progress bar, formatting by L&T.  
+      - "This update may take several minutes.  Do not turn off app or move phone away from the CU."
+
+01.05.76 03/08/16 (Nextivity)     
+    - Remove NU unique ID from V1 ICD requirement to allow a UNII link down error to be shown.
+      - NU unique ID was only used for SCFG and since we no longer plan to update SCFG, no need to get NU unique id.
+    - bluetoothle.js:  Corrected function GetDeviceSerialNumbersLoop() if 2nd BT device is ICD 1 and 1st BT device cannot connect.      
+
+
+ 01.05.77 03/09/16 (L&T)
+    - Added css property for progressBottomTextA, formatting by L&T.
+	
+01.05.78 03/09/16 (Nextivity)
+    - Deleted new text on V1 "Check for Updates" dialog...
+    - Updated LocationLockLoop() to not send request if SW update in progress.
+    - Bug 1438:  Allow CU to be downloaded even if UNII down.
+      - Send NU versions to the cloud after SW update.
+      - Modify Axeda GetUserInfo script to drop the NU version in the egress.
+      - Modify egress handler to save the NU version.
+      - Add a check link state in V1 ICD before getting NU ver.
+      - Modify UNII link down text:
+        "Wireless link between the Network Unit and Coverage Unit is down.  Please wait for the link to connect and try again.  Checking for SW Updates."
+      - Add SW update check if UNII link down.
+        - User must press retry to see if SW update available.  (Note: May require several retries for update information from cloud.)
+        - If user selects to update, change from sync screen to dashboard before updating.
+    - Change temp display value to units of C.   
+    - Change V1 timeout message to: "Timeout, Sorry, the server is taking too long to respond. Please try again later."
+    - Add NU and CU Build ID to cloud.    
+	
+	
+01.05.79 03/10/16 (Nextivity)
+    - Send Download End Request before starting to reset the PIC state machine.
+
+
+01.05.80 03/11/16 (Nextivity)
+    - Send CheckForSwUpdate() V1 after sending remote info.
+    - Reset counter when Move Closer popup.
+    - Moved OpenFileSystem() later in the start up sequence.  Some Androids were having issues.
+    - Reset the DldTimeoutCount before DLD_STATE_RESET so a full reset is waited on.
+
+01.05.81 03/11/16 (Nextivity)
+    - If CU or NU Sw version < 21 use PC.
+    - Add cautionary text before update.
+
+   Release notes:
+   - Make sure pointing to production platform and not sandbox.  Set CFG_RUN_ON_SANDBOX to false.
+   - Make sure to use IOS distribution key when building.
+   - Make sure print level is set to 1.
+   - Make sure js console is disabled in index.html
+	
