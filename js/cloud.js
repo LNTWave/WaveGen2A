@@ -39,7 +39,7 @@ function SendAzureData( )
             dataType   : nRespFormat,           // Response format
             
             headers: {
-                "iothub-to": "/devices/myFirstDevice/messages/events",
+//                "iothub-to": "/devices/myFirstDevice/messages/events",
                 "Authorization": "SharedAccessSignature sr=myIotHubYavuz.azure-devices.net/devices/myFirstDevice&sig=xHMvGnZ67nBTXpLqfxxaEjFRFJPcTBPvLnVsTRyVtf4%3d&se=1457983280&skn=",
             },
             success      : function(response)     // success call back
