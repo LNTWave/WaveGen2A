@@ -40,7 +40,7 @@ function SendAzureData( )
             
             headers: {
                 "iothub-to": "/devices/myFirstDevice/messages/events",
-                "Authorization": "SharedAccessSignature sr=myIotHubYavuz.azure-devices.net/devices/myFirstDevice&sig=I6szWS%2fW2I1gICF%2bVTJrK73rKCXj4uSY%2fpaTFkd7iPI%3d&se=1457980264&skn=",
+                "Authorization": "SharedAccessSignature sr=myIotHubYavuz.azure-devices.net/devices/myFirstDevice&sig=xHMvGnZ67nBTXpLqfxxaEjFRFJPcTBPvLnVsTRyVtf4%3d&se=1457983280&skn=",
             },
             success      : function(response)     // success call back
             {
