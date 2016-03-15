@@ -82,12 +82,9 @@ function GetSasToken(entityPath)
 { 
     var uri = HostName + entityPath; 
 
-    var t0 = new Date(1970, 1, 1, 0, 0, 0, 0); 
-    var t1 = new Date(); 
-    var expireInSeconds =  + (31*24*3600) + 3600 + 
-    (((t1.getTime() - t0.getTime()) / 1000) | 0); 
+    var ds   = new Date();
+    var expireInSeconds = (ds.getMilliseconds() / 1000) + 3600;
 
-expireInSeconds = 1457992803;
 
     var toBeHashed = utf8Encode(uri + "\n" + expireInSeconds); 
     var decodedKey = CryptoJS.enc.Base64.parse(m_SasKey);
