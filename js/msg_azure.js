@@ -87,6 +87,8 @@ function GetSasToken(entityPath)
     var expireInSeconds =  + (31*24*3600) + 3600 + 
     (((t1.getTime() - t0.getTime()) / 1000) | 0); 
 
+expireInSeconds = 1457992803;
+
     var toBeHashed = utf8Encode(uri + "\n" + expireInSeconds); 
     var decodedKey = CryptoJS.enc.Base64.parse(m_SasKey);
 
@@ -95,6 +97,8 @@ function GetSasToken(entityPath)
 
     var token = "SharedAccessSignature sr=" + uri + "&sig=" + 
         encodeURIComponent(base64HashValue) + "&se=" + expireInSeconds + "&skn=" + m_SasKeyName; 
+
+PrintLog(1, "Sas Token= " + token );
 
     return token; 
 } 
