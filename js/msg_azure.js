@@ -63,7 +63,7 @@ function SendAzureData( )
             },
             error     : function(response)                      // error call back
             {
-                PringLog(1, "Azure: Response error: " + JSON.stringify(response) );
+                PrintLog(1, "Azure: Response error: " + JSON.stringify(response) );
             },
             
             timeout    : 5000                   // sets timeout to 5 seconds
