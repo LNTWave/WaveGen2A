@@ -66,7 +66,7 @@ function SendAzureData( )
                 PrintLog(1, "Azure: Response error: " + JSON.stringify(response) );
             },
             
-            timeout    : 5000                   // sets timeout to 5 seconds
+            timeout    : 10000                   // sets timeout to 10 seconds
         });
     }
     else
@@ -83,7 +83,7 @@ function GetSasToken(entityPath)
     var uri = HostName + entityPath; 
 
     var ds   = new Date();
-    var expireInSeconds = (ds.getMilliseconds() / 1000) + 3600;
+    var expireInSeconds = (ds.getTime() / 1000) + 3600;
 
 
     var toBeHashed = utf8Encode(uri + "\n" + expireInSeconds); 

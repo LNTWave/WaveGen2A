@@ -992,6 +992,7 @@ var app = {
                     u8TempBuff[0] = NXTY_PHONE_ICD_VER;
                     nxty.SendNxtyMsg(NXTY_STATUS_REQ, u8TempBuff, 1);
 SendAzureData();
+//uMainLoopCounter = 0;
                     
                 }
                 else if( uMainLoopCounter == 1 )
