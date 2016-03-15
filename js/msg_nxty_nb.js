@@ -64,6 +64,7 @@ function GetNxtyPartNumber(uniqueId)
         "text/plain",     
         "",
         "",                                 // response format
+        "",                                     // headers
         function(response)                      // success call back
         {
             retryPartNumberCount = 0;
@@ -115,6 +116,7 @@ function GetNxtyOperatorList()
         "text/plain",     
         "",
         "",                                 // response format
+        "",                                     // headers
         function(response)                      // success call back
         {
             retryOperatorListCount = 0;
@@ -192,6 +194,7 @@ function GetNxtyOperatorCode(sevenHundredNumber)
             "text/plain",     
             "",
             "",                                 // response format
+            "",                                     // headers
             function(response)                      // success call back
             {
                 retryOperatorCodeCount = 0;

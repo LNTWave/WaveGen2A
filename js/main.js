@@ -658,7 +658,7 @@ function HandleUniiRetry(buttonIndex)
     	document.getElementById("searchMessageBox").innerHTML = "Retrying...";
         MainLoopIntervalHandle = setInterval(app.mainLoop, 1000 ); 
         nxtySwVerNuCf          = null;
-        nxtySwVerCuCf          = null;      // Set to Null so new NU version gets sent to cloud.  Bug 1324
+//        nxtySwVerCuCf          = null;      // Set to Null so new NU version gets sent to cloud.  Bug 1324
 //        bUniiUp                = true;
     }
     

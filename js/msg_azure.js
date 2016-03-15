@@ -7,6 +7,114 @@
 //
 //=================================================================================================
 
+
+
+
+
+
+
+
+var m_SasKey           = "vcZMwnGYQ0JubFc7nohwt49NBPoQpDujXaqQi8OE/B8=";          
+var m_SasKeyName       = "";
+var HostName           = "myIotHubYavuz.azure-devices.net";
+
+
+
+
+// SendAzureData............................................................................................
+function SendAzureData( )
+{
+
+    var nType = "POST";
+    var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
+//    var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events"
+    var nContentType = "application/octet-stream";
+    var nData = "{'deviceId': 'myFirstDevice','App Speed': 0}";
+    var nRespFormat = "";
+
+
+    PrintLog(1, "Azure: " + nType + " to " + nUrl );
+
+    
+    // Verify that we have network connectivity....
+    isNetworkConnected = NorthBoundConnectionActive();
+
+    if( isNetworkConnected )
+    {
+        var mySasToken = GetSasToken( "/devices/myFirstDevice" );
+    
+        // Send data to the cloud using a jQuery ajax call...        
+        $.ajax({
+            type       : nType,
+            url        : nUrl,
+            contentType: nContentType,
+            data       : nData,
+            crossDomain: true,                  // Needed to set to true to talk to Nextivity server.
+            dataType   : nRespFormat,           // Response format
+            
+            headers: {
+//                "iothub-to": "/devices/myFirstDevice/messages/events",
+//                "Authorization": "SharedAccessSignature sr=myIotHubYavuz.azure-devices.net/devices/myFirstDevice&sig=xHMvGnZ67nBTXpLqfxxaEjFRFJPcTBPvLnVsTRyVtf4%3d&se=1457983280&skn=",
+                "Authorization": mySasToken,
+            },
+            success      : function(response)     // success call back
+            {
+                PrintLog(1, "Azure: Success" ); 
+            },
+            error     : function(response)                      // error call back
+            {
+                PringLog(1, "Azure: Response error: " + JSON.stringify(response) );
+            },
+            
+            timeout    : 5000                   // sets timeout to 5 seconds
+        });
+    }
+    else
+    {
+        PrintLog( 99, "SendAzureData: No network connection (WiFi or Cell)." );
+    }
+}
+
+
+
+
+function GetSasToken(entityPath) 
+{ 
+    var uri = HostName + entityPath; 
+
+    var t0 = new Date(1970, 1, 1, 0, 0, 0, 0); 
+    var t1 = new Date(); 
+    var expireInSeconds =  + (31*24*3600) + 3600 + 
+    (((t1.getTime() - t0.getTime()) / 1000) | 0); 
+
+    var toBeHashed = utf8Encode(uri + "\n" + expireInSeconds); 
+    var decodedKey = CryptoJS.enc.Base64.parse(m_SasKey);
+
+    var hash = CryptoJS.HmacSHA256(toBeHashed, decodedKey); 
+    var base64HashValue = CryptoJS.enc.Base64.stringify(hash); 
+
+    var token = "SharedAccessSignature sr=" + uri + "&sig=" + 
+        encodeURIComponent(base64HashValue) + "&se=" + expireInSeconds + "&skn=" + m_SasKeyName; 
+
+    return token; 
+} 
+
+
+function utf8Encode(s)
+{ 
+    for(var c, i = -1, l = (s = s.split("")).length, o = String.fromCharCode; ++i < l;
+            s[i] = (c = s[i].charCodeAt(0)) >= 127 ? o(0xc0 | (c >>> 6)) + o(0x80 | (c & 0x3f)) : s[i]
+        );
+    return s.join("");    
+} 
+
+
+
+
+
+
+
+/*
 var mySandboxPlatformUrl    = "https://nextivity-sandbox-connect.axeda.com:443/ammp/";
 var myPlatformUrl           = "https://nextivity-connect.axeda.com:443/ammp/";
 var myOperatorCode          = "0000";
@@ -36,7 +144,6 @@ function SendCloudAsset()
             "application/json;charset=utf-8",
             myAsset,
             "",  // 'json',                         // response format
-            "",                                     // headers
             function(response)                      // success call back
             {
                 if( response != null )
@@ -78,7 +185,6 @@ function SendCloudData(dataText)
             "application/json;charset=utf-8",
             myData,
             "",  // 'json',    // response format
-            "",                                     // headers
             function(response) 
             {
                 if( response != null )
@@ -127,7 +233,6 @@ function SendCloudDataCheckRsp(dataText)
             "application/json;charset=utf-8",
             myData,
             "",  // 'json',    // response format
-            "",                                     // headers
             function(response) 
             {
                 // Success, clear flag...
@@ -186,7 +291,6 @@ function SendCloudLocation(lat, lng)
             "application/json;charset=utf-8",
             myData,
             "",     // 'json',    // response format
-            "",                                     // headers
             function(response) 
             {
                 if( response != null )
@@ -238,7 +342,6 @@ function SendCloudEgressStatus(packageId, myStatus)
             "application/json;charset=utf-8",
             myData,
             "",     // 'json',    // response format
-            "",                                     // headers
             function(response) 
             {
                 if( response != null )
@@ -283,7 +386,6 @@ function SendCloudPoll()
             "",         // no contentType
             "",         // no data
             "",     // 'json',     // response format
-            "",                                     // headers
             function(response) 
             {
                 if( response != null )
@@ -465,17 +567,6 @@ function ProcessEgressResponse(eg)
             
             
             
-/*
-jdo: only grab first name just in case phone data gets cleared.                    
-            else if( egStr.search("lastName")          != -1 )   szRegLastName              = eg.set[i].items.lastName;        
-            else if( egStr.search("addr_1")            != -1 )   szRegAddr1                 = eg.set[i].items.addr_1;        
-            else if( egStr.search("addr_2")            != -1 )   szRegAddr2                 = eg.set[i].items.addr_2;
-            else if( egStr.search("city")              != -1 )   szRegCity                  = eg.set[i].items.city;
-            else if( egStr.search("state")             != -1 )   szRegState                 = eg.set[i].items.state;
-            else if( egStr.search("zip")               != -1 )   szRegZip                   = eg.set[i].items.zip;
-            else if( egStr.search("country")           != -1 )   szRegCountry               = eg.set[i].items.country;
-            else if( egStr.search("phone")             != -1 )   szRegPhone                 = eg.set[i].items.phone;
-*/                    
                     
 
             // Search for strings associated with OperatorList egress...
@@ -663,6 +754,6 @@ jdo: only grab first name just in case phone data gets cleared.
 
 
 
-
+*/
 
     
