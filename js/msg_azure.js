@@ -8,12 +8,6 @@
 //=================================================================================================
 
 
-
-
-
-
-
-
 var sasKey              = "vcZMwnGYQ0JubFc7nohwt49NBPoQpDujXaqQi8OE/B8=";          
 var sasKeyName          = "";
 var sasToken            = "";
@@ -28,13 +22,14 @@ function SendAzureData( )
 
     var nType = "POST";
     var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
-//    var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events"
     var nContentType = "application/octet-stream";
-    var nData = "{'deviceId': 'myFirstDevice','App Speed':" + tempCounter + "}";
+//    var nData = "{'deviceId': 'myFirstDevice','App Speed':" + tempCounter + "}";
+    var nData = "{'App Speed':" + tempCounter + "}";        // Does not look like we need the deviceId in the data....
+
     var nRespFormat = "";
 
 
-    PrintLog(1, "Azure: " + nType + " to " + nUrl );
+    PrintLog(1, "Azure: " + nType + " to " + nUrl + " Data:" + nData );
 
     
     // Verify that we have network connectivity....
@@ -79,6 +74,13 @@ tempCounter++;
 
     
 }
+
+
+
+
+
+
+
 
 // ----------------------------------------------------------------------------------------------
 // Generate a token with a 2 hour expiration.  
