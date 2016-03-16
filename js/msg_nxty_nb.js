@@ -194,7 +194,7 @@ function GetNxtyOperatorCode(sevenHundredNumber)
             "text/plain",     
             "",
             "",                                 // response format
-            "",                                     // headers
+            "{}",                                     // headers
             function(response)                      // success call back
             {
                 retryOperatorCodeCount = 0;
