@@ -19,22 +19,38 @@ function SendNorthBoundData( nType, nUrl, nContentType, nData, nRespFormat, nHea
 
     if( isNetworkConnected )
     {
-        // Send data to the cloud using a jQuery ajax call...        
-        $.ajax({
-            type       : nType,
-            url        : nUrl,
-            contentType: nContentType,
-            data       : nData,
-            crossDomain: true,                  // Needed to set to true to talk to Nextivity server.
-            dataType   : nRespFormat,           // Response format
-   if( nHeader.length != 0 )
-   {
-            headers    : nHeader,
-   }             
-            success    : successCb,             // Success callback
-            error      : errorCb,               // Error callback
-            timeout    : 5000                   // sets timeout to 5 seconds
-        });
+        if( nHeader.length == 0 )
+        {
+            // Send data to the cloud using a jQuery ajax call...        
+            $.ajax({
+                type       : nType,
+                url        : nUrl,
+                contentType: nContentType,
+                data       : nData,
+                crossDomain: true,                  // Needed to set to true to talk to Nextivity server.
+                dataType   : nRespFormat,           // Response format
+                success    : successCb,             // Success callback
+                error      : errorCb,               // Error callback
+                timeout    : 10000                  // sets timeout to 10 seconds
+            });
+        }
+        else
+        {
+            // Send data to the cloud using a jQuery ajax call...        
+            $.ajax({
+                type       : nType,
+                url        : nUrl,
+                contentType: nContentType,
+                data       : nData,
+                crossDomain: true,                  // Needed to set to true to talk to Nextivity server.
+                dataType   : nRespFormat,           // Response format
+                headers    : nHeader,
+                success    : successCb,             // Success callback
+                error      : errorCb,               // Error callback
+                timeout    : 10000                  // sets timeout to 10 seconds
+            });
+        }
+        
     }
     else
     {
