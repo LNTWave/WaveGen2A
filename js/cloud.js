@@ -27,7 +27,7 @@ function SendNorthBoundData( nType, nUrl, nContentType, nData, nRespFormat, nHea
             data       : nData,
             crossDomain: true,                  // Needed to set to true to talk to Nextivity server.
             dataType   : nRespFormat,           // Response format
-            headers    : nHeader,
+//            headers    : nHeader,
             success    : successCb,             // Success callback
             error      : errorCb,               // Error callback
             timeout    : 5000                   // sets timeout to 5 seconds
