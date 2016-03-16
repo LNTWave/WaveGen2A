@@ -10,8 +10,10 @@
 
 var sasKey              = "vcZMwnGYQ0JubFc7nohwt49NBPoQpDujXaqQi8OE/B8=";          
 var sasKeyName          = "";
-var sasToken            = "";
-var hostName            = "myIotHubYavuz.azure-devices.net";
+var sasToken            = "";               // Generated hourly by GenerateSasTokenHourly();
+var platformName        = "https://myIotHubYavuz.azure-devices.net";
+var sandboxName         = "myIotHubYavuz.azure-devices.net";
+var platformVer         = "2015-08-15-preview"
 
 
 var tempCounter  = 0;
@@ -20,6 +22,7 @@ var tempCounter  = 0;
 function SendAzureData( )
 {
 
+/*
     var nType = "POST";
     var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
     var nContentType = "application/octet-stream";
@@ -69,15 +72,64 @@ function SendAzureData( )
     {
         PrintLog( 99, "SendAzureData: No network connection (WiFi or Cell)." );
     }
-    
-tempCounter++;
+*/
 
+    
+
+SendCloudDataA( "'App Speed':" + tempCounter );
+tempCounter++;
     
 }
 
 
 
 
+// SendCloudData............................................................................................
+function SendCloudDataA(dataText)
+{
+    if( nxtyNuUniqueId != null )
+    {
+        var myData    = "{" + dataText + "}";
+        
+//        var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
+        
+        var myDataUrl = platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api_version=" + platformVer;
+        var myHeader  =  "{'Authorization':" + sasToken + "}";
+        
+        PrintLog( 1, "SendCloudData: " + myDataUrl + "  " + myData );
+        
+        SendNorthBoundData( 
+            "POST",
+            myDataUrl,
+            "application/octet-stream",
+            myData,
+            "",                             // response format
+            myHeader,
+            function(response) 
+            {
+                if( response != null )
+                {
+                    var responseText = JSON.stringify(response);    // Returns "" at a minimum
+                    if( responseText.length > 2 )
+                    {
+                        PrintLog( 1, "Response success: SendCloudData()..." + responseText );
+                        ProcessEgressResponse(response);
+                    }
+                }
+            },
+            function(response) 
+            {
+                PrintLog( 99, "Response error: SendCloudData()..." + JSON.stringify(response) );
+            }
+        );
+
+    }
+    else
+    {
+        PrintLog( 99, "SendCloudData: NU Unique ID not available yet." );
+    }
+    
+}
 
 
 
@@ -102,7 +154,7 @@ function GenerateSasTokenHourly(entityPath)
 // ----------------------------------------------------------------------------------------------
 function GetSasToken(entityPath) 
 { 
-    var uri = hostName + entityPath; 
+    var uri = platformName + entityPath; 
 
     var ds   = new Date();
     var expireInSeconds = (ds.getTime() / 1000) + (60 * 2);
