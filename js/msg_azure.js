@@ -92,7 +92,6 @@ function GenerateSasTokenHourly(entityPath)
     if( (tokenTimeSec - dsSec) < 60 )
     {
         PrintLog(1, "Azure: Regenerate 2 hour SAS token." );
-        tokenTimeSec = dsSec;
         sasToken = GetSasToken( entityPath );
     }
 }
@@ -105,7 +104,7 @@ function GetSasToken(entityPath)
 
     var ds   = new Date();
     var expireInSeconds = (ds.getTime() / 1000) + (60 * 2);
-
+    tokenTimeSec = expireInSeconds;
 
     var toBeHashed = utf8Encode(uri + "\n" + expireInSeconds); 
     var decodedKey = CryptoJS.enc.Base64.parse(sasKey);
