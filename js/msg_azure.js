@@ -90,6 +90,7 @@ function SendCloudDataA(dataText)
     if( nxtyNuUniqueId != null )
     {
         var myData    = "{" + dataText + "}";
+        GenerateSasTokenHourly( "/devices/" + nxtyNuUniqueId );
         
 //        var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
         
