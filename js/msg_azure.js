@@ -14,12 +14,13 @@
 
 
 
-var m_SasKey           = "vcZMwnGYQ0JubFc7nohwt49NBPoQpDujXaqQi8OE/B8=";          
-var m_SasKeyName       = "";
-var HostName           = "myIotHubYavuz.azure-devices.net";
+var sasKey              = "vcZMwnGYQ0JubFc7nohwt49NBPoQpDujXaqQi8OE/B8=";          
+var sasKeyName          = "";
+var sasToken            = "";
+var hostName            = "myIotHubYavuz.azure-devices.net";
 
 
-
+var tempCounter  = 0;
 
 // SendAzureData............................................................................................
 function SendAzureData( )
@@ -29,7 +30,7 @@ function SendAzureData( )
     var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
 //    var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events"
     var nContentType = "application/octet-stream";
-    var nData = "{'deviceId': 'myFirstDevice','App Speed': 0}";
+    var nData = "{'deviceId': 'myFirstDevice','App Speed': tempCounter}";
     var nRespFormat = "";
 
 
@@ -41,7 +42,7 @@ function SendAzureData( )
 
     if( isNetworkConnected )
     {
-        var mySasToken = GetSasToken( "/devices/myFirstDevice" );
+        GenerateSasTokenHourly( "/devices/myFirstDevice" );
     
         // Send data to the cloud using a jQuery ajax call...        
         $.ajax({
@@ -55,7 +56,7 @@ function SendAzureData( )
             headers: {
 //                "iothub-to": "/devices/myFirstDevice/messages/events",
 //                "Authorization": "SharedAccessSignature sr=myIotHubYavuz.azure-devices.net/devices/myFirstDevice&sig=xHMvGnZ67nBTXpLqfxxaEjFRFJPcTBPvLnVsTRyVtf4%3d&se=1457983280&skn=",
-                "Authorization": mySasToken,
+                "Authorization": sasToken,
             },
             success      : function(response)     // success call back
             {
@@ -73,29 +74,47 @@ function SendAzureData( )
     {
         PrintLog( 99, "SendAzureData: No network connection (WiFi or Cell)." );
     }
+    
+tempCounter++;
+
+    
+}
+
+// ----------------------------------------------------------------------------------------------
+// Generate a token with a 2 hour expiration.  
+// Regenerate the token every hour.
+var tokenTimeSec = 0;        // Last time the token was generated.
+function GenerateSasTokenHourly(entityPath) 
+{
+    var ds    = new Date();
+    var dsSec = (ds.getTime() / 1000);
+    
+    if( (tokenTimeSec - dsSec) < 3600 )
+    {
+        PrintLog(1, "Azure: Regenerate 2 hour SAS token." );
+        tokenTimeSec = dsSec;
+        sasToken = GetSasToken( entityPath );
+    }
 }
 
 
-
-
+// ----------------------------------------------------------------------------------------------
 function GetSasToken(entityPath) 
 { 
-    var uri = HostName + entityPath; 
+    var uri = hostName + entityPath; 
 
     var ds   = new Date();
-    var expireInSeconds = (ds.getTime() / 1000) + 3600;
+    var expireInSeconds = (ds.getTime() / 1000) + (3600 * 2);
 
 
     var toBeHashed = utf8Encode(uri + "\n" + expireInSeconds); 
-    var decodedKey = CryptoJS.enc.Base64.parse(m_SasKey);
+    var decodedKey = CryptoJS.enc.Base64.parse(sasKey);
 
     var hash = CryptoJS.HmacSHA256(toBeHashed, decodedKey); 
     var base64HashValue = CryptoJS.enc.Base64.stringify(hash); 
 
     var token = "SharedAccessSignature sr=" + uri + "&sig=" + 
-        encodeURIComponent(base64HashValue) + "&se=" + expireInSeconds + "&skn=" + m_SasKeyName; 
-
-PrintLog(1, "Sas Token= " + token );
+        encodeURIComponent(base64HashValue) + "&se=" + expireInSeconds + "&skn=" + sasKeyName; 
 
     return token; 
 } 
