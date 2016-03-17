@@ -110,7 +110,11 @@ function SendCloudDataA(dataText)
         var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api_version=" + platformVer;
         var myHeader  =  {"Authorization":sasToken};
 
+
+PrintLog(1,"myHeader     =" + myHeader );
+
         PrintLog( 1, "SendCloudData: " + myDataUrl + "  " + myData );
+        
         
         SendNorthBoundData( 
             "POST",
