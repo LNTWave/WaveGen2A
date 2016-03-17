@@ -41,7 +41,7 @@ PrintLog(1,"nData       =" + nData );
 PrintLog(1,"nRespFormat =" + nRespFormat );
 PrintLog(1,"nHeader     =" + nHeader );
 
-
+/*
     PrintLog(1, "Azure: " + nType + " to " + nUrl + " Data:" + nData );
 
     
@@ -61,13 +61,13 @@ PrintLog(1,"nHeader     =" + nHeader );
             crossDomain: true,                  // Needed to set to true to talk to Nextivity server.
             dataType   : nRespFormat,           // Response format
             headers    : nHeader,
-/*
-            headers: {
+
+//            headers: {
 //                "iothub-to": "/devices/myFirstDevice/messages/events",
 //                "Authorization": "SharedAccessSignature sr=myIotHubYavuz.azure-devices.net/devices/myFirstDevice&sig=xHMvGnZ67nBTXpLqfxxaEjFRFJPcTBPvLnVsTRyVtf4%3d&se=1457983280&skn=",
-                "Authorization": sasToken,
-            },
-*/            
+//                "Authorization": sasToken,
+//            },
+            
             success      : function(response)     // success call back
             {
                 PrintLog(1, "Azure: Success" ); 
@@ -85,10 +85,10 @@ PrintLog(1,"nHeader     =" + nHeader );
         PrintLog( 99, "SendAzureData: No network connection (WiFi or Cell)." );
     }
 
-
+*/
     
 
-//SendCloudDataA( "'App Speed':" + tempCounter );
+SendCloudDataA( "'App Speed':" + tempCounter );
 tempCounter++;
 
 //GetCloudDeviceId();
@@ -109,10 +109,7 @@ function SendCloudDataA(dataText)
 //        var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
         
         var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api_version=" + platformVer;
-        var myHeader  =  "{'Authorization':'" + sasToken + "'}";
-
-myDataUrl  = "https://NextivityIoTHubDev.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
-myData = "{'App Speed':" + tempCounter + "}";
+        var myHeader  =  {"Authorization":sasToken};
 
 
         
