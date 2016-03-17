@@ -41,7 +41,7 @@ PrintLog(1,"nData       =" + nData );
 PrintLog(1,"nRespFormat =" + nRespFormat );
 PrintLog(1,"nHeader     =" + nHeader );
 
-/*
+
     PrintLog(1, "Azure: " + nType + " to " + nUrl + " Data:" + nData );
 
     
