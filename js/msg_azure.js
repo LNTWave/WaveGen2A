@@ -196,8 +196,8 @@ function GenerateSasTokenHourly(entityPath)
     
     if( (tokenTimeSec - dsSec) < 60 )
     {
-        PrintLog(1, "Azure: Regenerate 2 hour SAS token." );
         sasToken = GetSasToken( entityPath );
+        PrintLog(1, "Azure: Regenerate 2 hour SAS token:" + sasToken );    
     }
 }
 
