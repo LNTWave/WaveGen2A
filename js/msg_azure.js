@@ -32,7 +32,7 @@ function SendAzureData( )
     var nData = "{'App Speed':" + tempCounter + "}";        // Does not look like we need the deviceId in the data....
 
     var nRespFormat = "";
-    var nHeader     = "{'Authorization':'" + sasToken + "}";
+    var nHeader     = "{'Authorization':'" + sasToken + "'}";
 
 PrintLog(1,"nType       =" + nType );
 PrintLog(1,"nUrl        =" + nUrl );
