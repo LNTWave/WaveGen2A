@@ -9,12 +9,12 @@
 
 
 //var sasKey              = "CEDyJHXUOLMVE3dk3jcNjS8bHWYZDzleIp+kubXFxw4=";           // 0x
-var sasKey              = "bmBFxjhdI9mjCgjesWjOsf2dJ3iWkuztcV3X4h/JSgs="          // myFirst
+var sasKey              = "bmBFxjhdI9mjCgjesWjOsf2dJ3iWkuztcV3X4h/JSgs=";          // myFirst
 var sasKeyName          = "";
 var sasToken            = "";               // Generated hourly by GenerateSasTokenHourly();
 var platformName        = "NextivityIoTHubDev.azure-devices.net";
 var sandboxName         = "NextivityIoTHubDev.azure-devices.net";
-var platformVer         = "2015-08-15-preview"
+var platformVer         = "2015-08-15-preview";
 //var platformVer         = "2016-02-03";
 
 
