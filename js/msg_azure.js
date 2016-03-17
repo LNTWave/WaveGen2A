@@ -32,13 +32,14 @@ function SendAzureData( )
     var nData = "{'App Speed':" + tempCounter + "}";        // Does not look like we need the deviceId in the data....
 
     var nRespFormat = "";
+    var nHeader     = "{'Authorization':'" + sasToken + "}";
 
 PrintLog(1,"nType       =" + nType );
 PrintLog(1,"nUrl        =" + nUrl );
 PrintLog(1,"nContentType=" + nContentType );
 PrintLog(1,"nData       =" + nData );
 PrintLog(1,"nRespFormat =" + nRespFormat );
-//PrintLog(1,"nHeader     =" + nHeader );
+PrintLog(1,"nHeader     =" + nHeader );
 
 /*
     PrintLog(1, "Azure: " + nType + " to " + nUrl + " Data:" + nData );
@@ -59,12 +60,14 @@ PrintLog(1,"nRespFormat =" + nRespFormat );
             data       : nData,
             crossDomain: true,                  // Needed to set to true to talk to Nextivity server.
             dataType   : nRespFormat,           // Response format
-            
+            headers    : nHeader,
+/*
             headers: {
 //                "iothub-to": "/devices/myFirstDevice/messages/events",
 //                "Authorization": "SharedAccessSignature sr=myIotHubYavuz.azure-devices.net/devices/myFirstDevice&sig=xHMvGnZ67nBTXpLqfxxaEjFRFJPcTBPvLnVsTRyVtf4%3d&se=1457983280&skn=",
                 "Authorization": sasToken,
             },
+*/            
             success      : function(response)     // success call back
             {
                 PrintLog(1, "Azure: Success" ); 
@@ -82,10 +85,10 @@ PrintLog(1,"nRespFormat =" + nRespFormat );
         PrintLog( 99, "SendAzureData: No network connection (WiFi or Cell)." );
     }
 
-*/
+
     
 
-SendCloudDataA( "'App Speed':" + tempCounter );
+//SendCloudDataA( "'App Speed':" + tempCounter );
 tempCounter++;
 
 //GetCloudDeviceId();
