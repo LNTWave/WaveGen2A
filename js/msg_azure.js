@@ -8,7 +8,8 @@
 //=================================================================================================
 
 
-var sasKey              = "CEDyJHXUOLMVE3dk3jcNjS8bHWYZDzleIp+kubXFxw4=";          
+//var sasKey              = "CEDyJHXUOLMVE3dk3jcNjS8bHWYZDzleIp+kubXFxw4="; 
+var sasKey              = "bmBFxjhdI9mjCgjesWjOsf2dJ3iWkuztcV3X4h/JSgs="         
 var sasKeyName          = "";
 var sasToken            = "";               // Generated hourly by GenerateSasTokenHourly();
 var platformName        = "NextivityIoTHubDev.azure-devices.net";
