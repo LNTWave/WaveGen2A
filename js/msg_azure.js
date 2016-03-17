@@ -8,8 +8,8 @@
 //=================================================================================================
 
 
-//var sasKey              = "CEDyJHXUOLMVE3dk3jcNjS8bHWYZDzleIp+kubXFxw4="; 
-var sasKey              = "bmBFxjhdI9mjCgjesWjOsf2dJ3iWkuztcV3X4h/JSgs="         
+var sasKey              = "CEDyJHXUOLMVE3dk3jcNjS8bHWYZDzleIp+kubXFxw4="; 
+//var sasKey              = "bmBFxjhdI9mjCgjesWjOsf2dJ3iWkuztcV3X4h/JSgs="         
 var sasKeyName          = "";
 var sasToken            = "";               // Generated hourly by GenerateSasTokenHourly();
 var platformName        = "NextivityIoTHubDev.azure-devices.net";
@@ -106,13 +106,9 @@ function SendCloudDataA(dataText)
         var myData    = "{" + dataText + "}";
         GenerateSasTokenHourly( "/devices/" + nxtyNuUniqueId );
         
-//        var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
-        
         var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api_version=" + platformVer;
         var myHeader  =  {"Authorization":sasToken};
 
-
-        
         PrintLog( 1, "SendCloudData: " + myDataUrl + "  " + myData );
         
         SendNorthBoundData( 
