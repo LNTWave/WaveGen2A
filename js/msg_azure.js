@@ -99,10 +99,12 @@ function SendCloudDataA(dataText)
 //        var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
         
         var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api_version=" + platformVer;
-        var myHeader  =  "{'Authorization':" + sasToken + "}";
+        var myHeader  =  "{'Authorization':" + sasToken + ",}";
 
 myDataUrl  = "https://NextivityIoTHubDev.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
 myData = "{'App Speed':" + tempCounter + "}";
+
+
         
         PrintLog( 1, "SendCloudData: " + myDataUrl + "  " + myData );
         
