@@ -26,7 +26,7 @@ function SendAzureData( )
 
     var nType = "POST";
 //    var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
-    var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
+    var nUrl  = "https://NextivityIoTHubDev.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
     var nContentType = "application/octet-stream";
 //    var nData = "{'deviceId': 'myFirstDevice','App Speed':" + tempCounter + "}";
     var nData = "{'App Speed':" + tempCounter + "}";        // Does not look like we need the deviceId in the data....
