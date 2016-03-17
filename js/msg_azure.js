@@ -208,7 +208,7 @@ function GetSasToken(entityPath)
     var uri = platformName + entityPath; 
 
     var ds   = new Date();
-    var expireInSeconds = (ds.getTime() / 1000) + (60 * 2);
+    var expireInSeconds = Math.round((ds.getTime() / 1000) + (60 * 2));
     tokenTimeSec = expireInSeconds;
 
     var toBeHashed = utf8Encode(uri + "\n" + expireInSeconds); 
