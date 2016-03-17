@@ -100,6 +100,9 @@ function SendCloudDataA(dataText)
         
         var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api_version=" + platformVer;
         var myHeader  =  "{'Authorization':" + sasToken + "}";
+
+    myDataUrl  = "https://NextivityIoTHubDev.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
+
         
         PrintLog( 1, "SendCloudData: " + myDataUrl + "  " + myData );
         
