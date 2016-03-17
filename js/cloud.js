@@ -36,6 +36,14 @@ function SendNorthBoundData( nType, nUrl, nContentType, nData, nRespFormat, nHea
         }
         else
         {
+        
+PrintLog(1,"nType       =" + nType );
+PrintLog(1,"nUrl        =" + nUrl );
+PrintLog(1,"nContentType=" + nContentType );
+PrintLog(1,"nData       =" + nData );
+PrintLog(1,"nRespFormat =" + nRespFormat );
+PrintLog(1,"nHeader     =" + nHeader );
+        
             // Send data to the cloud using a jQuery ajax call...        
             $.ajax({
                 type       : nType,

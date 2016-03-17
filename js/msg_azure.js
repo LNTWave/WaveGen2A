@@ -23,7 +23,7 @@ var tempCounter  = 0;
 function SendAzureData( )
 {
 
-/*
+
     var nType = "POST";
 //    var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
     var nUrl  = "https://NextivityIoTHubDev.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
@@ -33,7 +33,14 @@ function SendAzureData( )
 
     var nRespFormat = "";
 
+PrintLog(1,"nType       =" + nType );
+PrintLog(1,"nUrl        =" + nUrl );
+PrintLog(1,"nContentType=" + nContentType );
+PrintLog(1,"nData       =" + nData );
+PrintLog(1,"nRespFormat =" + nRespFormat );
+//PrintLog(1,"nHeader     =" + nHeader );
 
+/*
     PrintLog(1, "Azure: " + nType + " to " + nUrl + " Data:" + nData );
 
     
