@@ -78,6 +78,8 @@ function SendAzureData( )
 
 SendCloudDataA( "'App Speed':" + tempCounter );
 tempCounter++;
+
+GetCloudDeviceId();
     
 }
 
@@ -132,6 +134,54 @@ function SendCloudDataA(dataText)
     
 }
 
+
+// GetCloudDeviceId............................................................................................
+function GetCloudDeviceId()
+{
+    if( nxtyNuUniqueId != null )
+    {
+        var myData    = "";
+        GenerateSasTokenHourly( "/devices/" + nxtyNuUniqueId );
+        
+//        var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
+        
+        var myDataUrl = platformName + "/devices/" + nxtyNuUniqueId + "?api_version=" + platformVer;
+        var myHeader  =  "{'Authorization':" + sasToken + "}";
+        
+        PrintLog( 1, "GetCloudDeviceId: " + myDataUrl );
+        
+        SendNorthBoundData( 
+            "GET",
+            myDataUrl,
+            "application/json",
+            myData,
+            "",                             // response format
+//            myHeader,
+            function(response) 
+            {
+                if( response != null )
+                {
+                    var responseText = JSON.stringify(response);    // Returns "" at a minimum
+                    if( responseText.length > 2 )
+                    {
+                        PrintLog( 1, "Response success: SendCloudData()..." + responseText );
+                        ProcessEgressResponse(response);
+                    }
+                }
+            },
+            function(response) 
+            {
+                PrintLog( 99, "Response error: SendCloudData()..." + JSON.stringify(response) );
+            }
+        );
+
+    }
+    else
+    {
+        PrintLog( 99, "SendCloudData: NU Unique ID not available yet." );
+    }
+    
+}
 
 
 
