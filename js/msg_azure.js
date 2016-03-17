@@ -11,8 +11,8 @@
 var sasKey              = "CEDyJHXUOLMVE3dk3jcNjS8bHWYZDzleIp+kubXFxw4=";          
 var sasKeyName          = "";
 var sasToken            = "";               // Generated hourly by GenerateSasTokenHourly();
-var platformName        = "https://myIotHubYavuz.azure-devices.net";
-var sandboxName         = "myIotHubYavuz.azure-devices.net";
+var platformName        = "https://NextivityIoTHubDev.azure-devices.net";
+var sandboxName         = "https://NextivityIoTHubDev.azure-devices.net";
 var platformVer         = "2015-08-15-preview"
 
 
