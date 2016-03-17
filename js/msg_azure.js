@@ -11,8 +11,8 @@
 var sasKey              = "CEDyJHXUOLMVE3dk3jcNjS8bHWYZDzleIp+kubXFxw4=";          
 var sasKeyName          = "";
 var sasToken            = "";               // Generated hourly by GenerateSasTokenHourly();
-var platformName        = "https://NextivityIoTHubDev.azure-devices.net";
-var sandboxName         = "https://NextivityIoTHubDev.azure-devices.net";
+var platformName        = "NextivityIoTHubDev.azure-devices.net";
+var sandboxName         = "NextivityIoTHubDev.azure-devices.net";
 var platformVer         = "2015-08-15-preview"
 
 
@@ -96,7 +96,7 @@ function SendCloudDataA(dataText)
         
 //        var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
         
-        var myDataUrl = platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api_version=" + platformVer;
+        var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api_version=" + platformVer;
         var myHeader  =  "{'Authorization':" + sasToken + "}";
         
         PrintLog( 1, "SendCloudData: " + myDataUrl + "  " + myData );
@@ -145,7 +145,7 @@ function GetCloudDeviceId()
         
 //        var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
         
-        var myDataUrl = platformName + "/devices/" + nxtyNuUniqueId + "?api_version=" + platformVer;
+        var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "?api_version=" + platformVer;
         var myHeader  =  "{'Authorization':" + sasToken + "}";
         
         PrintLog( 1, "GetCloudDeviceId: " + myDataUrl );
