@@ -23,8 +23,9 @@ var tempCounter  = 0;
 function SendAzureData( )
 {
 
-/*
+
     var nType = "POST";
+//    var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
     var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
     var nContentType = "application/octet-stream";
 //    var nData = "{'deviceId': 'myFirstDevice','App Speed':" + tempCounter + "}";
@@ -73,11 +74,11 @@ function SendAzureData( )
     {
         PrintLog( 99, "SendAzureData: No network connection (WiFi or Cell)." );
     }
-*/
+
 
     
 
-SendCloudDataA( "'App Speed':" + tempCounter );
+//SendCloudDataA( "'App Speed':" + tempCounter );
 tempCounter++;
 
 //GetCloudDeviceId();
