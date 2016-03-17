@@ -8,7 +8,7 @@
 //=================================================================================================
 
 
-var sasKey              = "vcZMwnGYQ0JubFc7nohwt49NBPoQpDujXaqQi8OE/B8=";          
+var sasKey              = "CEDyJHXUOLMVE3dk3jcNjS8bHWYZDzleIp+kubXFxw4=";          
 var sasKeyName          = "";
 var sasToken            = "";               // Generated hourly by GenerateSasTokenHourly();
 var platformName        = "https://myIotHubYavuz.azure-devices.net";
@@ -79,7 +79,7 @@ function SendAzureData( )
 SendCloudDataA( "'App Speed':" + tempCounter );
 tempCounter++;
 
-GetCloudDeviceId();
+//GetCloudDeviceId();
     
 }
 
