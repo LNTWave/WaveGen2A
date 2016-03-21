@@ -9,7 +9,8 @@
 
 
 var sasHubKey           = "Xh86c4aekfwLnqXQUz6VaFn/Q4jFQo/roGhuGbjfiJA=";
-var sasDevKey           = "CEDyJHXUOLMVE3dk3jcNjS8bHWYZDzleIp+kubXFxw4=";           // 0x
+var sasDevKey           = "";                                                       // Use RetrieveCloudDeviceId() to return key
+//var sasDevKey           = "CEDyJHXUOLMVE3dk3jcNjS8bHWYZDzleIp+kubXFxw4=";           // 0x
 //var sasDevKey           = "bmBFxjhdI9mjCgjesWjOsf2dJ3iWkuztcV3X4h/JSgs=";          // myFirst
 var sasDevKeyName       = "";
 var sasHubKeyName       = "iothubowner";
@@ -91,10 +92,11 @@ function SendAzureData( )
   
 */
 
-// SendCloudDataA( "'App Speed':" + tempCounter );
+RetrieveCloudDeviceId();
+
+SendCloudDataA( "'App Speed':" + tempCounter );
 tempCounter++;
 
-RetrieveCloudDeviceId();
     
 }
 
@@ -104,7 +106,7 @@ RetrieveCloudDeviceId();
 // SendCloudData............................................................................................
 function SendCloudDataA(dataText)
 {
-    if( nxtyCuUniqueId != null )
+    if( (nxtyCuUniqueId != null) && (sasDevKey.length != 0) )
     {
         var myData    = "{" + dataText + "}";
         GenerateSasDevTokenHourly( "/devices/" + nxtyCuUniqueId );
@@ -146,7 +148,15 @@ function SendCloudDataA(dataText)
     }
     else
     {
-        PrintLog( 99, "SendCloudData: CU Unique ID not available yet." );
+        if( nxtyCuUniqueId == null )
+        {
+            PrintLog( 99, "SendCloudData: CU Unique ID not available yet." );
+        }
+        else
+        {
+            PrintLog( 99, "SendCloudData: SAS key not retrieved from cloud yet." );
+        }
+        
     }
     
 }
@@ -162,11 +172,10 @@ function RetrieveCloudDeviceId()
 {
     if( nxtyCuUniqueId != null )
     {
-        var myData    = "";
+        var myDataUrl   = "https://" + platformName + "/devices/" + nxtyCuUniqueId + "?api-version=" + platformVer;
+        var myData      = "";
         var sasHubToken = GetSasHubToken( "/devices/" + nxtyCuUniqueId );
-        
-        var myDataUrl = "https://" + platformName + "/devices/" + nxtyCuUniqueId + "?api-version=" + platformVer;
-        var myHeader  =  {"Authorization":sasHubToken};
+        var myHeader    =  {"Authorization":sasHubToken};
         
         PrintLog( 1, "RetrieveCloudDeviceId: " + myDataUrl );
         
@@ -184,9 +193,8 @@ function RetrieveCloudDeviceId()
                     var responseText = JSON.stringify(response);    // Returns "" at a minimum
                     if( responseText.length > 2 )
                     {
-                        PrintLog( 1, "Response success: RetrieveCloudDeviceId()..." + responseText );
-                        var tempDevSasKey = response.authentication.symmetricKey.primaryKey;
-                        PrintLog( 1, "Device key=" + tempDevSasKey );
+//                        PrintLog( 1, "Response success: RetrieveCloudDeviceId()..." + responseText );
+                        sasDevKey = response.authentication.symmetricKey.primaryKey;
                     }
                 }
             },
@@ -210,9 +218,8 @@ function RetrieveCloudDeviceId()
     {
         PrintLog( 99, "RetrieveCloudDeviceId: CU Unique ID not available yet." );
     }
-    
-    nxtyCuUniqueId = "0x12345678";
 }
+
 
 // CreateCloudDeviceId............................................................................................
 //   Create the device in Azure with a "PUT"...  
@@ -222,11 +229,10 @@ function CreateCloudDeviceId(myId)
 {
     if( nxtyCuUniqueId != null )
     {
-        var myData    = "{'deviceId':'" + myId + "'}";
+        var myDataUrl   = "https://" + platformName + "/devices/" + myId + "?api-version=" + platformVer;
+        var myData      = "{'deviceId':'" + myId + "'}";
         var sasHubToken = GetSasHubToken( "/devices/" + myId );
-        
-        var myDataUrl = "https://" + platformName + "/devices/" + myId + "?api-version=" + platformVer;
-        var myHeader  =  {"Authorization":sasHubToken};
+        var myHeader    =  {"Authorization":sasHubToken};
         
         PrintLog( 1, "CreateCloudDeviceId: " + myDataUrl + " " + myData );
         
@@ -244,9 +250,7 @@ function CreateCloudDeviceId(myId)
                     var responseText = JSON.stringify(response);    // Returns "" at a minimum
                     if( responseText.length > 2 )
                     {
-                        PrintLog( 1, "Response success: CreateCloudDeviceId()..." + responseText );
-                        var tempDevSasKey = response.authentication.symmetricKey.primaryKey;
-                        PrintLog( 1, "Device key=" + tempDevSasKey );
+                        sasDevKey = response.authentication.symmetricKey.primaryKey;
                     }
                 }
             },
@@ -261,8 +265,6 @@ function CreateCloudDeviceId(myId)
     {
         PrintLog( 99, "CreateCloudDeviceId: CU Unique ID not available yet." );
     }
-    
-    nxtyCuUniqueId = "0x12345678";
 }
 
 
