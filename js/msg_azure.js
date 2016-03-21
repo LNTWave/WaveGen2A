@@ -94,7 +94,7 @@ function SendAzureData( )
 // SendCloudDataA( "'App Speed':" + tempCounter );
 tempCounter++;
 
-GetCloudDeviceId();
+RetrieveCloudDeviceId();
     
 }
 
@@ -152,12 +152,12 @@ function SendCloudDataA(dataText)
 }
 
 
-// GetCloudDeviceId............................................................................................
+// RetrieveCloudDeviceId............................................................................................
 //   First see if device exists by sending a "GET":  
 //     Example: https://NextivityIoTHubDev.azure-devices.net/devices/0x1118B37326C26CAA?api-version=2015-08-15-preview
 //     if successful then the primary key returned will contain the key for the device.
 //  
-function GetCloudDeviceId()
+function RetrieveCloudDeviceId()
 {
     if( nxtyNuUniqueId != null )
     {
@@ -167,7 +167,7 @@ function GetCloudDeviceId()
         var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "?api-version=" + platformVer;
         var myHeader  =  {"Authorization":sasHubToken};
         
-        PrintLog( 1, "GetCloudDeviceId: " + myDataUrl );
+        PrintLog( 1, "RetrieveCloudDeviceId: " + myDataUrl );
         
         SendNorthBoundData( 
             "GET",
@@ -183,7 +183,7 @@ function GetCloudDeviceId()
                     var responseText = JSON.stringify(response);    // Returns "" at a minimum
                     if( responseText.length > 2 )
                     {
-                        PrintLog( 1, "Response success: GetCloudDeviceId()..." + responseText );
+                        PrintLog( 1, "Response success: RetrieveCloudDeviceId()..." + responseText );
                         var tempDevSasKey = response.authentication.symmetricKey.primaryKey;
                         PrintLog( 1, "Device key=" + tempDevSasKey );
 //                        ProcessEgressResponse(response);
@@ -192,14 +192,22 @@ function GetCloudDeviceId()
             },
             function(response) 
             {
-                PrintLog( 99, "Response error: GetCloudDeviceId()..." + JSON.stringify(response) );
+                if( response.statusText == "Not Found" )
+                {
+                    // Try to create the ID...
+                    PrintLog( 1, "Azure: Device not registered.  So register..." );
+                }
+                else
+                {
+                    PrintLog( 99, "Response error: RetrieveCloudDeviceId()..." + JSON.stringify(response) );
+                }
             }
         );
 
     }
     else
     {
-        PrintLog( 99, "GetClouddeviceId: CU Unique ID not available yet." );
+        PrintLog( 99, "RetrieveCloudDeviceId: CU Unique ID not available yet." );
     }
     
     nxtyNuUniqueId = "0x12345678";
