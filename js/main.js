@@ -994,12 +994,14 @@ var app = {
                     
 nxtyNuUniqueId = "0x1118B37326C26CAA"; 
 //nxtyNuUniqueId = "myFirstDevice";                   
-SendAzureData();
-uMainLoopCounter = -1;
                     
                 }
                 else if( uMainLoopCounter == 1 )
                 {
+SendAzureData();
+uMainLoopCounter = 0;
+
+/*
                     // Stay here until we get a correct status.  If we get the wrong ICD version we are messed up...
                     if( isNxtyStatusCurrent == false )
                     {
@@ -1013,6 +1015,7 @@ uMainLoopCounter = -1;
                         u8TempBuff[0] = NXTY_PHONE_ICD_VER;
                         nxty.SendNxtyMsg(NXTY_STATUS_REQ, u8TempBuff, 1);
                     }
+*/                    
                     
                 }
                 else if( uMainLoopCounter == 2 )
