@@ -35,14 +35,14 @@ function SendAzureData( )
     var nRespFormat = "";
     var nHeader     = {"Authorization":sasToken};
 
-//PrintLog(1,"nType       =" + nType );
-//PrintLog(1,"nUrl        =" + nUrl );
-//PrintLog(1,"nContentType=" + nContentType );
-//PrintLog(1,"nData       =" + nData );
-//PrintLog(1,"nRespFormat =" + nRespFormat );
-//PrintLog(1,"nHeader     =" + nHeader );
+PrintLog(1,"nType       =" + nType );
+PrintLog(1,"nUrl        =" + nUrl );
+PrintLog(1,"nContentType=" + nContentType );
+PrintLog(1,"nData       =" + nData );
+PrintLog(1,"nRespFormat =" + nRespFormat );
+PrintLog(1,"nHeader     =" + nHeader );
 
-/*
+
     PrintLog(1, "Azure: " + nType + " to " + nUrl + " Data:" + nData );
 
     
@@ -86,10 +86,10 @@ function SendAzureData( )
         PrintLog( 99, "SendAzureData: No network connection (WiFi or Cell)." );
     }
 
-*/
+
     
 
-SendCloudDataA( "'App Speed':" + tempCounter );
+//SendCloudDataA( "'App Speed':" + tempCounter );
 tempCounter++;
 
 //GetCloudDeviceId();
