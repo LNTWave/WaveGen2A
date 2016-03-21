@@ -107,7 +107,7 @@ function SendCloudDataA(dataText)
         var myData    = "{" + dataText + "}";
         GenerateSasTokenHourly( "/devices/" + nxtyNuUniqueId );
         
-        var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api_version=" + platformVer;
+        var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api-version=" + platformVer;
         var myHeader  =  {"Authorization":sasToken};
 
 
