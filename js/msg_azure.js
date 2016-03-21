@@ -164,7 +164,6 @@ function GetCloudDeviceId()
         var myHeader  =  {"Authorization":sasHubToken};
         
         PrintLog( 1, "GetCloudDeviceId: " + myDataUrl );
-PrintLog(1,"  myHeader     =" + JSON.stringify(myHeader) );
         
         SendNorthBoundData( 
             "GET",
@@ -181,13 +180,15 @@ PrintLog(1,"  myHeader     =" + JSON.stringify(myHeader) );
                     if( responseText.length > 2 )
                     {
                         PrintLog( 1, "Response success: GetCloudDeviceId()..." + responseText );
+                        var tempDevSasKey = response.authentication.symmetricKey.primaryKey;
+                        PrintLog( 1, "Device key=" + tempDevSasKey );
 //                        ProcessEgressResponse(response);
                     }
                 }
             },
             function(response) 
             {
-                PrintLog( 99, "Response error: GetClouddeviceId()..." + JSON.stringify(response) );
+                PrintLog( 99, "Response error: GetCloudDeviceId()..." + JSON.stringify(response) );
             }
         );
 
