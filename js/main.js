@@ -992,8 +992,8 @@ var app = {
                     u8TempBuff[0] = NXTY_PHONE_ICD_VER;
                     nxty.SendNxtyMsg(NXTY_STATUS_REQ, u8TempBuff, 1);
                     
-nxtyNuUniqueId = "0x1118B37326C26CAA"; 
-//nxtyNuUniqueId = "myFirstDevice";                   
+nxtyCuUniqueId = "0x1118B37326C26CAA"; 
+//nxtyCuUniqueId = "myFirstDevice";                   
                     
                 }
                 else if( uMainLoopCounter == 1 )
