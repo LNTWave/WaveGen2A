@@ -12,6 +12,7 @@ var sasHubKey           = "Xh86c4aekfwLnqXQUz6VaFn/Q4jFQo/roGhuGbjfiJA=";
 var sasDevKey           = "CEDyJHXUOLMVE3dk3jcNjS8bHWYZDzleIp+kubXFxw4=";           // 0x
 //var sasDevKey           = "bmBFxjhdI9mjCgjesWjOsf2dJ3iWkuztcV3X4h/JSgs=";          // myFirst
 var sasDevKeyName       = "";
+var sasHubKeyName       = "iothubowner";
 var sasDevToken         = "";               // Generated hourly by GenerateSasDevTokenHourly();
 var platformName        = "NextivityIoTHubDev.azure-devices.net";
 var sandboxName         = "NextivityIoTHubDev.azure-devices.net";
@@ -163,6 +164,7 @@ function GetCloudDeviceId()
         var myHeader  =  {"Authorization":sasHubToken};
         
         PrintLog( 1, "GetCloudDeviceId: " + myDataUrl );
+PrintLog(1,"  myHeader     =" + JSON.stringify(myHeader) );
         
         SendNorthBoundData( 
             "GET",
@@ -252,7 +254,7 @@ function GetSasHubToken(entityPath)
     var base64HashValue = CryptoJS.enc.Base64.stringify(hash); 
 
     var token = "SharedAccessSignature sr=" + uri + "&sig=" + 
-        encodeURIComponent(base64HashValue) + "&se=" + expireInSeconds + "&skn=" + sasDevKeyName; 
+        encodeURIComponent(base64HashValue) + "&se=" + expireInSeconds + "&skn=" + sasHubKeyName; 
 
     return token; 
 } 
