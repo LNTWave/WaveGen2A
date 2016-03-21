@@ -165,8 +165,7 @@ function RetrieveCloudDeviceId()
         var myData    = "";
         var sasHubToken = GetSasHubToken( "/devices/" + nxtyNuUniqueId );
         
-//        var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "?api-version=" + platformVer;
-        var myDataUrl = "https://dude" + platformName + "/devices/" + nxtyNuUniqueId + "?api-version=" + platformVer;
+        var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "?api-version=" + platformVer;
         var myHeader  =  {"Authorization":sasHubToken};
         
         PrintLog( 1, "RetrieveCloudDeviceId: " + myDataUrl );
@@ -188,18 +187,16 @@ function RetrieveCloudDeviceId()
                         PrintLog( 1, "Response success: RetrieveCloudDeviceId()..." + responseText );
                         var tempDevSasKey = response.authentication.symmetricKey.primaryKey;
                         PrintLog( 1, "Device key=" + tempDevSasKey );
-//                        ProcessEgressResponse(response);
                     }
                 }
             },
             function(response) 
             {
- PrintLog( 99, "What does response contain: Response error: RetrieveCloudDeviceId()..." + JSON.stringify(response) );
- 
-                if( response.statusText && (response.statusText == "Not Found") )
+                if( response.statusText == "Not Found" )
                 {
                     // Try to create the ID...
                     PrintLog( 1, "Azure: Device not registered.  So register..." );
+                    CreateCloudDeviceId();
                 }
                 else
                 {
@@ -217,6 +214,56 @@ function RetrieveCloudDeviceId()
     nxtyNuUniqueId = "0x12345678";
 }
 
+// CreateCloudDeviceId............................................................................................
+//   Create the device in Azure with a "PUT"...  
+//     Example: https://NextivityIoTHubDev.azure-devices.net/devices/0x1118B37326C26CAA?api-version=2015-08-15-preview
+//
+function CreateCloudDeviceId()
+{
+    if( nxtyNuUniqueId != null )
+    {
+        var myData    = "";
+        var sasHubToken = GetSasHubToken( "/devices/" + nxtyNuUniqueId );
+        
+        var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "?api-version=" + platformVer;
+        var myHeader  =  {"Authorization":sasHubToken};
+        
+        PrintLog( 1, "CreateCloudDeviceId: " + myDataUrl );
+        
+        SendNorthBoundData( 
+            "PUT",
+            myDataUrl,
+            "application/json",
+            myData,
+            "",                             // response format
+            myHeader,
+            function(response) 
+            {
+                if( response != null )
+                {
+                    var responseText = JSON.stringify(response);    // Returns "" at a minimum
+                    if( responseText.length > 2 )
+                    {
+                        PrintLog( 1, "Response success: CreateCloudDeviceId()..." + responseText );
+                        var tempDevSasKey = response.authentication.symmetricKey.primaryKey;
+                        PrintLog( 1, "Device key=" + tempDevSasKey );
+                    }
+                }
+            },
+            function(response) 
+            {
+                PrintLog( 99, "Response error: CreateCloudDeviceId()..." + JSON.stringify(response) );
+            }
+        );
+
+    }
+    else
+    {
+        PrintLog( 99, "CreateCloudDeviceId: CU Unique ID not available yet." );
+    }
+    
+    nxtyNuUniqueId = "0x12345678";
+}
 
 
 // ----------------------------------------------------------------------------------------------
