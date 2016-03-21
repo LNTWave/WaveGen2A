@@ -8,10 +8,10 @@
 //=================================================================================================
 
 
-var sasKey              = "CEDyJHXUOLMVE3dk3jcNjS8bHWYZDzleIp+kubXFxw4=";           // 0x
-//var sasKey              = "bmBFxjhdI9mjCgjesWjOsf2dJ3iWkuztcV3X4h/JSgs=";          // myFirst
-var sasKeyName          = "";
-var sasToken            = "";               // Generated hourly by GenerateSasTokenHourly();
+var sasDevKey           = "CEDyJHXUOLMVE3dk3jcNjS8bHWYZDzleIp+kubXFxw4=";           // 0x
+//var sasDevKey           = "bmBFxjhdI9mjCgjesWjOsf2dJ3iWkuztcV3X4h/JSgs=";          // myFirst
+var sasDevKeyName       = "";
+var sasDevToken         = "";               // Generated hourly by GenerateSasDevTokenHourly();
 var platformName        = "NextivityIoTHubDev.azure-devices.net";
 var sandboxName         = "NextivityIoTHubDev.azure-devices.net";
 var platformVer         = "2015-08-15-preview";
@@ -33,7 +33,7 @@ function SendAzureData( )
     var nData = "{'App Speed':" + tempCounter + "}";        // Does not look like we need the deviceId in the data....
 
     var nRespFormat = "";
-    var nHeader     = {"Authorization":sasToken};
+    var nHeader     = {"Authorization":sasDevToken};
 
 //PrintLog(1,"nType       =" + nType );
 //PrintLog(1,"nUrl        =" + nUrl );
@@ -51,7 +51,7 @@ function SendAzureData( )
 
     if( isNetworkConnected )
     {
-        GenerateSasTokenHourly( "/devices/myFirstDevice" );
+        GenerateSasDevTokenHourly( "/devices/myFirstDevice" );
     
         // Send data to the cloud using a jQuery ajax call...        
         $.ajax({
@@ -66,7 +66,7 @@ function SendAzureData( )
 //            headers: {
 //                "iothub-to": "/devices/myFirstDevice/messages/events",
 //                "Authorization": "SharedAccessSignature sr=myIotHubYavuz.azure-devices.net/devices/myFirstDevice&sig=xHMvGnZ67nBTXpLqfxxaEjFRFJPcTBPvLnVsTRyVtf4%3d&se=1457983280&skn=",
-//                "Authorization": sasToken,
+//                "Authorization": sasDevToken,
 //            },
             
             success      : function(response)     // success call back
@@ -105,10 +105,10 @@ function SendCloudDataA(dataText)
     if( nxtyNuUniqueId != null )
     {
         var myData    = "{" + dataText + "}";
-        GenerateSasTokenHourly( "/devices/" + nxtyNuUniqueId );
+        GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
         
         var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api-version=" + platformVer;
-        var myHeader  =  {"Authorization":sasToken};
+        var myHeader  =  {"Authorization":sasDevToken};
 
 
 //PrintLog(1,"myHeader     =" + JSON.stringify(myHeader) );
@@ -156,12 +156,10 @@ function GetCloudDeviceId()
     if( nxtyNuUniqueId != null )
     {
         var myData    = "";
-        GenerateSasTokenHourly( "/devices/" + nxtyNuUniqueId );
+        GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
         
-//        var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
-        
-        var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "?api_version=" + platformVer;
-        var myHeader  =  "{'Authorization':" + sasToken + "}";
+        var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "?api-version=" + platformVer;
+        var myHeader  =  {"Authorization":sasDevToken};
         
         PrintLog( 1, "GetCloudDeviceId: " + myDataUrl );
         
@@ -171,7 +169,7 @@ function GetCloudDeviceId()
             "application/json",
             myData,
             "",                             // response format
-//            myHeader,
+            myHeader,
             function(response) 
             {
                 if( response != null )
@@ -204,21 +202,21 @@ function GetCloudDeviceId()
 // Generate a token with a 2 hour expiration.  
 // Regenerate the token every hour.
 var tokenTimeSec = 0;        // Last time the token was generated.
-function GenerateSasTokenHourly(entityPath) 
+function GenerateSasDevTokenHourly(entityPath) 
 {
     var ds    = new Date();
     var dsSec = (ds.getTime() / 1000);
     
     if( (tokenTimeSec - dsSec) < 60 )
     {
-        sasToken = GetSasToken( entityPath );
-        PrintLog(1, "Azure: Regenerate 2 hour SAS token:" + sasToken );    
+        sasDevToken = GetSasDevToken( entityPath );
+        PrintLog(1, "Azure: Regenerate 2 hour SAS token:" + sasDevToken );    
     }
 }
 
 
 // ----------------------------------------------------------------------------------------------
-function GetSasToken(entityPath) 
+function GetSasDevToken(entityPath) 
 { 
     var uri = platformName + entityPath; 
 
@@ -227,13 +225,13 @@ function GetSasToken(entityPath)
     tokenTimeSec = expireInSeconds;
 
     var toBeHashed = utf8Encode(uri + "\n" + expireInSeconds); 
-    var decodedKey = CryptoJS.enc.Base64.parse(sasKey);
+    var decodedKey = CryptoJS.enc.Base64.parse(sasDevKey);
 
     var hash = CryptoJS.HmacSHA256(toBeHashed, decodedKey); 
     var base64HashValue = CryptoJS.enc.Base64.stringify(hash); 
 
     var token = "SharedAccessSignature sr=" + uri + "&sig=" + 
-        encodeURIComponent(base64HashValue) + "&se=" + expireInSeconds + "&skn=" + sasKeyName; 
+        encodeURIComponent(base64HashValue) + "&se=" + expireInSeconds + "&skn=" + sasDevKeyName; 
 
     return token; 
 } 
