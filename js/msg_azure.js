@@ -16,8 +16,8 @@ var sasHubKeyName       = "iothubowner";
 var sasDevToken         = "";               // Generated hourly by GenerateSasDevTokenHourly();
 var platformName        = "NextivityIoTHubDev.azure-devices.net";
 var sandboxName         = "NextivityIoTHubDev.azure-devices.net";
-var platformVer         = "2015-08-15-preview";
-//var platformVer         = "2016-02-03";
+//var platformVer         = "2015-08-15-preview";
+var platformVer         = "2016-02-03";
 
 
 var tempCounter  = 0;
@@ -156,7 +156,8 @@ function SendCloudDataA(dataText)
 //   First see if device exists by sending a "GET":  
 //     Example: https://NextivityIoTHubDev.azure-devices.net/devices/0x1118B37326C26CAA?api-version=2015-08-15-preview
 //     if successful then the primary key returned will contain the key for the device.
-//  
+//     if not successful, check the return statusText and if it is "Not Found" then go register the device.
+//
 function RetrieveCloudDeviceId()
 {
     if( nxtyNuUniqueId != null )
@@ -164,7 +165,8 @@ function RetrieveCloudDeviceId()
         var myData    = "";
         var sasHubToken = GetSasHubToken( "/devices/" + nxtyNuUniqueId );
         
-        var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "?api-version=" + platformVer;
+//        var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "?api-version=" + platformVer;
+        var myDataUrl = "https://dude" + platformName + "/devices/" + nxtyNuUniqueId + "?api-version=" + platformVer;
         var myHeader  =  {"Authorization":sasHubToken};
         
         PrintLog( 1, "RetrieveCloudDeviceId: " + myDataUrl );
@@ -192,7 +194,9 @@ function RetrieveCloudDeviceId()
             },
             function(response) 
             {
-                if( response.statusText == "Not Found" )
+ PrintLog( 99, "What does response contain: Response error: RetrieveCloudDeviceId()..." + JSON.stringify(response) );
+ 
+                if( response.statusText && (response.statusText == "Not Found") )
                 {
                     // Try to create the ID...
                     PrintLog( 1, "Azure: Device not registered.  So register..." );
