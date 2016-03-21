@@ -91,7 +91,7 @@ function SendAzureData( )
   
 */
 
-SendCloudDataA( "'App Speed':" + tempCounter );
+// SendCloudDataA( "'App Speed':" + tempCounter );
 tempCounter++;
 
 GetCloudDeviceId();
@@ -153,6 +153,10 @@ function SendCloudDataA(dataText)
 
 
 // GetCloudDeviceId............................................................................................
+//   First see if device exists by sending a "GET":  
+//     Example: https://NextivityIoTHubDev.azure-devices.net/devices/0x1118B37326C26CAA?api-version=2015-08-15-preview
+//     if successful then the primary key returned will contain the key for the device.
+//  
 function GetCloudDeviceId()
 {
     if( nxtyNuUniqueId != null )
@@ -198,6 +202,7 @@ function GetCloudDeviceId()
         PrintLog( 99, "GetClouddeviceId: CU Unique ID not available yet." );
     }
     
+    nxtyNuUniqueId = "0x12345678";
 }
 
 
