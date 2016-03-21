@@ -111,7 +111,7 @@ function SendCloudDataA(dataText)
         var myHeader  =  {"Authorization":sasToken};
 
 
-PrintLog(1,"myHeader     =" + myHeader );
+PrintLog(1,"myHeader     =" + JSON.stringify(myHeader) );
 
         PrintLog( 1, "SendCloudData: " + myDataUrl + "  " + myData );
         
