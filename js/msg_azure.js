@@ -8,6 +8,7 @@
 //=================================================================================================
 
 
+var sasHubKey           = "Xh86c4aekfwLnqXQUz6VaFn/Q4jFQo/roGhuGbjfiJA=";
 var sasDevKey           = "CEDyJHXUOLMVE3dk3jcNjS8bHWYZDzleIp+kubXFxw4=";           // 0x
 //var sasDevKey           = "bmBFxjhdI9mjCgjesWjOsf2dJ3iWkuztcV3X4h/JSgs=";          // myFirst
 var sasDevKeyName       = "";
@@ -92,7 +93,7 @@ function SendAzureData( )
 SendCloudDataA( "'App Speed':" + tempCounter );
 tempCounter++;
 
-//GetCloudDeviceId();
+GetCloudDeviceId();
     
 }
 
@@ -144,7 +145,7 @@ function SendCloudDataA(dataText)
     }
     else
     {
-        PrintLog( 99, "SendCloudData: NU Unique ID not available yet." );
+        PrintLog( 99, "SendCloudData: CU Unique ID not available yet." );
     }
     
 }
@@ -156,10 +157,10 @@ function GetCloudDeviceId()
     if( nxtyNuUniqueId != null )
     {
         var myData    = "";
-        GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
+        var sasHubToken = GetSasHubToken( "/devices/" + nxtyNuUniqueId );
         
         var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "?api-version=" + platformVer;
-        var myHeader  =  {"Authorization":sasDevToken};
+        var myHeader  =  {"Authorization":sasHubToken};
         
         PrintLog( 1, "GetCloudDeviceId: " + myDataUrl );
         
@@ -177,21 +178,21 @@ function GetCloudDeviceId()
                     var responseText = JSON.stringify(response);    // Returns "" at a minimum
                     if( responseText.length > 2 )
                     {
-                        PrintLog( 1, "Response success: SendCloudData()..." + responseText );
-                        ProcessEgressResponse(response);
+                        PrintLog( 1, "Response success: GetCloudDeviceId()..." + responseText );
+//                        ProcessEgressResponse(response);
                     }
                 }
             },
             function(response) 
             {
-                PrintLog( 99, "Response error: SendCloudData()..." + JSON.stringify(response) );
+                PrintLog( 99, "Response error: GetClouddeviceId()..." + JSON.stringify(response) );
             }
         );
 
     }
     else
     {
-        PrintLog( 99, "SendCloudData: NU Unique ID not available yet." );
+        PrintLog( 99, "GetClouddeviceId: CU Unique ID not available yet." );
     }
     
 }
@@ -199,7 +200,7 @@ function GetCloudDeviceId()
 
 
 // ----------------------------------------------------------------------------------------------
-// Generate a token with a 2 hour expiration.  
+// Generate a Device token with a 2 hour expiration.  
 // Regenerate the token every hour.
 var tokenTimeSec = 0;        // Last time the token was generated.
 function GenerateSasDevTokenHourly(entityPath) 
@@ -236,6 +237,25 @@ function GetSasDevToken(entityPath)
     return token; 
 } 
 
+// ----------------------------------------------------------------------------------------------
+function GetSasHubToken(entityPath) 
+{ 
+    var uri = platformName + entityPath; 
+
+    var ds   = new Date();
+    var expireInSeconds = Math.round((ds.getTime() / 1000) + (60 * 2));
+
+    var toBeHashed = utf8Encode(uri + "\n" + expireInSeconds); 
+    var decodedKey = CryptoJS.enc.Base64.parse(sasHubKey);
+
+    var hash = CryptoJS.HmacSHA256(toBeHashed, decodedKey); 
+    var base64HashValue = CryptoJS.enc.Base64.stringify(hash); 
+
+    var token = "SharedAccessSignature sr=" + uri + "&sig=" + 
+        encodeURIComponent(base64HashValue) + "&se=" + expireInSeconds + "&skn=" + sasDevKeyName; 
+
+    return token; 
+} 
 
 function utf8Encode(s)
 { 
