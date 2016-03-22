@@ -8,97 +8,48 @@
 //=================================================================================================
 
 
-var sasHubKey           = "Xh86c4aekfwLnqXQUz6VaFn/Q4jFQo/roGhuGbjfiJA=";
-var sasDevKey           = "";                                                       // Use RetrieveCloudDeviceId() to return key
-//var sasDevKey           = "CEDyJHXUOLMVE3dk3jcNjS8bHWYZDzleIp+kubXFxw4=";           // 0x
-//var sasDevKey           = "bmBFxjhdI9mjCgjesWjOsf2dJ3iWkuztcV3X4h/JSgs=";          // myFirst
-var sasDevKeyName       = "";
-var sasHubKeyName       = "iothubowner";
-var sasDevToken         = "";               // Generated hourly by GenerateSasDevTokenHourly();
-var platformName        = "NextivityIoTHubDev.azure-devices.net";
-var sandboxName         = "NextivityIoTHubDev.azure-devices.net";
-//var platformVer         = "2015-08-15-preview";
-var platformVer         = "2016-02-03";
+var platformName            = "JDO_TEMP_NextivityIoTHubQA.azure-devices.net";
+var sasHubKey               = "sJBd8gHBNQUcrCKqfbnAdW8wfGQNwcSbITesLa/9J3A=";       // Specific key for NextivityIoTHubQA.azure-devices.net 
+var sandboxName             = "NextivityIoTHubDev.azure-devices.net";
+var sandboxSasHubKey        = "Xh86c4aekfwLnqXQUz6VaFn/Q4jFQo/roGhuGbjfiJA=";       // Specific key for NextivityIoTHubDev.azure-devices.net 
+var sasDevKey               = "";                                                   // Use RetrieveCloudDeviceKey() to return key
+var sasDevKeyName           = "";
+var sasHubKeyName           = "iothubowner";
+var sasDevToken             = "";                                                   // Generated hourly by GenerateSasDevTokenHourly();
+var platformVer             = "2016-02-03";
+//const CFG_RUN_ON_SANDBOX    = true;                 // true to run on Azure sandbox.  false to run on Azure production platform.
 
+
+var azureDeviceId           = "";
 
 var tempCounter  = 0;
 
-// SendAzureData............................................................................................
-function SendAzureData( )
+// RegisterCloudDev............................................................................................
+function RegisterCloudDev( devId )
 {
-
-
-    var nType = "POST";
-//    var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
-    var nUrl  = "https://NextivityIoTHubDev.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
-    var nContentType = "application/octet-stream";
-//    var nData = "{'deviceId': 'myFirstDevice','App Speed':" + tempCounter + "}";
-    var nData = "{'App Speed':" + tempCounter + "}";        // Does not look like we need the deviceId in the data....
-
-    var nRespFormat = "";
-    var nHeader     = {"Authorization":sasDevToken};
-
-//PrintLog(1,"nType       =" + nType );
-//PrintLog(1,"nUrl        =" + nUrl );
-//PrintLog(1,"nContentType=" + nContentType );
-//PrintLog(1,"nData       =" + nData );
-//PrintLog(1,"nRespFormat =" + nRespFormat );
-//PrintLog(1,"nHeader     =" + nHeader );
-
-/*
-    PrintLog(1, "Azure: " + nType + " to " + nUrl + " Data:" + nData );
-
     
-    // Verify that we have network connectivity....
-    isNetworkConnected = NorthBoundConnectionActive();
-
-    if( isNetworkConnected )
+    if( CFG_RUN_ON_SANDBOX )
     {
-        GenerateSasDevTokenHourly( "/devices/myFirstDevice" );
-    
-        // Send data to the cloud using a jQuery ajax call...        
-        $.ajax({
-            type       : nType,
-            url        : nUrl,
-            contentType: nContentType,
-            data       : nData,
-            crossDomain: true,                  // Needed to set to true to talk to Nextivity server.
-            dataType   : nRespFormat,           // Response format
-            headers    : nHeader,
-
-//            headers: {
-//                "iothub-to": "/devices/myFirstDevice/messages/events",
-//                "Authorization": "SharedAccessSignature sr=myIotHubYavuz.azure-devices.net/devices/myFirstDevice&sig=xHMvGnZ67nBTXpLqfxxaEjFRFJPcTBPvLnVsTRyVtf4%3d&se=1457983280&skn=",
-//                "Authorization": sasDevToken,
-//            },
-            
-            success      : function(response)     // success call back
-            {
-                PrintLog(1, "Azure: Success" ); 
-            },
-            error     : function(response)                      // error call back
-            {
-                PrintLog(1, "Azure: Response error: " + JSON.stringify(response) );
-            },
-            
-            timeout    : 10000                   // sets timeout to 10 seconds
-        });
+        PrintLog(1, "Azure: RegisterCloudDev(" + devId + ") with sandbox at " + sandboxName );
+        platformName = sandboxName;
+        sasHubKey    = sandboxSasHubKey;
     }
     else
     {
-        PrintLog( 99, "SendAzureData: No network connection (WiFi or Cell)." );
+        PrintLog(1, "Azure: RegisterCloudDev(" + devId + ") with platform at " + platformName );
     }
-
-  
-*/
-
-RetrieveCloudDeviceId();
-
-SendCloudDataA( "'App Speed':" + tempCounter );
-tempCounter++;
-
     
+    if( azureDeviceId.length == 0 )
+    {
+        azureDeviceId = devId;
+    } 
+    
+    if( sasDevKey.length == 0 )
+    {
+        RetrieveCloudDeviceKey();
+    }
 }
+
 
 
 
@@ -106,7 +57,7 @@ tempCounter++;
 // SendCloudData............................................................................................
 function SendCloudDataA(dataText)
 {
-    if( (nxtyCuUniqueId != null) && (sasDevKey.length != 0) )
+    if( sasDevKey.length != 0 )
     {
         var myData    = "{" + dataText + "}";
         GenerateSasDevTokenHourly( "/devices/" + nxtyCuUniqueId );
@@ -148,36 +99,28 @@ function SendCloudDataA(dataText)
     }
     else
     {
-        if( nxtyCuUniqueId == null )
-        {
-            PrintLog( 99, "SendCloudData: CU Unique ID not available yet." );
-        }
-        else
-        {
-            PrintLog( 99, "SendCloudData: SAS key not retrieved from cloud yet." );
-        }
-        
+        PrintLog( 99, "SendCloudData: SAS key not retrieved from cloud yet." );
     }
     
 }
 
 
-// RetrieveCloudDeviceId............................................................................................
+// RetrieveCloudDeviceKey............................................................................................
 //   First see if device exists by sending a "GET":  
 //     Example: https://NextivityIoTHubDev.azure-devices.net/devices/0x1118B37326C26CAA?api-version=2015-08-15-preview
 //     if successful then the primary key returned will contain the key for the device.
 //     if not successful, check the return statusText and if it is "Not Found" then go register the device.
 //
-function RetrieveCloudDeviceId()
+function RetrieveCloudDeviceKey()
 {
-    if( nxtyCuUniqueId != null )
+    if( azureDeviceId.length )
     {
-        var myDataUrl   = "https://" + platformName + "/devices/" + nxtyCuUniqueId + "?api-version=" + platformVer;
+        var myDataUrl   = "https://" + platformName + "/devices/" + azureDeviceId + "?api-version=" + platformVer;
         var myData      = "";
-        var sasHubToken = GetSasHubToken( "/devices/" + nxtyCuUniqueId );
+        var sasHubToken = GetSasHubToken( "/devices/" + azureDeviceId );
         var myHeader    =  {"Authorization":sasHubToken};
         
-        PrintLog( 1, "RetrieveCloudDeviceId: " + myDataUrl );
+        PrintLog( 1, "RetrieveCloudDeviceKey: " + myDataUrl );
         
         SendNorthBoundData( 
             "GET",
@@ -193,7 +136,7 @@ function RetrieveCloudDeviceId()
                     var responseText = JSON.stringify(response);    // Returns "" at a minimum
                     if( responseText.length > 2 )
                     {
-//                        PrintLog( 1, "Response success: RetrieveCloudDeviceId()..." + responseText );
+//                        PrintLog( 1, "Response success: RetrieveCloudDeviceKey()..." + responseText );
                         sasDevKey = response.authentication.symmetricKey.primaryKey;
                     }
                 }
@@ -204,11 +147,11 @@ function RetrieveCloudDeviceId()
                 {
                     // Try to create the ID...
                     PrintLog( 1, "Azure: Device not registered.  So register..." );
-                    CreateCloudDeviceId(nxtyCuUniqueId);
+                    CreateCloudDeviceId(azureDeviceId);
                 }
                 else
                 {
-                    PrintLog( 99, "Response error: RetrieveCloudDeviceId()..." + JSON.stringify(response) );
+                    PrintLog( 99, "Response error: RetrieveCloudDeviceKey()..." + JSON.stringify(response) );
                 }
             }
         );
@@ -216,25 +159,25 @@ function RetrieveCloudDeviceId()
     }
     else
     {
-        PrintLog( 99, "RetrieveCloudDeviceId: CU Unique ID not available yet." );
+        PrintLog( 99, "RetrieveCloudDeviceKey: Device ID, i.e. CU Unique ID, not available yet." );
     }
 }
 
 
-// CreateCloudDeviceId............................................................................................
+// CreateCloudDeviceKey............................................................................................
 //   Create the device in Azure with a "PUT"...  
 //     Example: https://NextivityIoTHubDev.azure-devices.net/devices/0x1118B37326C26CAA?api-version=2015-08-15-preview
 //
-function CreateCloudDeviceId(myId)
+function CreateCloudDeviceKey(myId)
 {
-    if( nxtyCuUniqueId != null )
+    if( azureDeviceId.length )
     {
         var myDataUrl   = "https://" + platformName + "/devices/" + myId + "?api-version=" + platformVer;
         var myData      = "{'deviceId':'" + myId + "'}";
         var sasHubToken = GetSasHubToken( "/devices/" + myId );
         var myHeader    =  {"Authorization":sasHubToken};
         
-        PrintLog( 1, "CreateCloudDeviceId: " + myDataUrl + " " + myData );
+        PrintLog( 1, "CreateCloudDeviceKey: " + myDataUrl + " " + myData );
         
         SendNorthBoundData( 
             "PUT",
@@ -256,14 +199,14 @@ function CreateCloudDeviceId(myId)
             },
             function(response) 
             {
-                PrintLog( 99, "Response error: CreateCloudDeviceId()..." + JSON.stringify(response) );
+                PrintLog( 99, "Response error: CreateCloudDeviceKey()..." + JSON.stringify(response) );
             }
         );
 
     }
     else
     {
-        PrintLog( 99, "CreateCloudDeviceId: CU Unique ID not available yet." );
+        PrintLog( 99, "CreateCloudDeviceKey: Device ID, i.e. CU Unique ID, not available yet." );
     }
 }
 
@@ -983,3 +926,80 @@ function ProcessEgressResponse(eg)
 */
 
     
+
+    
+    
+/*    
+
+// SendAzureData Hard code example showing how to communicate with Azure ........................................................
+function SendAzureData( )
+{
+
+
+    var nType = "POST";
+//    var nUrl  = "https://myIotHubYavuz.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
+    var nUrl  = "https://NextivityIoTHubDev.azure-devices.net/devices/myFirstDevice/messages/events?api-version=2015-08-15-preview"
+    var nContentType = "application/octet-stream";
+//    var nData = "{'deviceId': 'myFirstDevice','App Speed':" + tempCounter + "}";
+    var nData = "{'App Speed':" + tempCounter + "}";        // Does not look like we need the deviceId in the data....
+
+    var nRespFormat = "";
+    var nHeader     = {"Authorization":sasDevToken};
+
+//PrintLog(1,"nType       =" + nType );
+//PrintLog(1,"nUrl        =" + nUrl );
+//PrintLog(1,"nContentType=" + nContentType );
+//PrintLog(1,"nData       =" + nData );
+//PrintLog(1,"nRespFormat =" + nRespFormat );
+//PrintLog(1,"nHeader     =" + nHeader );
+
+
+    PrintLog(1, "Azure: " + nType + " to " + nUrl + " Data:" + nData );
+
+    
+    // Verify that we have network connectivity....
+    isNetworkConnected = NorthBoundConnectionActive();
+
+    if( isNetworkConnected )
+    {
+        GenerateSasDevTokenHourly( "/devices/myFirstDevice" );
+    
+        // Send data to the cloud using a jQuery ajax call...        
+        $.ajax({
+            type       : nType,
+            url        : nUrl,
+            contentType: nContentType,
+            data       : nData,
+            crossDomain: true,                  // Needed to set to true to talk to Nextivity server.
+            dataType   : nRespFormat,           // Response format
+            headers    : nHeader,
+
+//            headers: {
+//                "iothub-to": "/devices/myFirstDevice/messages/events",
+//                "Authorization": "SharedAccessSignature sr=myIotHubYavuz.azure-devices.net/devices/myFirstDevice&sig=xHMvGnZ67nBTXpLqfxxaEjFRFJPcTBPvLnVsTRyVtf4%3d&se=1457983280&skn=",
+//                "Authorization": sasDevToken,
+//            },
+            
+            success      : function(response)     // success call back
+            {
+                PrintLog(1, "Azure: Success" ); 
+            },
+            error     : function(response)                      // error call back
+            {
+                PrintLog(1, "Azure: Response error: " + JSON.stringify(response) );
+            },
+            
+            timeout    : 10000                   // sets timeout to 10 seconds
+        });
+    }
+    else
+    {
+        PrintLog( 99, "SendAzureData: No network connection (WiFi or Cell)." );
+    }
+
+  
+tempCounter++;
+
+    
+}
+*/    

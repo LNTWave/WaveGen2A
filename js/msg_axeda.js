@@ -14,7 +14,7 @@ var myLat                   = 32.987838;            // Nextivity lat
 var myLong                  = -117.074195;          // Nextivity long
 var s_CheckRspData          = "";       
 var s_CheckRspCount         = 0;
-const CFG_RUN_ON_SANDBOX    = false;                 // true to run on Axeda sandbox.  false to run on Axeda production platform.
+const CFG_RUN_ON_SANDBOX    = true;                 // true to run on Axeda sandbox.  false to run on Axeda production platform.
 
 
 
