@@ -146,8 +146,8 @@ function RetrieveCloudDeviceKey()
                 if( response.statusText == "Not Found" )
                 {
                     // Try to create the ID...
-                    PrintLog( 1, "Azure: Device not registered.  So register..." );
-                    CreateCloudDeviceId(azureDeviceId);
+                    PrintLog( 1, "Azure: Device has not been created yet so go and create..." );
+                    CreateCloudDeviceKey(azureDeviceId);
                 }
                 else
                 {
@@ -177,7 +177,7 @@ function CreateCloudDeviceKey(myId)
         var sasHubToken = GetSasHubToken( "/devices/" + myId );
         var myHeader    =  {"Authorization":sasHubToken};
         
-        PrintLog( 1, "CreateCloudDeviceKey: " + myDataUrl + " " + myData );
+        PrintLog( 1, "Azure: CreateCloudDeviceKey: " + myDataUrl + " " + myData );
         
         SendNorthBoundData( 
             "PUT",
