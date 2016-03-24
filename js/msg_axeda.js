@@ -18,6 +18,8 @@ const CFG_RUN_ON_SANDBOX    = true;                 // true to run on Axeda sand
 
 
 
+/*
+Moved to azure...
 
 // SendCloudAsset............................................................................................
 function SendCloudAsset()
@@ -62,6 +64,13 @@ function SendCloudAsset()
     }
 }
 
+*/
+
+
+/*
+
+Moved to Azure...
+
 // SendCloudData............................................................................................
 function SendCloudData(dataText)
 {
@@ -104,6 +113,9 @@ function SendCloudData(dataText)
     }
     
 }
+*/
+
+
 
 // SendCloudDataCheckRsp............................................................................................
 function SendCloudDataCheckRsp(dataText)

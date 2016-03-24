@@ -992,16 +992,9 @@ var app = {
                     u8TempBuff[0] = NXTY_PHONE_ICD_VER;
                     nxty.SendNxtyMsg(NXTY_STATUS_REQ, u8TempBuff, 1);
                     
-//nxtyCuUniqueId = "0x1118B37326C26CAA"; 
-//nxtyCuUniqueId = "myFirstDevice";                   
-                    
                 }
                 else if( uMainLoopCounter == 1 )
                 {
-//SendAzureData();
-//uMainLoopCounter = 0;
-
-/*
                     // Stay here until we get a correct status.  If we get the wrong ICD version we are messed up...
                     if( isNxtyStatusCurrent == false )
                     {
@@ -1015,7 +1008,6 @@ var app = {
                         u8TempBuff[0] = NXTY_PHONE_ICD_VER;
                         nxty.SendNxtyMsg(NXTY_STATUS_REQ, u8TempBuff, 1);
                     }
-*/                    
                     
                 }
                 else if( uMainLoopCounter == 2 )
@@ -1183,7 +1175,7 @@ Do not auto update PIC at this time....
             // Wait until we receive the device key from Azure..........................
             else if( sasDevKey.length == 0 )
             {
-                PrintLog(1, "Main: Waiting on the Azure device key from Azure..." );
+                PrintLog(1, "Main: Waiting on the device key from Azure..." );
                 RegisterCloudDev(nxtyCuUniqueId);
                 return;
             }

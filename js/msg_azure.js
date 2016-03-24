@@ -53,9 +53,14 @@ function RegisterCloudDev( devId )
 
 
 
+// SendCloudAsset - Needed by Axeda, now just a stub since Azure does not need .....................................................................
+function SendCloudAsset()
+{
+    PrintLog( 1, "SendCloudAsset: Not needed with Azure." );
+}
 
 // SendCloudData............................................................................................
-function SendCloudDataA(dataText)
+function SendCloudData(dataText)
 {
     if( sasDevKey.length != 0 )
     {
@@ -296,47 +301,6 @@ const CFG_RUN_ON_SANDBOX    = false;                 // true to run on Axeda san
 
 
 
-// SendCloudAsset............................................................................................
-function SendCloudAsset()
-{
-    if( (myModel != null) && (mySn != null) )
-    {
-        // Set the ping rate to 0 so egress queue times out and resets quickly.
-        var myAsset    = "{'id': {'mn':'" + myModel + "', 'sn':'" + mySn + "', 'tn': '0' }, 'pingRate': 0 }";
-        var myAssetUrl = myPlatformUrl + "assets/1";
-        
-        PrintLog( 1, "SendCloudAsset: " + myAssetUrl + "  " + myAsset );
-        
-        SendNorthBoundData( 
-            "POST",
-            myAssetUrl,
-            "application/json;charset=utf-8",
-            myAsset,
-            "",  // 'json',                         // response format
-            function(response)                      // success call back
-            {
-                if( response != null )
-                {
-                    var responseText = JSON.stringify(response);    // Returns "" at a minimum
-                    if( responseText.length > 2 )
-                    {
-                        PrintLog( 1, "Response success: SendCloudAsset()..." + responseText );
-                        ProcessEgressResponse(response);
-                    }
-                }
-            },
-            function(response)                      // error call back
-            {
-                PrintLog( 99, "Response error: SendCloudAsset()..." + JSON.stringify(response) );
-            }
-        );
-        
-    }
-    else
-    {
-        PrintLog( 99, "SendCloudAsset: Model and SN not available yet" );
-    }
-}
 
 // SendCloudData............................................................................................
 function SendCloudData(dataText)
