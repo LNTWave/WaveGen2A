@@ -120,7 +120,7 @@ function RetrieveCloudDeviceKey()
         var sasHubToken = GetSasHubToken( "/devices/" + azureDeviceId );
         var myHeader    =  {"Authorization":sasHubToken};
         
-        PrintLog( 1, "RetrieveCloudDeviceKey: " + myDataUrl );
+        PrintLog( 1, "Azure: RetrieveCloudDeviceKey: " + myDataUrl );
         
         SendNorthBoundData( 
             "GET",
