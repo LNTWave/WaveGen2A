@@ -180,10 +180,10 @@ function SendCloudAssociateSystem()
     u8AzureTxBuff[i++] = 0;
     u8AzureTxBuff[i++] = 0;
     u8AzureTxBuff[i++] = 0;
-    u8AzureTxBuff[i++] = (uniqueIdNu >> 56);            // uniqueID            
-    u8AzureTxBuff[i++] = (uniqueIdNu >> 48);              
-    u8AzureTxBuff[i++] = (uniqueIdNu >> 40);              
-    u8AzureTxBuff[i++] = (uniqueIdNu >> 32);              
+    u8AzureTxBuff[i++] = 0; //(uniqueIdNu >> 56);            // uniqueID            
+    u8AzureTxBuff[i++] = 0; //(uniqueIdNu >> 48);              
+    u8AzureTxBuff[i++] = 0; //(uniqueIdNu >> 40);              
+    u8AzureTxBuff[i++] = 0; //(uniqueIdNu >> 32);              
     u8AzureTxBuff[i++] = (uniqueIdNu >> 24);              
     u8AzureTxBuff[i++] = (uniqueIdNu >> 16);
     u8AzureTxBuff[i++] = (uniqueIdNu >> 8);
@@ -191,10 +191,10 @@ function SendCloudAssociateSystem()
 
     // payload assoc system
     u8AzureTxBuff[i++] = 0;                             // siteID
-    u8AzureTxBuff[i++] = (uniqueIdNu >> 56);            // systemID same as uniqueID in header.             
-    u8AzureTxBuff[i++] = (uniqueIdNu >> 48);              
-    u8AzureTxBuff[i++] = (uniqueIdNu >> 40);              
-    u8AzureTxBuff[i++] = (uniqueIdNu >> 32);              
+    u8AzureTxBuff[i++] = 0; //(uniqueIdNu >> 56);            // systemID same as uniqueID in header.             
+    u8AzureTxBuff[i++] = 0; //(uniqueIdNu >> 48);              
+    u8AzureTxBuff[i++] = 0; //(uniqueIdNu >> 40);              
+    u8AzureTxBuff[i++] = 0; // (uniqueIdNu >> 32);              
     u8AzureTxBuff[i++] = (uniqueIdNu >> 24);              
     u8AzureTxBuff[i++] = (uniqueIdNu >> 16);
     u8AzureTxBuff[i++] = (uniqueIdNu >> 8);
