@@ -109,6 +109,74 @@ function SendCloudData(dataText)
     
 }
 
+/*
+// SendCloudAssociateSystem............................................................................................
+//
+function SendCloudAssociateSystem()
+{
+
+    var i              = 0;
+    var resetWriteAddr = 0xF0000040;
+    var resetWriteData = 0xBEDA221E;
+    var resetReadAddr  = 0xF8100000;
+    
+
+    PrintLog(1,  "Super Msg Send: Reset Ares after download" );
+
+    // Send 0xBEDA221E to 0xF0000040 and read from 0xF8100000.
+    u8TempTxBuff[i++] = NXTY_WRITE_ADDRESS_REQ;
+    u8TempTxBuff[i++] = (resetWriteAddr >> 24);  
+    u8TempTxBuff[i++] = (resetWriteAddr >> 16);
+    u8TempTxBuff[i++] = (resetWriteAddr >> 8);
+    u8TempTxBuff[i++] = resetWriteAddr;
+    u8TempTxBuff[i++] = (resetWriteData >> 24);              
+    u8TempTxBuff[i++] = (resetWriteData >> 16);
+    u8TempTxBuff[i++] = (resetWriteData >> 8);
+    u8TempTxBuff[i++] = (resetWriteData >> 0);
+
+
+    if( azureDeviceId.length )
+    {
+        var myDataUrl   = "https://" + platformName + "/devices/" + myId + "?api-version=" + platformVer;
+        var myData      = "{'deviceId':'" + myId + "'}";
+        var sasHubToken = GetSasHubToken( "/devices/" + myId );
+        var myHeader    =  {"Authorization":sasHubToken};
+        
+        PrintLog( 1, "Azure: CreateCloudDeviceKey: " + myDataUrl + " " + myData );
+        
+        SendNorthBoundData( 
+            "PUT",
+            myDataUrl,
+            "application/json",
+            myData,
+            "",                             // response format
+            myHeader,
+            function(response) 
+            {
+                if( response != null )
+                {
+                    var responseText = JSON.stringify(response);    // Returns "" at a minimum
+                    if( responseText.length > 2 )
+                    {
+                        sasDevKey = response.authentication.symmetricKey.primaryKey;
+                    }
+                }
+            },
+            function(response) 
+            {
+                PrintLog( 99, "Response error: CreateCloudDeviceKey()..." + JSON.stringify(response) );
+            }
+        );
+
+    }
+    else
+    {
+        PrintLog( 99, "CreateCloudDeviceKey: Device ID, i.e. CU Unique ID, not available yet." );
+    }
+}
+*/
+
+
 
 // RetrieveCloudDeviceKey............................................................................................
 //   First see if device exists by sending a "GET":  

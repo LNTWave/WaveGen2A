@@ -45,6 +45,7 @@ function SendNorthBoundData( nType, nUrl, nContentType, nData, nRespFormat, nHea
                 data       : nData,
                 crossDomain: true,                  // Needed to set to true to talk to Nextivity server.
                 dataType   : nRespFormat,           // Response format
+                processData: false,                 // Set to false so that binary data can be sent.
                 headers    : nHeader,
                 success    : successCb,             // Success callback
                 error      : errorCb,               // Error callback
