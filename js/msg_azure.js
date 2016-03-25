@@ -225,7 +225,8 @@ function SendCloudAssociateSystem()
     
    
     // Create an array of the exact size to send...
-    var u8Send = new Unit8Array(u8AzureTxBuff, 0, i);
+    var u8Send = new Uint8Array(u8AzureTxBuff, 0, i);
+
 
     GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
         
