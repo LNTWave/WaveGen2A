@@ -127,7 +127,7 @@ function SendCloudData(dataText)
     
 }
 
-/*
+
 // SendCloudAssociateSystem............................................................................................
 //
 //  typedef struct
@@ -223,7 +223,7 @@ function SendCloudAssociateSystem()
     // Fill in the payload size, assume less than 1 byte.    
     u8AzureTxBuff[7] = i - 16;          // Current number of bytes minus 16-byte header.
     
-/*    
+   
     // Create an array of the exact size to send...
     var u8Send = new Unit8Array(u8AzureTxBuff, 0, i);
 
@@ -256,7 +256,6 @@ function SendCloudAssociateSystem()
         }
     );
     
- */
     
 
 }
