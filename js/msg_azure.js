@@ -224,20 +224,18 @@ function SendCloudAssociateSystem()
     u8AzureTxBuff[7] = i - 16;          // Current number of bytes minus 16-byte header.
     
    
-    // Create an array of the exact size to send...
-    var u8Send = new Uint8Array(u8AzureTxBuff, 0, i);
-
 
     GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
         
     var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api-version=" + platformVer;
     var myHeader  =  {"Authorization":sasDevToken};
 
-     SendNorthBoundData( 
+     SendNorthBoundDataBinary( 
         "POST",
         myDataUrl,
         "application/octet-stream",
-        u8Send,
+        u8AzureTxBuff,
+        i,                              // length
         "",                             // response format
         myHeader,
         function(response) 
