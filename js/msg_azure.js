@@ -22,6 +22,23 @@ var platformVer             = "2016-02-03";
 
 var azureDeviceId           = "";
 
+
+// Azure IOT Hub message data...
+var u8AzureTxBuff = new Uint8Array(4096);
+const   D2CMSG_TECHDATA                         = 1;
+const   D2CMSG_REGISTER_NEWSITE                 = 10;
+const   D2CMSG_REGISTER_ASSOC_SYSTEM            = 11;
+const   D2CMSG_REGISTER_DISASSOC_SYSTEM         = 12;
+const   D2CMSG_REGISTER_ASSOC_BOARD             = 13;
+const   D2CMSG_REGISTER_DISASSOC_BOARD          = 14;
+const   D2CMSG_REGISTER_ASSOC_NOTIFICATION      = 15;
+const   D2CMSG_INQUIRY                          = 20;
+const   D2CMSG_SETPARAM_RSP                     = 30;
+const   D2CMDG_SWUPDATE                         = 40;
+const   D2CMDG_SWUPDATE_GETSAS                  = 41;
+const   D2CMDG_DEBUG_ADDFAKEFACTORYINFO         = 90;
+
+
 var tempCounter  = 0;
 
 // RegisterCloudDev............................................................................................
@@ -100,6 +117,7 @@ function SendCloudData(dataText)
                 PrintLog( 99, "Response error: SendCloudData()..." + JSON.stringify(response) );
             }
         );
+        
 
     }
     else
@@ -112,69 +130,133 @@ function SendCloudData(dataText)
 /*
 // SendCloudAssociateSystem............................................................................................
 //
+//  typedef struct
+//  {
+//      char                    nameStr[WAVE2_SYSATTRIBNAME_LEN];
+//      char                    valStr[WAVE2_SYSATTRIBVAL_LEN];
+//  } systemAttribType;
+//  
+//  typedef struct
+//  {
+//      unsigned int            siteID;
+//      long long               systemID;
+//      unsigned char           systemIPAddress[WAVE2_SYSIPADDR_LEN];
+//      unsigned int            numSystemAttrib;
+//      systemAttribType        systemAttrib[1];//variable size field as determined by numSystemAttrib
+//  } d2cMsg_Register_Assoc_System;             //Reference: D2CMSG_REGISTER_ASSOC_SYSTEM
+//  
+//  typedef struct
+//  {
+//      unsigned char           version;
+//      E8(D2CMSGTYPE)          type;
+//      unsigned char           reserved[2];
+//      unsigned int            payloadSize;
+//      long long               uniqueID;
+//  } d2cMsgHdr;
+//  
+//  typedef struct
+//  {
+//      d2cMsgHdr               hdr;
+//      unsigned int            payload[1];     //variable-size field as determined by hdr.type
+//  } d2cMsg;
+
+
 function SendCloudAssociateSystem()
 {
-
     var i              = 0;
-    var resetWriteAddr = 0xF0000040;
-    var resetWriteData = 0xBEDA221E;
-    var resetReadAddr  = 0xF8100000;
+    var uniqueIdNu     =  parseInt( nxtyNuUniqueId, 16 );
+    
+    PrintLog(1,  "Azure: SendCloudAssociateSystem()" );
+    
     
 
-    PrintLog(1,  "Super Msg Send: Reset Ares after download" );
+    // d2cMsg....................................
+    // d2cMsgHdr size = 16 bytes
+    u8AzureTxBuff[i++] = 1;                             // version
+    u8AzureTxBuff[i++] = D2CMSG_REGISTER_ASSOC_SYSTEM;  // type  
+    u8AzureTxBuff[i++] = 0;                             // reserved
+    u8AzureTxBuff[i++] = 0;                             // reserved
+    u8AzureTxBuff[i++] = 0;                             // payloadSize in bytes, fill in after payload.
+    u8AzureTxBuff[i++] = 0;
+    u8AzureTxBuff[i++] = 0;
+    u8AzureTxBuff[i++] = 0;
+    u8AzureTxBuff[i++] = (uniqueIdNu >> 56);            // uniqueID            
+    u8AzureTxBuff[i++] = (uniqueIdNu >> 48);              
+    u8AzureTxBuff[i++] = (uniqueIdNu >> 40);              
+    u8AzureTxBuff[i++] = (uniqueIdNu >> 32);              
+    u8AzureTxBuff[i++] = (uniqueIdNu >> 24);              
+    u8AzureTxBuff[i++] = (uniqueIdNu >> 16);
+    u8AzureTxBuff[i++] = (uniqueIdNu >> 8);
+    u8AzureTxBuff[i++] = (uniqueIdNu >> 0);
 
-    // Send 0xBEDA221E to 0xF0000040 and read from 0xF8100000.
-    u8TempTxBuff[i++] = NXTY_WRITE_ADDRESS_REQ;
-    u8TempTxBuff[i++] = (resetWriteAddr >> 24);  
-    u8TempTxBuff[i++] = (resetWriteAddr >> 16);
-    u8TempTxBuff[i++] = (resetWriteAddr >> 8);
-    u8TempTxBuff[i++] = resetWriteAddr;
-    u8TempTxBuff[i++] = (resetWriteData >> 24);              
-    u8TempTxBuff[i++] = (resetWriteData >> 16);
-    u8TempTxBuff[i++] = (resetWriteData >> 8);
-    u8TempTxBuff[i++] = (resetWriteData >> 0);
+    // payload assoc system
+    u8AzureTxBuff[i++] = 0;                             // siteID
+    u8AzureTxBuff[i++] = (uniqueIdNu >> 56);            // systemID same as uniqueID in header.             
+    u8AzureTxBuff[i++] = (uniqueIdNu >> 48);              
+    u8AzureTxBuff[i++] = (uniqueIdNu >> 40);              
+    u8AzureTxBuff[i++] = (uniqueIdNu >> 32);              
+    u8AzureTxBuff[i++] = (uniqueIdNu >> 24);              
+    u8AzureTxBuff[i++] = (uniqueIdNu >> 16);
+    u8AzureTxBuff[i++] = (uniqueIdNu >> 8);
+    u8AzureTxBuff[i++] = (uniqueIdNu >> 0);
+    u8AzureTxBuff[i++] = 0;                             // systemIPAddress[16]
+    u8AzureTxBuff[i++] = 0;
+    u8AzureTxBuff[i++] = 0;
+    u8AzureTxBuff[i++] = 0;
+    u8AzureTxBuff[i++] = 0;
+    u8AzureTxBuff[i++] = 0;
+    u8AzureTxBuff[i++] = 0;
+    u8AzureTxBuff[i++] = 0;
+    u8AzureTxBuff[i++] = 0;
+    u8AzureTxBuff[i++] = 0;
+    u8AzureTxBuff[i++] = 0;
+    u8AzureTxBuff[i++] = 0;
+    u8AzureTxBuff[i++] = 0;
+    u8AzureTxBuff[i++] = 0;
+    u8AzureTxBuff[i++] = 0;
+    u8AzureTxBuff[i++] = 0;
+    u8AzureTxBuff[i++] = 0;                             // numSystemAttrib
+    u8AzureTxBuff[i++] = 0;
+    u8AzureTxBuff[i++] = 0;
+    u8AzureTxBuff[i++] = 0;
 
+    // Fill in the payload size, assume less than 1 byte.    
+    u8AzureTxBuff[7] = i - 16;          // Current number of bytes minus 16-byte header.
+    
+    // Create an array of the exact size to send...
+    var u8Send = new Unit8Array(u8AzureTxBuff, 0, i);
 
-    if( azureDeviceId.length )
-    {
-        var myDataUrl   = "https://" + platformName + "/devices/" + myId + "?api-version=" + platformVer;
-        var myData      = "{'deviceId':'" + myId + "'}";
-        var sasHubToken = GetSasHubToken( "/devices/" + myId );
-        var myHeader    =  {"Authorization":sasHubToken};
-        
-        PrintLog( 1, "Azure: CreateCloudDeviceKey: " + myDataUrl + " " + myData );
-        
-        SendNorthBoundData( 
-            "PUT",
-            myDataUrl,
-            "application/json",
-            myData,
-            "",                             // response format
-            myHeader,
-            function(response) 
+    var myDataUrl   = "https://" + platformName + "/devices/" + myId + "?api-version=" + platformVer;
+    var sasHubToken = GetSasHubToken( "/devices/" + myId );
+    var myHeader    =  {"Authorization":sasHubToken};
+    
+   
+    SendNorthBoundData( 
+        "POST",
+        myDataUrl,
+        "application/octet-stream",
+        u8Send,
+        "",                             // response format
+        myHeader,
+        function(response) 
+        {
+            if( response != null )
             {
-                if( response != null )
+                var responseText = JSON.stringify(response);    // Returns "" at a minimum
+                if( responseText.length > 2 )
                 {
-                    var responseText = JSON.stringify(response);    // Returns "" at a minimum
-                    if( responseText.length > 2 )
-                    {
-                        sasDevKey = response.authentication.symmetricKey.primaryKey;
-                    }
+                    sasDevKey = response.authentication.symmetricKey.primaryKey;
                 }
-            },
-            function(response) 
-            {
-                PrintLog( 99, "Response error: CreateCloudDeviceKey()..." + JSON.stringify(response) );
             }
-        );
+        },
+        function(response) 
+        {
+            PrintLog( 99, "Response error: CreateCloudDeviceKey()..." + JSON.stringify(response) );
+        }
+    );
 
-    }
-    else
-    {
-        PrintLog( 99, "CreateCloudDeviceKey: Device ID, i.e. CU Unique ID, not available yet." );
-    }
 }
-*/
+
 
 
 
@@ -211,6 +293,7 @@ function RetrieveCloudDeviceKey()
                     {
 //                        PrintLog( 1, "Response success: RetrieveCloudDeviceKey()..." + responseText );
                         sasDevKey = response.authentication.symmetricKey.primaryKey;
+SendCloudAssociateSystem();
                     }
                 }
             },
