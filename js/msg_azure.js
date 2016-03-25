@@ -241,6 +241,7 @@ function SendCloudAssociateSystem()
         myHeader,
         function(response) 
         {
+PrintLog( 1, "Response success: SendCloudAssociateSystem()..."  );        
             if( response != null )
             {
                 var responseText = JSON.stringify(response);    // Returns "" at a minimum
