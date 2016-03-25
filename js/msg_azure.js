@@ -82,9 +82,9 @@ function SendCloudData(dataText)
     if( sasDevKey.length != 0 )
     {
         var myData    = "{" + dataText + "}";
-        GenerateSasDevTokenHourly( "/devices/" + nxtyCuUniqueId );
+        GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
         
-        var myDataUrl = "https://" + platformName + "/devices/" + nxtyCuUniqueId + "/messages/events?api-version=" + platformVer;
+        var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api-version=" + platformVer;
         var myHeader  =  {"Authorization":sasDevToken};
 
 
@@ -227,12 +227,12 @@ function SendCloudAssociateSystem()
     // Create an array of the exact size to send...
     var u8Send = new Unit8Array(u8AzureTxBuff, 0, i);
 
-    var myDataUrl   = "https://" + platformName + "/devices/" + myId + "?api-version=" + platformVer;
-    var sasHubToken = GetSasHubToken( "/devices/" + myId );
-    var myHeader    =  {"Authorization":sasHubToken};
-    
-   
-    SendNorthBoundData( 
+    GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
+        
+    var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api-version=" + platformVer;
+    var myHeader  =  {"Authorization":sasDevToken};
+
+     SendNorthBoundData( 
         "POST",
         myDataUrl,
         "application/octet-stream",
@@ -246,17 +246,17 @@ function SendCloudAssociateSystem()
                 var responseText = JSON.stringify(response);    // Returns "" at a minimum
                 if( responseText.length > 2 )
                 {
-                    sasDevKey = response.authentication.symmetricKey.primaryKey;
+                    PrintLog( 1, "Response success: SendCloudAssociateSystem()..." + responseText );
                 }
             }
         },
         function(response) 
         {
-            PrintLog( 99, "Response error: CreateCloudDeviceKey()..." + JSON.stringify(response) );
+            PrintLog( 99, "Response error: SendCloudAssociateSystem()..." + JSON.stringify(response) );
         }
     );
-    
-    
+   
+  
 
 }
 
