@@ -25,6 +25,8 @@ var azureDeviceId           = "";
 
 // Azure IOT Hub message data...
 var u8AzureTxBuff = new Uint8Array(4096);
+var u8NuUniqueId  = new Uint8Array(8);
+var u8CuUniqueId  = new Uint8Array(8);
 const   D2CMSG_TECHDATA                         = 1;
 const   D2CMSG_REGISTER_NEWSITE                 = 10;
 const   D2CMSG_REGISTER_ASSOC_SYSTEM            = 11;
@@ -59,6 +61,24 @@ function RegisterCloudDev( devId )
     if( azureDeviceId.length == 0 )
     {
         azureDeviceId = devId;
+        u8NuUniqueId[0] = parseInt( nxtyNuUniqueId.subString(2,4), 16 ); 
+        u8NuUniqueId[1] = parseInt( nxtyNuUniqueId.subString(4,6), 16 ); 
+        u8NuUniqueId[2] = parseInt( nxtyNuUniqueId.subString(6,8), 16 ); 
+        u8NuUniqueId[3] = parseInt( nxtyNuUniqueId.subString(8,10), 16 ); 
+        u8NuUniqueId[4] = parseInt( nxtyNuUniqueId.subString(10,12), 16 ); 
+        u8NuUniqueId[5] = parseInt( nxtyNuUniqueId.subString(12,14), 16 ); 
+        u8NuUniqueId[6] = parseInt( nxtyNuUniqueId.subString(14,16), 16 ); 
+        u8NuUniqueId[7] = parseInt( nxtyNuUniqueId.subString(16,18), 16 ); 
+        u8NuUniqueId[8] = parseInt( nxtyNuUniqueId.subString(18,20), 16 ); 
+        u8CuUniqueId[0] = parseInt( nxtyCuUniqueId.subString(2,4), 16 ); 
+        u8CuUniqueId[1] = parseInt( nxtyCuUniqueId.subString(4,6), 16 ); 
+        u8CuUniqueId[2] = parseInt( nxtyCuUniqueId.subString(6,8), 16 ); 
+        u8CuUniqueId[3] = parseInt( nxtyCuUniqueId.subString(8,10), 16 ); 
+        u8CuUniqueId[4] = parseInt( nxtyCuUniqueId.subString(10,12), 16 ); 
+        u8CuUniqueId[5] = parseInt( nxtyCuUniqueId.subString(12,14), 16 ); 
+        u8CuUniqueId[6] = parseInt( nxtyCuUniqueId.subString(14,16), 16 ); 
+        u8CuUniqueId[7] = parseInt( nxtyCuUniqueId.subString(16,18), 16 ); 
+        u8CuUniqueId[8] = parseInt( nxtyCuUniqueId.subString(18,20), 16 ); 
     } 
     
     if( sasDevKey.length == 0 )
@@ -180,25 +200,25 @@ function SendCloudAssociateSystem()
     u8AzureTxBuff[i++] = 0;
     u8AzureTxBuff[i++] = 0;
     u8AzureTxBuff[i++] = 0;
-    u8AzureTxBuff[i++] = 0; //(uniqueIdNu >> 56);            // uniqueID            
-    u8AzureTxBuff[i++] = 0; //(uniqueIdNu >> 48);              
-    u8AzureTxBuff[i++] = 0; //(uniqueIdNu >> 40);              
-    u8AzureTxBuff[i++] = 0; //(uniqueIdNu >> 32);              
-    u8AzureTxBuff[i++] = (uniqueIdNu >> 24);              
-    u8AzureTxBuff[i++] = (uniqueIdNu >> 16);
-    u8AzureTxBuff[i++] = (uniqueIdNu >> 8);
-    u8AzureTxBuff[i++] = (uniqueIdNu >> 0);
+    u8AzureTxBuff[i++] = u8NuUniqueId[0];               // uniqueID            
+    u8AzureTxBuff[i++] = u8NuUniqueId[1];              
+    u8AzureTxBuff[i++] = u8NuUniqueId[2];              
+    u8AzureTxBuff[i++] = u8NuUniqueId[3];              
+    u8AzureTxBuff[i++] = u8NuUniqueId[4];              
+    u8AzureTxBuff[i++] = u8NuUniqueId[5];
+    u8AzureTxBuff[i++] = u8NuUniqueId[6];
+    u8AzureTxBuff[i++] = u8NuUniqueId[7];
 
     // payload assoc system
     u8AzureTxBuff[i++] = 0;                             // siteID
-    u8AzureTxBuff[i++] = 0; //(uniqueIdNu >> 56);            // systemID same as uniqueID in header.             
-    u8AzureTxBuff[i++] = 0; //(uniqueIdNu >> 48);              
-    u8AzureTxBuff[i++] = 0; //(uniqueIdNu >> 40);              
-    u8AzureTxBuff[i++] = 0; // (uniqueIdNu >> 32);              
-    u8AzureTxBuff[i++] = (uniqueIdNu >> 24);              
-    u8AzureTxBuff[i++] = (uniqueIdNu >> 16);
-    u8AzureTxBuff[i++] = (uniqueIdNu >> 8);
-    u8AzureTxBuff[i++] = (uniqueIdNu >> 0);
+    u8AzureTxBuff[i++] = u8NuUniqueId[0];               // systemID same as uniqueID in header.            
+    u8AzureTxBuff[i++] = u8NuUniqueId[1];              
+    u8AzureTxBuff[i++] = u8NuUniqueId[2];              
+    u8AzureTxBuff[i++] = u8NuUniqueId[3];              
+    u8AzureTxBuff[i++] = u8NuUniqueId[4];              
+    u8AzureTxBuff[i++] = u8NuUniqueId[5];
+    u8AzureTxBuff[i++] = u8NuUniqueId[6];
+    u8AzureTxBuff[i++] = u8NuUniqueId[7];
     u8AzureTxBuff[i++] = 0;                             // systemIPAddress[16]
     u8AzureTxBuff[i++] = 0;
     u8AzureTxBuff[i++] = 0;
