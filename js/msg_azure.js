@@ -61,22 +61,22 @@ function RegisterCloudDev( devId )
     if( azureDeviceId.length == 0 )
     {
         azureDeviceId = devId;
-        u8NuUniqueId[0] = parseInt( nxtyNuUniqueId.subString(2,4), 16 ); 
-        u8NuUniqueId[1] = parseInt( nxtyNuUniqueId.subString(4,6), 16 ); 
-        u8NuUniqueId[2] = parseInt( nxtyNuUniqueId.subString(6,8), 16 ); 
-        u8NuUniqueId[3] = parseInt( nxtyNuUniqueId.subString(8,10), 16 ); 
-        u8NuUniqueId[4] = parseInt( nxtyNuUniqueId.subString(10,12), 16 ); 
-        u8NuUniqueId[5] = parseInt( nxtyNuUniqueId.subString(12,14), 16 ); 
-        u8NuUniqueId[6] = parseInt( nxtyNuUniqueId.subString(14,16), 16 ); 
-        u8NuUniqueId[7] = parseInt( nxtyNuUniqueId.subString(16), 16 ); 
-        u8CuUniqueId[0] = parseInt( nxtyCuUniqueId.subString(2,4), 16 ); 
-        u8CuUniqueId[1] = parseInt( nxtyCuUniqueId.subString(4,6), 16 ); 
-        u8CuUniqueId[2] = parseInt( nxtyCuUniqueId.subString(6,8), 16 ); 
-        u8CuUniqueId[3] = parseInt( nxtyCuUniqueId.subString(8,10), 16 ); 
-        u8CuUniqueId[4] = parseInt( nxtyCuUniqueId.subString(10,12), 16 ); 
-        u8CuUniqueId[5] = parseInt( nxtyCuUniqueId.subString(12,14), 16 ); 
-        u8CuUniqueId[6] = parseInt( nxtyCuUniqueId.subString(14,16), 16 ); 
-        u8CuUniqueId[7] = parseInt( nxtyCuUniqueId.subString(16), 16 ); 
+        u8NuUniqueId[0] = parseInt( nxtyNuUniqueId.substring(2,4), 16 ); 
+        u8NuUniqueId[1] = parseInt( nxtyNuUniqueId.substring(4,6), 16 ); 
+        u8NuUniqueId[2] = parseInt( nxtyNuUniqueId.substring(6,8), 16 ); 
+        u8NuUniqueId[3] = parseInt( nxtyNuUniqueId.substring(8,10), 16 ); 
+        u8NuUniqueId[4] = parseInt( nxtyNuUniqueId.substring(10,12), 16 ); 
+        u8NuUniqueId[5] = parseInt( nxtyNuUniqueId.substring(12,14), 16 ); 
+        u8NuUniqueId[6] = parseInt( nxtyNuUniqueId.substring(14,16), 16 ); 
+        u8NuUniqueId[7] = parseInt( nxtyNuUniqueId.substring(16), 16 ); 
+        u8CuUniqueId[0] = parseInt( nxtyCuUniqueId.substring(2,4), 16 ); 
+        u8CuUniqueId[1] = parseInt( nxtyCuUniqueId.substring(4,6), 16 ); 
+        u8CuUniqueId[2] = parseInt( nxtyCuUniqueId.substring(6,8), 16 ); 
+        u8CuUniqueId[3] = parseInt( nxtyCuUniqueId.substring(8,10), 16 ); 
+        u8CuUniqueId[4] = parseInt( nxtyCuUniqueId.substring(10,12), 16 ); 
+        u8CuUniqueId[5] = parseInt( nxtyCuUniqueId.substring(12,14), 16 ); 
+        u8CuUniqueId[6] = parseInt( nxtyCuUniqueId.substring(14,16), 16 ); 
+        u8CuUniqueId[7] = parseInt( nxtyCuUniqueId.substring(16), 16 ); 
  
     } 
     
