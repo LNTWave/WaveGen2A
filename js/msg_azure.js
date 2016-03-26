@@ -68,8 +68,7 @@ function RegisterCloudDev( devId )
         u8NuUniqueId[4] = parseInt( nxtyNuUniqueId.subString(10,12), 16 ); 
         u8NuUniqueId[5] = parseInt( nxtyNuUniqueId.subString(12,14), 16 ); 
         u8NuUniqueId[6] = parseInt( nxtyNuUniqueId.subString(14,16), 16 ); 
-        u8NuUniqueId[7] = parseInt( nxtyNuUniqueId.subString(16,18), 16 ); 
-        u8NuUniqueId[8] = parseInt( nxtyNuUniqueId.subString(18,20), 16 ); 
+        u8NuUniqueId[7] = parseInt( nxtyNuUniqueId.subString(16), 16 ); 
         u8CuUniqueId[0] = parseInt( nxtyCuUniqueId.subString(2,4), 16 ); 
         u8CuUniqueId[1] = parseInt( nxtyCuUniqueId.subString(4,6), 16 ); 
         u8CuUniqueId[2] = parseInt( nxtyCuUniqueId.subString(6,8), 16 ); 
@@ -77,8 +76,8 @@ function RegisterCloudDev( devId )
         u8CuUniqueId[4] = parseInt( nxtyCuUniqueId.subString(10,12), 16 ); 
         u8CuUniqueId[5] = parseInt( nxtyCuUniqueId.subString(12,14), 16 ); 
         u8CuUniqueId[6] = parseInt( nxtyCuUniqueId.subString(14,16), 16 ); 
-        u8CuUniqueId[7] = parseInt( nxtyCuUniqueId.subString(16,18), 16 ); 
-        u8CuUniqueId[8] = parseInt( nxtyCuUniqueId.subString(18,20), 16 ); 
+        u8CuUniqueId[7] = parseInt( nxtyCuUniqueId.subString(16), 16 ); 
+ 
     } 
     
     if( sasDevKey.length == 0 )
