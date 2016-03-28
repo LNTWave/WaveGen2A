@@ -104,7 +104,8 @@ function SendCloudData(dataText)
         GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
         
         var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api-version=" + platformVer;
-        var myHeader  =  {"Authorization":sasDevToken, "iothub-messageid":iMsgId++ };
+        var myHeader  =  {"Authorization":sasDevToken, "iothub-messageid":iMsgId };
+        iMsgId++;
 
 
 //PrintLog(1,"myHeader     =" + JSON.stringify(myHeader) );
@@ -248,7 +249,8 @@ function SendCloudAssociateSystem()
     GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
         
     var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api-version=" + platformVer;
-    var myHeader  =  {"Authorization":sasDevToken, "iothub-messageid":iMsgId++ };
+    var myHeader  =  {"Authorization":sasDevToken, "iothub-messageid":iMsgId };
+    iMsgId++;
 
      SendNorthBoundDataBinary( 
         "POST",
@@ -403,7 +405,9 @@ function SendCloudAssociateBoards()
         GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
             
         var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api-version=" + platformVer;
-        var myHeader  =  {"Authorization":sasDevToken, "iothub-messageid":iMsgId++ };
+        var myHeader  =  {"Authorization":sasDevToken, "iothub-messageid":iMsgId };
+        iMsgId++;
+        
     
          SendNorthBoundDataBinary( 
             "POST",
