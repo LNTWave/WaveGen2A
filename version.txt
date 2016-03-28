@@ -485,6 +485,21 @@ Post 01.05.25 01/04/16 (Nextivity HB)
     - If CU or NU Sw version < 21 use PC.
     - Add cautionary text before update.
 
+01.05.82 03/14/16 (Nextivity)
+    - Do not clear the CU version info if UNII retry.  
+
+01.05.83 03/16/16 (Nextivity)
+    - Change the UNII_TRY_COUNTER_MAX from 15 to 45 seconds.
+    - Change the main loop timer interval from 1 to 5 seconds if V1_ICD just before asking for SW Update check.
+      This is to make sure that the SW version data items get stored in the cloud before we evaluate.  
+
+01.05.84 03/16/16 (Nextivity)
+    - Change the MAIN_LOOP_COUNTER_MAX from 60 to 120 seconds to allow the new UNII_TRY_COUNTER.
+
+TODO:
+    - Init nxtySwBuildIdNu/Cu to "" empty string instead of 0.   0 causes problems in 5_1_19 check.
+
+
    Release notes:
    - Make sure pointing to production platform and not sandbox.  Set CFG_RUN_ON_SANDBOX to false.
    - Make sure to use IOS distribution key when building.

@@ -13,8 +13,8 @@ var mySn                        = null;
 var mySku                       = null;
 var mySkuCld                    = null;
 
-const   MAIN_LOOP_COUNTER_MAX   = 60;
-const   UNII_TRY_COUNTER_MAX    = 15;
+const   MAIN_LOOP_COUNTER_MAX   = 120;
+const   UNII_TRY_COUNTER_MAX    = 45;
 const   SwPnNuCu                = "700.036.";
 const   SwPnPic                 = "700.040.";
 const   SwPnBt                  = "700.041.";
@@ -1128,7 +1128,6 @@ Do not auto update PIC at this time....
                         GetNxtyOperatorCode(nxtyConfigPn);
                     }
 
-                    
                     // Get SKU, i.e. now the Model Number...
                     // First check to see if we have retrieved the SKU previously...                    
                     myModel = window.localStorage.getItem(nxtyCuUniqueId);              // returns null if key not found...
@@ -1170,7 +1169,6 @@ Do not auto update PIC at this time....
                 return;
             }
 
-            
             // Send first round of information to the cloud.............................................
             else if( bSendLocalInfoToCloud == false )
             {
@@ -1391,6 +1389,10 @@ Do not force a SW update....
                     bNxtySuperMsgRsp     = true;
                     bGotRegLockStatus    = true;
                     guiGotTechModeValues = true;
+                    
+                    // Slow the main loop down since we are falling through and do not want to trigger the SW update check too quickly.
+                    clearInterval(MainLoopIntervalHandle);
+                    MainLoopIntervalHandle = setInterval(app.mainLoop, 5000 );                     
                 }
                 else
                 {            
