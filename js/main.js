@@ -69,7 +69,7 @@ var v1GatheringMainData         = false;
 
 var uIcd                    = 0;
 var swVerBtScan             = "--.--";          // Filled in by scan results. 
-var szVerApp                = "01.05.81";       // In BCD, remember config.xml as well.
+var szVerApp                = "01.05.85";       // In BCD, remember config.xml as well.
 
 
 // Determine which messages get sent to the console.  1 normal, 10 verbose.

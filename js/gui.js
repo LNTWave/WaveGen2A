@@ -2645,7 +2645,7 @@ var util = {
 		
 		var titleArray = ['Bandwidth', 'Downlink centre freq.', 'Uplink centre freq.', 'PRI Cell ID', 'Donor RSSI', 'Donor RSCP',  'Donor EC/IO',  'Donor SINR', 	'Downlink TX power', 'Uplink TX power', 'Ext. antenna in use', 	'Uplink Safe Mode Gain', 	'Downlink System Gain', 	'Uplink System Gain', 	'Downlink Echo Gain', 	'Uplink Echo Gain'];
 	    var keyParams  = ['Bandwidth', 'DL Center Freq',        'UL Center Freq',      'ID0',         'DL RSSI',    'Max DL RSCP', 'Max DL ECIO', 'SINR',       	'DL Tx Power',       'UL Tx Power',     'Ext Ant In Use', 		'UL Safe Mode Gain', 	'DL System Gain', 				'UL System Gain', 		'DL Echo Gain', 		'UL Echo Gain'];
-	    var unitsArray = ['MHz',       'MHz',                   'MHz',                 '',            'dBm',        'dBm',         'dB',          'dB',				'dBm',               'dBm',             '', 					'dB', 					'dB', 							'dB',					'dB',					'dB'];
+	    var unitsArray = ['MHz',       'MHz',                   'MHz',                 '',            'dBm',        'dBm',         'dB',          'dB',				'dB',               'dB',             '', 					'dB', 					'dB', 							'dB',					'dB',					'dB'];
 		var sinrIndex;	
 	    var advancedHeader = "<div id='advancedContentwrapper'>" + "<div class='panel-group' id='advancedDataContainer'>";
 	    var overViewContent = '';
@@ -2752,8 +2752,8 @@ var util = {
 	    if (guiProductType === PRODUCT_TYPE_DUO || guiProductType === PRODUCT_TYPE_PRO) {
 	        deviceStateContent = deviceStateContent + "<div class='divider'>SYSTEM OVERVIEW</div>";
 	        deviceStateContent = deviceStateContent + "<div class='panel panel-default col-sm-6'>" + "<div class='panel-heading drop-purple dropDown'>" + "<h4 class='panel-title'>" + "<a data-toggle='collapse' href='#deviceStateCollapse'>" + "<div>Device State</div>" + "<span class='pull-right'>" + "<span class='toggle-icon  expand-more'></span>" + "</span></a></h4></div>" + "<div id='deviceStateCollapse' class='panel-collapse collapse'>" + "<div class='panel-body dropDownList'>" + "<div class='dropDownInnerTitle '>" + "<div class='col-xs-8 col-sm-8'>Description</div>" + "<div class='col-xs-4 col-sm-4'>Value</div></div>";
-	        var deviceStates = 		['UNII Modem State',		'5GHz Downlink Freq',		'5GHz Uplink Freq', 	'Distance Metric',		'Remote Shutdown State', 		'NU Temp', 		'CU Temp', 		'NU Ctrl Chan BER', 		'CAC', 		'CU TX Power', 		'NU TX Power'],
-	            deviceStateUnits = 	['', 				'GHz', 				'GHz', 				'R:-7', 					'', 							'&deg;C', 		'&deg;C', 		'%', 						'seconds', 	'dBm', 				'dBm'],
+	        var deviceStates = 		['UNII Modem State',		'5MHz Downlink Freq',		'5MHz Uplink Freq', 	'Distance Metric',		'Remote Shutdown State', 		'NU Temp', 		'CU Temp', 		'NU Ctrl Chan BER', 		'CAC', 		'CU TX Power', 		'NU TX Power'],
+	            deviceStateUnits = 	['', 				'MHz', 				'MHz', 				'R:-7', 					'', 							'&deg;C', 		'&deg;C', 		'%', 						'seconds', 	'dBm', 				'dBm'],
 	            deviceStateKeys = 	['NU UNII State', 	'NU 5G DL', 		'NU 5G UL', 		'NU Dist Metric', 		'Remote Shutdown', 				'NU Temp', 		'CU Temp', 		'NU Ctrl Chan BER', 		'CAC', 		'CU Tx Pwr', 		'NU Tx Pwr'];
 	
 	        for (var i = 0; i < deviceStateKeys.length; i++) {
@@ -2882,9 +2882,9 @@ var util = {
 	    var cellStates = ['Not Boosting', 'Boosting'],
 			channelsTitleArray = ['Bandwidth', 'Downlink centre freq.', 'Uplink centre freq.', 'PRI Cell ID', 'Donor RSSI', 'Donor RSCP',  'Donor EC/IO',  'Donor SINR', 	'Downlink TX power', 'Uplink TX power', 'Ext. antenna in use', 	'Uplink Safe Mode Gain', 	'Downlink System Gain', 	'Uplink System Gain', 	'Downlink Echo Gain', 	'Uplink Echo Gain'];
 			channelsKeyParams  = ['Bandwidth', 'DL Center Freq',        'UL Center Freq',      'ID0',         'DL RSSI',    'Max DL RSCP', 'Max DL ECIO', 'SINR',       	'DL Tx Power',       'UL Tx Power',     'Ext Ant In Use', 		'UL Safe Mode Gain', 	'DL System Gain', 	'UL System Gain', 	'DL Echo Gain', 	'UL Echo Gain'];
-			channelsUnitsArray = ['MHz',       'MHz',                   'MHz',                 '',            'dBm',        'dBm',         'dB',          'dB',				'dBm',               'dBm',             '', 					'dB', 					'dB', 				'dB',				'dB',				'dB'];
+			channelsUnitsArray = ['MHz',       'MHz',                   'MHz',                 '',            'dBm',        'dBm',         'dB',          'dB',				'dB',               'dB',             '', 					'dB', 					'dB', 				'dB',				'dB',				'dB'];
 			deviceStateKeys = ['NU UNII State', 	'NU 5G DL', 		'NU 5G UL', 		'NU Dist Metric', 		'Remote Shutdown', 				'NU Temp', 		'CU Temp', 		'NU Ctrl Chan BER', 		'CAC', 		'CU Tx Pwr', 		'NU Tx Pwr'],
-			deviceStateUnits = ['', 				'GHz', 				'GHz', 				'R:-7', 					'', 							'&deg;C', 		'&deg;C', 		'%', 						'seconds', 	'dBm', 				'dBm'];
+			deviceStateUnits = ['', 				'MHz', 				'MHz', 				'R:-7', 					'', 							'&deg;C', 		'&deg;C', 		'%', 						'seconds', 	'dBm', 				'dBm'];
 		var sinrIndex;
 		for (var i = 0; i < guiBands.length; i++) {
 			$('#networkTitle_' + i).html(guiRadios[i]);
@@ -3718,7 +3718,7 @@ var util = {
 	    var aboutLogoContainer = util.createAppendElem("div", "aboutLogoContainer", "aboutLogoContainer", aboutLogoVersionContainer);
 	    var aboutVersionContainer = util.createAppendElem("div", "aboutVersionContainer", "aboutVersionContainer", aboutLogoVersionContainer);
 	    aboutVersionContainer.innerHTML = "Version "+szVerApp;
-	    aboutFooterContainer.innerHTML = "Copyright &copy; 2015<br>Nextivity Inc. All rights reserved";
+	    aboutFooterContainer.innerHTML = "Copyright &copy; 2016<br>Nextivity Inc. All rights reserved";
 	},
 	
 	showPrivacyPolicy: function() {
@@ -3761,7 +3761,7 @@ var util = {
 	    var emailBodyContainer = util.createAppendElem("div", "emailBodyContainer", "emailBodyContainer", feedBackComposer);
 	    emailToContainer.innerHTML = "To: <span class='emailTo'>support@cel-fi.com</span>";
 	    emailCCContainer.innerHTML = "Cc/Bcc:";
-	    emailSubContainer.innerHTML = "Subject: <span class='emailSubject'>Cel-Fi Support</span>";
+	    emailSubContainer.innerHTML = "Subject: <span class='emailSubject'>Cel-Fi Wave Support</span>";
 	    emailBodyContainer.innerHTML = "<textarea class='emailComposeBody' rows='15'></textarea>";
 	},
 	
@@ -4057,7 +4057,7 @@ updatePICError: {
 },
 updateCelFiError: {
     errorTitle: "Booster update required",
-    errorBody: "Your boosters software is out of date. Please install the latest version to make sure your Cel-Fi system is working correctly.",
+    errorBody: "Your booster's software is out of date. Please install the latest version to make sure your Cel-Fi system is working correctly.",
 },
 noWifiError: {
     errorTitle: "No WiFi or Cell",

@@ -3,7 +3,7 @@
         xmlns:gap   = "http://phonegap.com/ns/1.0"
         id          = "NxtyWave"
         versionCode = "18"          
-        version     = "01.05.81">  <!-- Remember to update main.js as well -->
+        version     = "01.05.85">  <!-- Remember to update main.js as well -->
 
  
     <name>Wave</name>
