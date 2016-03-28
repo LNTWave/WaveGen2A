@@ -1128,8 +1128,6 @@ Do not auto update PIC at this time....
                         GetNxtyOperatorCode(nxtyConfigPn);
                     }
 
-                    // Register this device with Azure using the CU unique ID (2-box) or NU unique iD (1-box)....
-                    RegisterCloudDev(nxtyCuUniqueId);
                     
                     // Get SKU, i.e. now the Model Number...
                     // First check to see if we have retrieved the SKU previously...                    
@@ -1172,13 +1170,6 @@ Do not auto update PIC at this time....
                 return;
             }
 
-            // Wait until we receive the device key from Azure..........................
-            else if( sasDevKey.length == 0 )
-            {
-                PrintLog(1, "Main: Waiting on the device key from Azure..." );
-                RegisterCloudDev(nxtyCuUniqueId);
-                return;
-            }
             
             // Send first round of information to the cloud.............................................
             else if( bSendLocalInfoToCloud == false )
@@ -1436,6 +1427,13 @@ Do not force a SW update....
                 }  // End V2
             }
 
+            // Wait until we receive the device key from Azure..........................
+            else if( sasDevKey.length == 0 )
+            {
+                PrintLog(1, "Main: Waiting on the device key from Azure..." );
+                RegisterCloudDev(nxtyNuUniqueId);
+                return;
+            }
 
             // Get the 2nd Glob of information ..............
             else if( (bNxtySuperMsgRemoteInfo2 == false) && (bCnxToOneBoxNu == false) )

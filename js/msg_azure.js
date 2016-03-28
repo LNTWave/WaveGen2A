@@ -109,6 +109,7 @@ function SendCloudData(dataText)
 
 //PrintLog(1,"myHeader     =" + JSON.stringify(myHeader) );
 
+
         PrintLog( 1, "SendCloudData: " + myDataUrl + "  " + myData );
         
         
@@ -368,14 +369,14 @@ function SendCloudAssociateBoards()
         }
         else
         {
-            u8AzureTxBuff[i++] = u8CuUniqueId[0];               // board uniqueID.            
-            u8AzureTxBuff[i++] = u8CuUniqueId[1];              
-            u8AzureTxBuff[i++] = u8CuUniqueId[2];              
-            u8AzureTxBuff[i++] = u8CuUniqueId[3];              
+            u8AzureTxBuff[i++] = u8CuUniqueId[7];               // board uniqueID.            
+            u8AzureTxBuff[i++] = u8CuUniqueId[6];              
+            u8AzureTxBuff[i++] = u8CuUniqueId[5];              
             u8AzureTxBuff[i++] = u8CuUniqueId[4];              
-            u8AzureTxBuff[i++] = u8CuUniqueId[5];
-            u8AzureTxBuff[i++] = u8CuUniqueId[6];
-            u8AzureTxBuff[i++] = u8CuUniqueId[7];
+            u8AzureTxBuff[i++] = u8CuUniqueId[3];              
+            u8AzureTxBuff[i++] = u8CuUniqueId[2];
+            u8AzureTxBuff[i++] = u8CuUniqueId[1];
+            u8AzureTxBuff[i++] = u8CuUniqueId[0];
             u8AzureTxBuff[i++] = 0;                             // port number
             u8AzureTxBuff[i++] = 0;
             u8AzureTxBuff[i++] = 0;
