@@ -345,14 +345,14 @@ function SendCloudAssociateBoards()
         
         if( iBoard == 0 )
         {
-            u8AzureTxBuff[i++] = u8NuUniqueId[0];               // board uniqueID.            
-            u8AzureTxBuff[i++] = u8NuUniqueId[1];              
-            u8AzureTxBuff[i++] = u8NuUniqueId[2];              
-            u8AzureTxBuff[i++] = u8NuUniqueId[3];              
+            u8AzureTxBuff[i++] = u8NuUniqueId[7];               // board uniqueID.            
+            u8AzureTxBuff[i++] = u8NuUniqueId[6];              
+            u8AzureTxBuff[i++] = u8NuUniqueId[5];              
             u8AzureTxBuff[i++] = u8NuUniqueId[4];              
-            u8AzureTxBuff[i++] = u8NuUniqueId[5];
-            u8AzureTxBuff[i++] = u8NuUniqueId[6];
-            u8AzureTxBuff[i++] = u8NuUniqueId[7];
+            u8AzureTxBuff[i++] = u8NuUniqueId[3];              
+            u8AzureTxBuff[i++] = u8NuUniqueId[2];
+            u8AzureTxBuff[i++] = u8NuUniqueId[1];
+            u8AzureTxBuff[i++] = u8NuUniqueId[0];
             u8AzureTxBuff[i++] = 0;                             // port number
             u8AzureTxBuff[i++] = 0;
             u8AzureTxBuff[i++] = 0;
