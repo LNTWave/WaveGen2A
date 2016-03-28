@@ -21,7 +21,7 @@ var platformVer             = "2016-02-03";
 
 
 var azureDeviceId           = "";
-
+var iMsgId                  = 0;
 
 // Azure IOT Hub message data...
 var u8AzureTxBuff = new Uint8Array(4096);
@@ -104,7 +104,7 @@ function SendCloudData(dataText)
         GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
         
         var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api-version=" + platformVer;
-        var myHeader  =  {"Authorization":sasDevToken};
+        var myHeader  =  {"Authorization":sasDevToken, "iothub-messageid":iMsgId++ };
 
 
 //PrintLog(1,"myHeader     =" + JSON.stringify(myHeader) );
@@ -248,7 +248,7 @@ function SendCloudAssociateSystem()
     GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
         
     var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api-version=" + platformVer;
-    var myHeader  =  {"Authorization":sasDevToken};
+    var myHeader  =  {"Authorization":sasDevToken, "iothub-messageid":iMsgId++ };
 
      SendNorthBoundDataBinary( 
         "POST",
@@ -403,7 +403,7 @@ function SendCloudAssociateBoards()
         GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
             
         var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api-version=" + platformVer;
-        var myHeader  =  {"Authorization":sasDevToken};
+        var myHeader  =  {"Authorization":sasDevToken, "iothub-messageid":iMsgId++ };
     
          SendNorthBoundDataBinary( 
             "POST",
