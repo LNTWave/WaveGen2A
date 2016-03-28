@@ -456,7 +456,7 @@ function RetrieveCloudDeviceKey()
 //                        PrintLog( 1, "Response success: RetrieveCloudDeviceKey()..." + responseText );
                         sasDevKey = response.authentication.symmetricKey.primaryKey;
 SendCloudAssociateSystem();
-SendCloudAssociateBoards();
+//SendCloudAssociateBoards();
                     }
                 }
             },
