@@ -240,7 +240,7 @@ function SendCloudAssociateSystem()
     u8AzureTxBuff[i++] = 0;
 
     // Fill in the payload size, assume size is less than 256, i.e. 1 byte.    
-    u8AzureTxBuff[7] = i - 16;          // Current number of bytes minus 16-byte header.
+    u8AzureTxBuff[4] = i - 16;          // Current number of bytes minus 16-byte header.
     
    
 
@@ -324,24 +324,24 @@ function SendCloudAssociateBoards()
         u8AzureTxBuff[i++] = 0;
         u8AzureTxBuff[i++] = 0;
         u8AzureTxBuff[i++] = 0;
-        u8AzureTxBuff[i++] = u8NuUniqueId[0];               // uniqueID            
-        u8AzureTxBuff[i++] = u8NuUniqueId[1];              
-        u8AzureTxBuff[i++] = u8NuUniqueId[2];              
-        u8AzureTxBuff[i++] = u8NuUniqueId[3];              
+        u8AzureTxBuff[i++] = u8NuUniqueId[7];               // uniqueID            
+        u8AzureTxBuff[i++] = u8NuUniqueId[6];              
+        u8AzureTxBuff[i++] = u8NuUniqueId[5];              
         u8AzureTxBuff[i++] = u8NuUniqueId[4];              
-        u8AzureTxBuff[i++] = u8NuUniqueId[5];
-        u8AzureTxBuff[i++] = u8NuUniqueId[6];
-        u8AzureTxBuff[i++] = u8NuUniqueId[7];
+        u8AzureTxBuff[i++] = u8NuUniqueId[3];              
+        u8AzureTxBuff[i++] = u8NuUniqueId[2];
+        u8AzureTxBuff[i++] = u8NuUniqueId[1];
+        u8AzureTxBuff[i++] = u8NuUniqueId[0];
     
         // payload assoc board 
-        u8AzureTxBuff[i++] = u8NuUniqueId[0];               // systemID same as uniqueID in header.            
-        u8AzureTxBuff[i++] = u8NuUniqueId[1];              
-        u8AzureTxBuff[i++] = u8NuUniqueId[2];              
-        u8AzureTxBuff[i++] = u8NuUniqueId[3];              
+        u8AzureTxBuff[i++] = u8NuUniqueId[7];               // systemID same as uniqueID in header.            
+        u8AzureTxBuff[i++] = u8NuUniqueId[6];              
+        u8AzureTxBuff[i++] = u8NuUniqueId[5];              
         u8AzureTxBuff[i++] = u8NuUniqueId[4];              
-        u8AzureTxBuff[i++] = u8NuUniqueId[5];
-        u8AzureTxBuff[i++] = u8NuUniqueId[6];
-        u8AzureTxBuff[i++] = u8NuUniqueId[7];
+        u8AzureTxBuff[i++] = u8NuUniqueId[3];              
+        u8AzureTxBuff[i++] = u8NuUniqueId[2];
+        u8AzureTxBuff[i++] = u8NuUniqueId[1];
+        u8AzureTxBuff[i++] = u8NuUniqueId[0];
         
         if( iBoard == 0 )
         {
@@ -396,7 +396,7 @@ function SendCloudAssociateBoards()
         }
     
         // Fill in the payload size, assume size is less than 256, i.e. 1 byte.    
-        u8AzureTxBuff[7] = i - 16;          // Current number of bytes minus 16-byte header.
+        u8AzureTxBuff[4] = i - 16;          // Current number of bytes minus 16-byte header.
         
     
         GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
@@ -459,7 +459,7 @@ function RetrieveCloudDeviceKey()
 //                        PrintLog( 1, "Response success: RetrieveCloudDeviceKey()..." + responseText );
                         sasDevKey = response.authentication.symmetricKey.primaryKey;
 SendCloudAssociateSystem();
-//SendCloudAssociateBoards();
+SendCloudAssociateBoards();
                     }
                 }
             },
