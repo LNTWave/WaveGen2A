@@ -39,7 +39,7 @@ const   D2CMSG_SETPARAM_RSP                     = 30;
 const   D2CMDG_SWUPDATE                         = 40;
 const   D2CMDG_SWUPDATE_GETSAS                  = 41;
 const   D2CMDG_DEBUG_ADDFAKEFACTORYINFO         = 90;
-
+const   WAVE2_BOARDNAME_LEN                     = 64;
 
 var tempCounter  = 0;
 
@@ -183,11 +183,8 @@ function SendCloudData(dataText)
 function SendCloudAssociateSystem()
 {
     var i              = 0;
-    var uniqueIdNu     =  parseInt( nxtyNuUniqueId, 16 );
     
     PrintLog(1,  "Azure: SendCloudAssociateSystem()" );
-    
-    
 
     // d2cMsg....................................
     // d2cMsgHdr size = 16 bytes
@@ -239,7 +236,7 @@ function SendCloudAssociateSystem()
     u8AzureTxBuff[i++] = 0;
     u8AzureTxBuff[i++] = 0;
 
-    // Fill in the payload size, assume less than 1 byte.    
+    // Fill in the payload size, assume size is less than 256, i.e. 1 byte.    
     u8AzureTxBuff[7] = i - 16;          // Current number of bytes minus 16-byte header.
     
    
@@ -259,27 +256,170 @@ function SendCloudAssociateSystem()
         myHeader,
         function(response) 
         {
-PrintLog( 1, "Response success: SendCloudAssociateSystem()..."  );        
-            if( response != null )
-            {
-                var responseText = JSON.stringify(response);    // Returns "" at a minimum
-                if( responseText.length > 2 )
-                {
-                    PrintLog( 1, "Response success: SendCloudAssociateSystem()..." + responseText );
-                }
-            }
+            PrintLog( 1, "Azure: Response success: SendCloudAssociateSystem()..."  );        
         },
         function(response) 
         {
-            PrintLog( 99, "Response error: SendCloudAssociateSystem()..." + JSON.stringify(response) );
+            PrintLog( 99, "Azure: Response error: SendCloudAssociateSystem()..." + JSON.stringify(response) );
         }
     );
-   
-  
-
 }
 
 
+// SendCloudAssociateBoards............................................................................................
+//
+//  typedef struct
+//  {
+//      long long               systemID;
+//      long long               boardUniqueID;
+//      unsigned int            portNum;
+//      char                    name[WAVE2_BOARDNAME_LEN];
+//  } d2cMsg_Register_Assoc_Board;              //Reference: D2CMSG_REGISTER_ASSOC_BOARD
+//
+//  typedef struct
+//  {
+//      unsigned char           version;
+//      E8(D2CMSGTYPE)          type;
+//      unsigned char           reserved[2];
+//      unsigned int            payloadSize;
+//      long long               uniqueID;
+//  } d2cMsgHdr;
+//  
+//  typedef struct
+//  {
+//      d2cMsgHdr               hdr;
+//      unsigned int            payload[1];     //variable-size field as determined by hdr.type
+//  } d2cMsg;
+
+
+function SendCloudAssociateBoards()
+{
+    var i              = 0;
+    var j              = 0;
+    var iNumBoards     = 0;
+    
+    if( bCnxToOneBoxNu )
+    {
+        iNumBoards     = 1;
+    }
+    else
+    {
+        iNumBoards     = 2;
+    }
+    
+    PrintLog(1,  "Azure: SendCloudAssociateBoards(" + iNumBoards + ")" );
+    
+    for( var iBoard = 0; iBoard < iNumBoards; iBoard++ )
+    {
+        // d2cMsg....................................
+        // d2cMsgHdr size = 16 bytes
+        u8AzureTxBuff[i++] = 1;                             // version
+        u8AzureTxBuff[i++] = D2CMSG_REGISTER_ASSOC_SYSTEM;  // type  
+        u8AzureTxBuff[i++] = 0;                             // reserved
+        u8AzureTxBuff[i++] = 0;                             // reserved
+        u8AzureTxBuff[i++] = 0;                             // payloadSize in bytes, fill in after payload.
+        u8AzureTxBuff[i++] = 0;
+        u8AzureTxBuff[i++] = 0;
+        u8AzureTxBuff[i++] = 0;
+        u8AzureTxBuff[i++] = u8NuUniqueId[0];               // uniqueID            
+        u8AzureTxBuff[i++] = u8NuUniqueId[1];              
+        u8AzureTxBuff[i++] = u8NuUniqueId[2];              
+        u8AzureTxBuff[i++] = u8NuUniqueId[3];              
+        u8AzureTxBuff[i++] = u8NuUniqueId[4];              
+        u8AzureTxBuff[i++] = u8NuUniqueId[5];
+        u8AzureTxBuff[i++] = u8NuUniqueId[6];
+        u8AzureTxBuff[i++] = u8NuUniqueId[7];
+    
+        // payload assoc board 
+        u8AzureTxBuff[i++] = u8NuUniqueId[0];               // systemID same as uniqueID in header.            
+        u8AzureTxBuff[i++] = u8NuUniqueId[1];              
+        u8AzureTxBuff[i++] = u8NuUniqueId[2];              
+        u8AzureTxBuff[i++] = u8NuUniqueId[3];              
+        u8AzureTxBuff[i++] = u8NuUniqueId[4];              
+        u8AzureTxBuff[i++] = u8NuUniqueId[5];
+        u8AzureTxBuff[i++] = u8NuUniqueId[6];
+        u8AzureTxBuff[i++] = u8NuUniqueId[7];
+        
+        if( iBoard == 0 )
+        {
+            u8AzureTxBuff[i++] = u8NuUniqueId[0];               // board uniqueID.            
+            u8AzureTxBuff[i++] = u8NuUniqueId[1];              
+            u8AzureTxBuff[i++] = u8NuUniqueId[2];              
+            u8AzureTxBuff[i++] = u8NuUniqueId[3];              
+            u8AzureTxBuff[i++] = u8NuUniqueId[4];              
+            u8AzureTxBuff[i++] = u8NuUniqueId[5];
+            u8AzureTxBuff[i++] = u8NuUniqueId[6];
+            u8AzureTxBuff[i++] = u8NuUniqueId[7];
+            u8AzureTxBuff[i++] = 0;                             // port number
+            u8AzureTxBuff[i++] = 0;
+            u8AzureTxBuff[i++] = 0;
+            u8AzureTxBuff[i++] = 0;
+            
+            // NU name....
+            var u8NuRsp = stringToBytes("NU");
+            
+            for( j = 0; j < u8NuRsp.length; j++ )
+            {
+                u8AzureTxBuff[i++] = u8NuRsp[j];
+            }
+        }
+        else
+        {
+            u8AzureTxBuff[i++] = u8CuUniqueId[0];               // board uniqueID.            
+            u8AzureTxBuff[i++] = u8CuUniqueId[1];              
+            u8AzureTxBuff[i++] = u8CuUniqueId[2];              
+            u8AzureTxBuff[i++] = u8CuUniqueId[3];              
+            u8AzureTxBuff[i++] = u8CuUniqueId[4];              
+            u8AzureTxBuff[i++] = u8CuUniqueId[5];
+            u8AzureTxBuff[i++] = u8CuUniqueId[6];
+            u8AzureTxBuff[i++] = u8CuUniqueId[7];
+            u8AzureTxBuff[i++] = 0;                             // port number
+            u8AzureTxBuff[i++] = 0;
+            u8AzureTxBuff[i++] = 0;
+            u8AzureTxBuff[i++] = 0;
+            
+            // NU name....
+            var u8CuRsp = stringToBytes("CU");
+            
+            for( j = 0; j < u8CuRsp.length; j++ )
+            {
+                u8AzureTxBuff[i++] = u8CuRsp[j];
+            }
+        }
+        
+        for( ; j < WAVE2_BOARDNAME_LEN; j++ )
+        {
+            u8AzureTxBuff[i++] = 0;
+        }
+    
+        // Fill in the payload size, assume size is less than 256, i.e. 1 byte.    
+        u8AzureTxBuff[7] = i - 16;          // Current number of bytes minus 16-byte header.
+        
+    
+        GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
+            
+        var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api-version=" + platformVer;
+        var myHeader  =  {"Authorization":sasDevToken};
+    
+         SendNorthBoundDataBinary( 
+            "POST",
+            myDataUrl,
+            "application/octet-stream",
+            u8AzureTxBuff,
+            i,                              // length
+            "",                             // response format
+            myHeader,
+            function(response) 
+            {
+                PrintLog( 1, "Azure: Response success: SendCloudAssociateBoards()..."  );        
+            },
+            function(response) 
+            {
+                PrintLog( 99, "Azure: Response error: SendCloudAssociateBoards()..." + JSON.stringify(response) );
+            }
+        );
+    }
+}
 
 
 // RetrieveCloudDeviceKey............................................................................................
@@ -316,6 +456,7 @@ function RetrieveCloudDeviceKey()
 //                        PrintLog( 1, "Response success: RetrieveCloudDeviceKey()..." + responseText );
                         sasDevKey = response.authentication.symmetricKey.primaryKey;
 SendCloudAssociateSystem();
+SendCloudAssociateBoards();
                     }
                 }
             },
