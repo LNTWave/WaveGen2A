@@ -317,7 +317,7 @@ function SendCloudAssociateBoards()
         // d2cMsg....................................
         // d2cMsgHdr size = 16 bytes
         u8AzureTxBuff[i++] = 1;                             // version
-        u8AzureTxBuff[i++] = D2CMSG_REGISTER_ASSOC_SYSTEM;  // type  
+        u8AzureTxBuff[i++] = D2CMSG_REGISTER_ASSOC_BOARD;   // type  
         u8AzureTxBuff[i++] = 0;                             // reserved
         u8AzureTxBuff[i++] = 0;                             // reserved
         u8AzureTxBuff[i++] = 0;                             // payloadSize in bytes, fill in after payload.
