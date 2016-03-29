@@ -103,7 +103,7 @@ function SendCloudData(dataText)
         var myData    = "{" + dataText + "}";
         GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
         
-        var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api-version=" + platformVer;
+        var myDataUrl = "https://" + platformName + "/devices/" + azureDeviceId + "/messages/events?api-version=" + platformVer;
         var myHeader  =  {"Authorization":sasDevToken, "iothub-messageid":iMsgId++ };
 
 
@@ -146,6 +146,104 @@ function SendCloudData(dataText)
     }
     
 }
+
+
+
+// SendCloudTechData............................................................................................
+function SendCloudTechData(dataText)
+{
+    if( sasDevKey.length != 0 )
+    {
+    
+        var i              = 0;
+        var j              = 0;
+        var measId         = 0;
+        var measVal        = 0;
+        
+        PrintLog(1,  "Azure: SendCloudTechData( {" + dataText + "} )" );
+    
+        var measList    = dataText.split(",");            // Build an array of meas values
+        var iNumMeas    = measList.length;
+        var payloadSize = 4 + (iNumMeas * 8);             // iNumMeas size is 4 plus 8 bytes per meas.   
+    
+        // d2cMsg....................................
+        // d2cMsgHdr size = 16 bytes
+        u8AzureTxBuff[i++] = 1;                             // version
+        u8AzureTxBuff[i++] = D2CMSG_TECHDATA;               // type  
+        u8AzureTxBuff[i++] = 0;                             // reserved
+        u8AzureTxBuff[i++] = 0;                             // reserved
+        u8AzureTxBuff[i++] = (payloadSize >> 0);            // payloadSize in bytes
+        u8AzureTxBuff[i++] = (payloadSize >> 8);
+        u8AzureTxBuff[i++] = (payloadSize >> 16);
+        u8AzureTxBuff[i++] = (payloadSize >> 24);
+        u8AzureTxBuff[i++] = u8NuUniqueId[7];               // uniqueID            
+        u8AzureTxBuff[i++] = u8NuUniqueId[6];              
+        u8AzureTxBuff[i++] = u8NuUniqueId[5];              
+        u8AzureTxBuff[i++] = u8NuUniqueId[4];              
+        u8AzureTxBuff[i++] = u8NuUniqueId[3];              
+        u8AzureTxBuff[i++] = u8NuUniqueId[2];
+        u8AzureTxBuff[i++] = u8NuUniqueId[1];
+        u8AzureTxBuff[i++] = u8NuUniqueId[0];
+    
+        // d2cMsg_Techdata
+        u8AzureTxBuff[i++] = (iNumMeas >> 0);               // numReports, i.e. number of measurements.
+        u8AzureTxBuff[i++] = (iNumMeas >> 8);
+        u8AzureTxBuff[i++] = (iNumMeas >> 16);
+        u8AzureTxBuff[i++] = (iNumMeas >> 24);
+        
+        for( j = 0; j < iNumMeas; j++ )
+        {
+            measId = j+1;
+            
+            // Fill in the meas ID
+            u8AzureTxBuff[i++] = (measId >> 0);               // numReports, i.e. number of measurements.
+            u8AzureTxBuff[i++] = (measId >> 8);
+            u8AzureTxBuff[i++] = (measId >> 16);
+            u8AzureTxBuff[i++] = (measId >> 24);
+
+            // Fill in the meas value
+            u8AzureTxBuff[i++] = (measVal >> 0);               // numReports, i.e. number of measurements.
+            u8AzureTxBuff[i++] = (measVal >> 8);
+            u8AzureTxBuff[i++] = (measVal >> 16);
+            u8AzureTxBuff[i++] = (measVal >> 24);
+        }
+    
+        GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
+            
+        var myDataUrl = "https://" + platformName + "/devices/" + azureDeviceId + "/messages/events?api-version=" + platformVer;
+        var myHeader  =  {"Authorization":sasDevToken, "iothub-messageid":iMsgId++ };
+    
+         SendNorthBoundDataBinary( 
+            "POST",
+            myDataUrl,
+            "application/octet-stream",
+            u8AzureTxBuff,
+            i,                              // length
+            "",                             // response format
+            myHeader,
+            function(response) 
+            {
+                PrintLog( 1, "Azure: Response success: SendCloudTechData()..."  );        
+            },
+            function(response) 
+            {
+                PrintLog( 99, "Azure: Response error: SendCloudTechData()..." + JSON.stringify(response) );
+            }
+        );
+    
+    
+        
+
+    }
+    else
+    {
+        PrintLog( 99, "Azure: SendCloudTechData: SAS key not retrieved from cloud yet." );
+    }
+    
+}
+
+
+
 
 
 // SendCloudAssociateSystem............................................................................................
@@ -247,7 +345,7 @@ function SendCloudAssociateSystem()
 
     GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
         
-    var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api-version=" + platformVer;
+    var myDataUrl = "https://" + platformName + "/devices/" + azureDeviceId + "/messages/events?api-version=" + platformVer;
     var myHeader  =  {"Authorization":sasDevToken, "iothub-messageid":iMsgId++ };
 
      SendNorthBoundDataBinary( 
@@ -404,7 +502,7 @@ function SendCloudAssociateBoards()
     
         GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
             
-        var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api-version=" + platformVer;
+        var myDataUrl = "https://" + platformName + "/devices/" + azureDeviceId + "/messages/events?api-version=" + platformVer;
         var myHeader  =  {"Authorization":sasDevToken, "iothub-messageid":iMsgId++ };
        
     

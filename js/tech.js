@@ -599,22 +599,22 @@ function ProcessTechData()
                         {
                             if( iVal & 0x01 )
                             {
-                                iVal = "True";
+                                iVal = 1; //"True";
                             }
                             else
                             {
-                                iVal = "False";
+                                iVal = 0; //"False";
                             }
                         }
                         else if( tag == "Ext Ant In Use" )
                         {
                             if( iVal & 0x81 )   // 0x80 bit to indicate valid and 0x01 to indicate yes.
                             {
-                                iVal = "Yes";
+                                iVal = 1; //"Yes";
                             }
                             else
                             {
-                                iVal = "No";
+                                iVal = 0; //"No";
                             }
                         }
                         
@@ -701,11 +701,11 @@ function ProcessTechData()
                         {
                             if( iVal & 0x01 )   
                             {
-                                iVal = "Up";
+                                iVal = 1; //"Up";
                             }
                             else
                             {
-                                iVal = "Down";
+                                iVal = 0; //"Down";
                             }
                         }
 
@@ -963,7 +963,7 @@ function ProcessTechData()
     if( cloudText.length != 0 )
     {
 //        PrintLog(1, cloudText );
-        SendCloudData(cloudText);
+        SendCloudTechData(cloudText);
     }
 
     // Normal processing to acknowledge receipt of response...
