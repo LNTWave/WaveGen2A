@@ -1452,6 +1452,7 @@ Do not force a SW update....
             {
                 PrintLog(1, "Main: Waiting on the device key from Azure..." );
                 RegisterCloudDev(nxtyNuUniqueId);
+                StartMainLoop(5000);        // Slow down...
                 return;
             }
 
@@ -1459,6 +1460,7 @@ Do not force a SW update....
             else if( (bNxtySuperMsgRemoteInfo2 == false) && (bCnxToOneBoxNu == false) )
             {
                 UpdateStatusLine("Retrieving Remote Info 2...");
+                StartMainLoop(1000);        
                 
                 if( bNxtySuperMsgRsp == false )
                 {
