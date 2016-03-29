@@ -502,6 +502,7 @@ Post 01.05.25 01/04/16 (Nextivity HB)
 
 TODO:
     - Init nxtySwBuildIdNu/Cu to "" empty string instead of 0.   0 causes problems in 5_1_19 check.
+    - Modifiy download so that both NU and CU get downloaded before resetting with bedazzle so the UNII does not break.
 
 
    Release notes:

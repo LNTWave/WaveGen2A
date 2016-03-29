@@ -104,8 +104,8 @@ function SendCloudData(dataText)
         GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
         
         var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api-version=" + platformVer;
-        var myHeader  =  {"Authorization":sasDevToken, "iothub-messageid":iMsgId };
-        iMsgId++;
+        var myHeader  =  {"Authorization":sasDevToken, "iothub-messageid":iMsgId++ };
+//        iMsgId++;
 
 
 //PrintLog(1,"myHeader     =" + JSON.stringify(myHeader) );
@@ -249,8 +249,8 @@ function SendCloudAssociateSystem()
     GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
         
     var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api-version=" + platformVer;
-    var myHeader  =  {"Authorization":sasDevToken, "iothub-messageid":iMsgId };
-    iMsgId++;
+    var myHeader  =  {"Authorization":sasDevToken, "iothub-messageid":iMsgId++ };
+//    iMsgId++;
 
      SendNorthBoundDataBinary( 
         "POST",
@@ -317,6 +317,8 @@ function SendCloudAssociateBoards()
     
     for( var iBoard = 0; iBoard < iNumBoards; iBoard++ )
     {
+        i = 0;
+        
         // d2cMsg....................................
         // d2cMsgHdr size = 16 bytes
         u8AzureTxBuff[i++] = 1;                             // version
@@ -405,8 +407,8 @@ function SendCloudAssociateBoards()
         GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
             
         var myDataUrl = "https://" + platformName + "/devices/" + nxtyNuUniqueId + "/messages/events?api-version=" + platformVer;
-        var myHeader  =  {"Authorization":sasDevToken, "iothub-messageid":iMsgId };
-        iMsgId++;
+        var myHeader  =  {"Authorization":sasDevToken, "iothub-messageid":iMsgId++ };
+//        iMsgId++;
         
     
          SendNorthBoundDataBinary( 
