@@ -2710,7 +2710,7 @@ function DldLoop()
                 PrintLog(1, "Forced update complete so restart main loop.");
                 // Restart the main loop since we halted for forced download.
                 // V1_ICD or build ID < SW5_1_45
-                MainLoopIntervalHandle = setInterval(app.mainLoop, 1000 );
+                StartMainLoop(1000);
             }      
             break;
         }

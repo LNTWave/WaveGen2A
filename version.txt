@@ -500,6 +500,13 @@ Post 01.05.25 01/04/16 (Nextivity HB)
   - Added new css file for the PcApp
   - cosmetic changes are made in the gui.cs
 
+01.05.86 03/16/16 (Nextivity)
+    - Switch from Axeda to Azure clouds
+      - Added file msg_azure.js.
+      - Deleted file msg_axeda.js
+    - Added StartMainLoop() and StopMainLoop() to log where the main loop starts and stops.
+
+
 TODO:
     - Init nxtySwBuildIdNu/Cu to "" empty string instead of 0.   0 causes problems in 5_1_19 check.
     - Modifiy download so that both NU and CU get downloaded before resetting with bedazzle so the UNII does not break.

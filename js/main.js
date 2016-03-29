@@ -89,6 +89,26 @@ var softwareVersionFlag = false;
 
 
 
+//.................................................................................................
+function StartMainLoop( loopTime )
+{
+    PrintLog(1, "StartMainLoop(" + loopTime + ")" );        
+    if( MainLoopIntervalHandle != null )
+    {
+        StopMainLoop();
+    }
+
+    MainLoopIntervalHandle = setInterval(app.mainLoop, loopTime );
+}
+
+
+//.................................................................................................
+function StopMainLoop()
+{
+//    PrintLog(1, "StopDownloadLoop()" );
+    clearInterval(MainLoopIntervalHandle)
+    MainLoopIntervalHandle = null;
+}
 
 
 // RequestModeChange............................................................................................
@@ -107,8 +127,7 @@ function RequestModeChange(newMode)
         // Handle if button is displayed...
         //if( guiButtonRegHtml.length > 10 )
         //{
-            clearInterval(MainLoopIntervalHandle);  
-            
+            StopMainLoop();            
             if( isSouthBoundIfCnx && bUniiUp )
             {
                 StopGatheringTechData();
@@ -138,7 +157,7 @@ function RequestModeChange(newMode)
         // Handle if button is displayed...
         if( guiButtonTkHtml.length > 10 )
         {
-            clearInterval(MainLoopIntervalHandle); 
+            StopMainLoop();            
                         
             if( isSouthBoundIfCnx )
             {
@@ -159,7 +178,7 @@ function RequestModeChange(newMode)
         // Handle if button is displayed...
         if( guiButtonTkHtml.length > 10 )
         {
-            clearInterval(MainLoopIntervalHandle); 
+            StopMainLoop();            
                         
             if( isSouthBoundIfCnx )
             {
@@ -180,7 +199,7 @@ function RequestModeChange(newMode)
         // Handle if button is displayed...
         //if( (guiAntennaFlag == true) || (guiBoosterFlag == true) )
         //{
-            clearInterval(MainLoopIntervalHandle);  
+            StopMainLoop();            
            
             //if( isSouthBoundIfCnx && bUniiUp )
             //{
@@ -209,7 +228,7 @@ function RequestModeChange(newMode)
         // Handle if button is displayed...
         if( guiButtonSwHtml.length > 10 )
         {
-            clearInterval(MainLoopIntervalHandle);  
+            StopMainLoop();            
         
             if( isSouthBoundIfCnx )
             {
@@ -230,7 +249,7 @@ function RequestModeChange(newMode)
     {
         {
             PrintLog(1, "RequestModeChange(DOWNLOAD_AUTO) -----------------------------------------------------------------");
-            clearInterval(MainLoopIntervalHandle);  
+            StopMainLoop();            
         
             if( isSouthBoundIfCnx )
             {
@@ -656,7 +675,7 @@ function HandleUniiRetry(buttonIndex)
         // Retry...
         //ShowWaitPopUpMsg( "Please wait", "Retrying..." );
     	document.getElementById("searchMessageBox").innerHTML = "Retrying...";
-        MainLoopIntervalHandle = setInterval(app.mainLoop, 1000 ); 
+    	StartMainLoop(1000);
         nxtySwVerNuCf          = null;
 //        nxtySwVerCuCf          = null;      // Set to Null so new NU version gets sent to cloud.  Bug 1324
 //        bUniiUp                = true;
@@ -677,7 +696,7 @@ function HandleCloudRetry(buttonIndex)
         // Retry...
         //ShowWaitPopUpMsg( "Please wait", "Retrying..." );
     	document.getElementById("searchMessageBox").innerHTML = "Retrying...";
-        MainLoopIntervalHandle = setInterval(app.mainLoop, 1000 );
+        StartMainLoop(1000);
                     
         // See if we have a network connection, i.e. WiFi or Cell.
         isNetworkConnected = NorthBoundConnectionActive();
@@ -845,14 +864,14 @@ var app = {
             {
             	softwareVersionFlag = true;
                 // Start the handler to be called every second...
-                MainLoopIntervalHandle = setInterval(app.mainLoop, 1000 );
+                StartMainLoop(1000);
             } 
         }                
         else
         {
-                softwareVersionFlag = true;
-                // Start the handler to be called every second...
-                MainLoopIntervalHandle = setInterval(app.mainLoop, 1000 );
+            softwareVersionFlag = true;
+            // Start the handler to be called every second...
+            StartMainLoop(1000);
         }
         
         
@@ -1053,7 +1072,7 @@ Do not auto update PIC at this time....
                     PrintLog(1, "PIC software needs to be updated:  PIC ICD=" + nxtyRxStatusIcd  );
                     UpdateStatusLine("PIC SW Update Required...");
                 
-                    clearInterval(MainLoopIntervalHandle);  
+                    StopMainLoop();            
                     StopWaitPopUpMsg();
                     
                     // Make sure that after the PIC update that we grab the new status so we can update the ICD version of the new PIC
@@ -1201,7 +1220,7 @@ Do not force a SW update....
                     // Since we do not complete the main loop before updating the NU info may not have been retrieved.
                     nxtySwBuildIdNu = nxtySwBuildIdCu;
                 
-                    clearInterval(MainLoopIntervalHandle);  
+                    StopMainLoop();            
                     StopWaitPopUpMsg();
                     
                     // Make sure that after the SW update that we grab the new status so we can update the Build ID
@@ -1328,7 +1347,7 @@ Do not force a SW update....
                 {
                 
                     // Clear the loop timer to stop the loop...
-                    clearInterval(MainLoopIntervalHandle);
+                    StopMainLoop();            
                     StopWaitPopUpMsg();
                     uMainLoopCounter = 0;
                     uStateCounter    = 0;
@@ -1391,8 +1410,7 @@ Do not force a SW update....
                     guiGotTechModeValues = true;
                     
                     // Slow the main loop down since we are falling through and do not want to trigger the SW update check too quickly.
-                    clearInterval(MainLoopIntervalHandle);
-                    MainLoopIntervalHandle = setInterval(app.mainLoop, 5000 );                     
+                    StartMainLoop(5000);
                 }
                 else
                 {            
@@ -1506,7 +1524,7 @@ Do not force a SW update....
             {
 
                 // Clear the loop timer to stop the loop...
-                clearInterval(MainLoopIntervalHandle);
+                StopMainLoop();            
                 StopWaitPopUpMsg();
                 uMainLoopCounter = 0;
 
@@ -1599,7 +1617,7 @@ Do not force a SW update....
             if( uMainLoopCounter > MAIN_LOOP_COUNTER_MAX )
             {
                 // Clear the loop timer to stop the loop...
-                clearInterval(MainLoopIntervalHandle);
+                StopMainLoop();            
                 StopWaitPopUpMsg();
                 uMainLoopCounter = 0;
                 
