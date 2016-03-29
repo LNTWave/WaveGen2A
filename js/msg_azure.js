@@ -92,7 +92,7 @@ function RegisterCloudDev( devId )
 // SendCloudAsset - Needed by Axeda, now just a stub since Azure does not need .....................................................................
 function SendCloudAsset()
 {
-    PrintLog( 1, "SendCloudAsset: Not needed with Azure." );
+    PrintLog( 1, "Azure: SendCloudAsset: Not needed with Azure." );
 }
 
 // SendCloudData............................................................................................
@@ -134,7 +134,7 @@ function SendCloudData(dataText)
             },
             function(response) 
             {
-                PrintLog( 99, "Response error: SendCloudData()..." + JSON.stringify(response) );
+                PrintLog( 99, "Azure: Response error: SendCloudData()..." + JSON.stringify(response) );
             }
         );
         
@@ -142,7 +142,7 @@ function SendCloudData(dataText)
     }
     else
     {
-        PrintLog( 99, "SendCloudData: SAS key not retrieved from cloud yet." );
+        PrintLog( 99, "Azure: SendCloudData: SAS key not retrieved from cloud yet." );
     }
     
 }
@@ -460,7 +460,7 @@ function RetrieveCloudDeviceKey()
                     var responseText = JSON.stringify(response);    // Returns "" at a minimum
                     if( responseText.length > 2 )
                     {
-//                        PrintLog( 1, "Response success: RetrieveCloudDeviceKey()..." + responseText );
+                        PrintLog( 1, "Azure: Response success: RetrieveCloudDeviceKey()..." );
                         sasDevKey = response.authentication.symmetricKey.primaryKey;
                     }
                 }
@@ -475,7 +475,7 @@ function RetrieveCloudDeviceKey()
                 }
                 else
                 {
-                    PrintLog( 99, "Response error: RetrieveCloudDeviceKey()..." + JSON.stringify(response) );
+                    PrintLog( 99, "Azure: Response error: RetrieveCloudDeviceKey()..." + JSON.stringify(response) );
                 }
             }
         );
@@ -483,7 +483,7 @@ function RetrieveCloudDeviceKey()
     }
     else
     {
-        PrintLog( 99, "RetrieveCloudDeviceKey: Device ID, i.e. CU Unique ID, not available yet." );
+        PrintLog( 99, "Azure: RetrieveCloudDeviceKey: Device ID, i.e. CU Unique ID, not available yet." );
     }
 }
 
@@ -517,6 +517,7 @@ function CreateCloudDeviceKey(myId)
                     var responseText = JSON.stringify(response);    // Returns "" at a minimum
                     if( responseText.length > 2 )
                     {
+                        PrintLog( 1, "Azure: Response success: CreateCloudDeviceKey()..." );
                         sasDevKey = response.authentication.symmetricKey.primaryKey;
                         
                         // Prime the SQL database for this unit...
@@ -527,14 +528,14 @@ function CreateCloudDeviceKey(myId)
             },
             function(response) 
             {
-                PrintLog( 99, "Response error: CreateCloudDeviceKey()..." + JSON.stringify(response) );
+                PrintLog( 99, "Azure: Response error: CreateCloudDeviceKey()..." + JSON.stringify(response) );
             }
         );
 
     }
     else
     {
-        PrintLog( 99, "CreateCloudDeviceKey: Device ID, i.e. CU Unique ID, not available yet." );
+        PrintLog( 99, "Azure: CreateCloudDeviceKey: Device ID, i.e. CU Unique ID, not available yet." );
     }
 }
 
