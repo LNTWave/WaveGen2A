@@ -234,10 +234,10 @@ function SendCloudTechData(dataText)
                     u8AzureTxBuff[i++] = (measId >> 24);
         
                     // Fill in the meas value
-                    u8AzureTxBuff[i++] = (measF32[0] >> 0);              
-                    u8AzureTxBuff[i++] = (measF32[0] >> 8);
+                    u8AzureTxBuff[i++] = (measF32[0] >> 24);              
                     u8AzureTxBuff[i++] = (measF32[0] >> 16);
-                    u8AzureTxBuff[i++] = (measF32[0] >> 24);
+                    u8AzureTxBuff[i++] = (measF32[0] >> 8);
+                    u8AzureTxBuff[i++] = (measF32[0] >> 0);
                 }
             }
         }
@@ -954,7 +954,7 @@ function GetMeasId(dataItemText)
             
         }
     
-        PrintLog(1, "GetMeasId(" + dataItemText + ") = " + measId );
+//        PrintLog(1, "GetMeasId(" + dataItemText + ") = " + measId );
     
     }
     else
