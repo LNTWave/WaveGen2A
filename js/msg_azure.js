@@ -41,6 +41,8 @@ const   D2CMDG_SWUPDATE_GETSAS                  = 41;
 const   D2CMDG_DEBUG_ADDFAKEFACTORYINFO         = 90;
 const   WAVE2_BOARDNAME_LEN                     = 64;
 
+
+
 var tempCounter  = 0;
 
 // RegisterCloudDev............................................................................................
@@ -158,7 +160,7 @@ function SendCloudTechData(dataText)
         var i              = 0;
         var j              = 0;
         var measId         = 0;
-        var measVal        = 0;
+        var measF32        = new Float32Array(10);
         
         PrintLog(1,  "Azure: SendCloudTechData( {" + dataText + "} )" );
     
@@ -176,14 +178,29 @@ function SendCloudTechData(dataText)
         u8AzureTxBuff[i++] = (payloadSize >> 8);
         u8AzureTxBuff[i++] = (payloadSize >> 16);
         u8AzureTxBuff[i++] = (payloadSize >> 24);
-        u8AzureTxBuff[i++] = u8NuUniqueId[7];               // uniqueID            
-        u8AzureTxBuff[i++] = u8NuUniqueId[6];              
-        u8AzureTxBuff[i++] = u8NuUniqueId[5];              
-        u8AzureTxBuff[i++] = u8NuUniqueId[4];              
-        u8AzureTxBuff[i++] = u8NuUniqueId[3];              
-        u8AzureTxBuff[i++] = u8NuUniqueId[2];
-        u8AzureTxBuff[i++] = u8NuUniqueId[1];
-        u8AzureTxBuff[i++] = u8NuUniqueId[0];
+        
+        if( measList[0].substring(0,2) == "TC" )
+        {
+            u8AzureTxBuff[i++] = u8CuUniqueId[7];               // If "TC..." assume we are the NU...           
+            u8AzureTxBuff[i++] = u8CuUniqueId[6];              
+            u8AzureTxBuff[i++] = u8CuUniqueId[5];              
+            u8AzureTxBuff[i++] = u8CuUniqueId[4];              
+            u8AzureTxBuff[i++] = u8CuUniqueId[3];              
+            u8AzureTxBuff[i++] = u8CuUniqueId[2];
+            u8AzureTxBuff[i++] = u8CuUniqueId[1];
+            u8AzureTxBuff[i++] = u8CuUniqueId[0];
+        }
+        else
+        {
+            u8AzureTxBuff[i++] = u8NuUniqueId[7];               // If "TN..." assume we are the NU for now...           
+            u8AzureTxBuff[i++] = u8NuUniqueId[6];              
+            u8AzureTxBuff[i++] = u8NuUniqueId[5];              
+            u8AzureTxBuff[i++] = u8NuUniqueId[4];              
+            u8AzureTxBuff[i++] = u8NuUniqueId[3];              
+            u8AzureTxBuff[i++] = u8NuUniqueId[2];
+            u8AzureTxBuff[i++] = u8NuUniqueId[1];
+            u8AzureTxBuff[i++] = u8NuUniqueId[0];
+        }
     
         // d2cMsg_Techdata
         u8AzureTxBuff[i++] = (iNumMeas >> 0);               // numReports, i.e. number of measurements.
@@ -193,19 +210,25 @@ function SendCloudTechData(dataText)
         
         for( j = 0; j < iNumMeas; j++ )
         {
-            measId = j+1;
+            var measPair = measList.split(":");
             
-            // Fill in the meas ID
-            u8AzureTxBuff[i++] = (measId >> 0);               // numReports, i.e. number of measurements.
-            u8AzureTxBuff[i++] = (measId >> 8);
-            u8AzureTxBuff[i++] = (measId >> 16);
-            u8AzureTxBuff[i++] = (measId >> 24);
-
-            // Fill in the meas value
-            u8AzureTxBuff[i++] = (measVal >> 0);               // numReports, i.e. number of measurements.
-            u8AzureTxBuff[i++] = (measVal >> 8);
-            u8AzureTxBuff[i++] = (measVal >> 16);
-            u8AzureTxBuff[i++] = (measVal >> 24);
+            if( measPair.length == 2 )
+            {
+                measId     = GetMeasId(measPair[0]);
+                measF32[0] = parseFloat(measPair[1]);
+                
+                // Fill in the meas ID
+                u8AzureTxBuff[i++] = (measId >> 0);               
+                u8AzureTxBuff[i++] = (measId >> 8);
+                u8AzureTxBuff[i++] = (measId >> 16);
+                u8AzureTxBuff[i++] = (measId >> 24);
+    
+                // Fill in the meas value
+                u8AzureTxBuff[i++] = (measF32[0] >> 0);              
+                u8AzureTxBuff[i++] = (measF32[0] >> 8);
+                u8AzureTxBuff[i++] = (measF32[0] >> 16);
+                u8AzureTxBuff[i++] = (measF32[0] >> 24);
+            }
         }
     
         GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
@@ -696,6 +719,7 @@ function GetSasHubToken(entityPath)
     return token; 
 } 
 
+// ----------------------------------------------------------------------------------------------
 function utf8Encode(s)
 { 
     for(var c, i = -1, l = (s = s.split("")).length, o = String.fromCharCode; ++i < l;
@@ -703,6 +727,236 @@ function utf8Encode(s)
         );
     return s.join("");    
 } 
+
+
+
+
+
+
+
+
+
+
+// ----------------------------------------------------------------------------------------------
+const   techMeasIds =
+{
+    // TNRx_...
+    "Band":                 0,      // MEASID_TNRA_Band = 0,
+    "LTE?":                 1,      // MEASID_TNRA_RAT,
+    "Bandwidth":            2,      // MEASID_TNRA_Bandwidth,
+    "DL Center Freq":       3,      // MEASID_TNRA_DL_Center_Freq,
+    "UL Center Freq":       4,      // MEASID_TNRA_UL_Center_Freq,
+//    "DL RSSI":              5,      // MEASID_TNRA_LTE_DL_RSSI,
+    "DL RSSI":              6,      // MEASID_TNRA_3G_DL_RSSI,
+//    "Max DL RSCP":          7,      // MEASID_TNRA_Max_DL_LTE_RSRP,
+//    "Max DL ECIO":          8,      // MEASID_TNRA_Max_DL_LTE_RSRQ,
+    "Max DL RSCP":          9,      // MEASID_TNRA_Max_DL_3G_RSCP,
+    "Max DL ECIO":          10,     // MEASID_TNRA_Max_DL_3G_ECIO,
+    "Remote Shutdown":      11,     // MEASID_TNRA_Remote_Shutdown,
+    "Narrow Filter In Use": 12,     // MEASID_TNRA_Narrow_Filter_In_Use,
+    "Ext Ant In Use":       13,     // MEASID_TNRA_Ext_Ant_In_Use,
+    "UL Safe Mode Gain":    14,     // MEASID_TNRA_UL_Safe_Mode_Gain,
+    "Relaying":             15,     // MEASID_TNRA_Relaying,
+    "Cell Count":           16,     // MEASID_TNRA_Cell_Count,
+//    "28 0":                 17,     // MEASID_TNRA_LTE_CellID28Bit,
+    "28 0":                 18,     // MEASID_TNRA_3G_CellID28Bit0,
+    "28 1":                 19,     // MEASID_TNRA_3G_CellID28Bit1,
+    "28 2":                 20,     // MEASID_TNRA_3G_CellID28Bit2,
+    "28 3":                 21,     // MEASID_TNRA_3G_CellID28Bit3,
+    "28 4":                 22,     // MEASID_TNRA_3G_CellID28Bit4,
+//    "Lte ID":               23,     // MEASID_TNRA_LTE_PCI,
+    "ID0":                  24,     // MEASID_TNRA_3G_PSC0,
+    "ID1":                  25,     // MEASID_TNRA_3G_PSC1,
+    "ID2":                  26,     // MEASID_TNRA_3G_PSC2,
+    "ID3":                  27,     // MEASID_TNRA_3G_PSC3,
+    "ID4":                  28,     // MEASID_TNRA_3G_PSC4,
+//    "RSRP":                 29,     // MEASID_TNRA_LTE_RSRP,
+    "RSCP 0":               30,     // MEASID_TNRA_3G_RSCP0,
+    "RSCP 1":               31,     // MEASID_TNRA_3G_RSCP1,
+    "RSCP 2":               32,     // MEASID_TNRA_3G_RSCP2,
+    "RSCP 3":               33,     // MEASID_TNRA_3G_RSCP3,
+    "RSCP 4":               34,     // MEASID_TNRA_3G_RSCP4,
+//    "RSRQ":                 35,     // MEASID_TNRA_LTE_RSRQ,
+    "ECIO 0":               36,     // MEASID_TNRA_3G_ECIO0,
+    "ECIO 1":               37,     // MEASID_TNRA_3G_ECIO1,
+    "ECIO 2":               38,     // MEASID_TNRA_3G_ECIO2,
+    "ECIO 3":               39,     // MEASID_TNRA_3G_ECIO3,
+    "ECIO 4":               40,     // MEASID_TNRA_3G_ECIO4,
+//    "SINR":                 41,     // MEASID_TNRA_LTE_SINR,
+//    "Freq Err Res":         42,     // MEASID_TNRA_Freq_Err_Res,
+//    "Freq Err Tot":         43,     // MEASID_TNRA_Freq_Err_Tot,
+//    "MP Early":             44,     // MEASID_TNRA_MP_Early,
+//    "MP Late":              45,     // MEASID_TNRA_MP_Late,
+//    "MP Margin":            46,     // MEASID_TNRA_MP_Margin,
+//    "CFI BER":              47,     // MEASID_TNRA_CFI_BER,
+//    "SIB 1 Cnt":            48,     // MEASID_TNRA_SIB1_Cnt,
+//    "SIB 2 Cnt":            49,     // MEASID_TNRA_SIB2_Cnt,            (not used)
+//    "DCI":                  50,     // MEASID_TNRA_DCI,
+//    "HARQ Comb":            51,     // MEASID_TNRA_HARQ_Comb,
+//    "Lte Ant":              52,     // MEASID_TNRA_LTE_Ant,
+    "DL Freq 0":            53,     // MEASID_TNRA_3G_DL_FREQ0,
+    "DL Freq 1":            54,     // MEASID_TNRA_3G_DL_FREQ1,
+    "DL Freq 2":            55,     // MEASID_TNRA_3G_DL_FREQ2,
+    "DL Freq 3":            56,     // MEASID_TNRA_3G_DL_FREQ3,
+    "DL Freq 4":            57,     // MEASID_TNRA_3G_DL_FREQ4,
+    "NU Temp":              1044,   // MEASID_TNM_Temp = 1044,
+
+    // TC0Rx_
+//    "UL RSSI":              74,     // MEASID_TCRA_LTE_UL_RSSI = 74,
+    "UL RSSI":              75,     // MEASID_TCRA_3G_UL_RSSI,
+    "DL Echo Gain":         76,     // MEASID_TCRA_DL_Echo_Gain,
+    "UL Echo Gain":         77,     // MEASID_TCRA_UL_Echo_Gain,
+    "DL Tx Power":          78,     // MEASID_TCRA_DL_TX_Power,
+    "UL Tx Power":          79,     // MEASID_TCRA_UL_TX_Power,
+    "CU Antenna":           80,     // MEASID_TCRA_Antenna,
+    "DL System Gain":       81,     // MEASID_TCRA_DL_System_Gain,
+    "UL System Gain":       82,     // MEASID_TCRA_UL_System_Gain,
+    "CU Temp":              1054,   // MEASID_TCM_Temp = 1054,
+
+    // TNM_...
+    "NU 5G DL":             1000,   // MEASID_TNU_DL_Freq = 1000,
+    "NU 5G UL":             1001,   // MEASID_TNU_UL_Freq,
+    "NU UNII State":        1002,   // MEASID_TNU_UNII_State,
+    "NU RSSI":              1003,   // MEASID_TNU_RSSI,
+    "NU Tx Pwr":            1004,   // MEASID_TNU_Tx_Power,
+    "NU Ctrl Chan BER":     1005,   // MEASID_TNU_Ctrl_Chan_BER,
+    "Radar Detect Cnt":     1006,   // MEASID_TNU_Radar_Detect_Cnt,
+    "NU Dist Metric":       1007,   // MEASID_TNU_Dist_Metric,
+    "NU Bars":              1008,   // MEASID_TNU_Bars,
+    "NU ES Err":            1063,   // MEASID_TM_Error_Code_Legacy = 1063,
+
+    // TC0M_...
+    "CU UNII State":        1028,   // MEASID_TCU_UNII_State = 1028,
+    "CU RSSI":              1029,   // MEASID_TCU_RSSI,
+    "CU Tx Pwr":            1030,   // MEASID_TCU_Tx_Power,
+    "CU BER":               1031,   // MEASID_TCU_Ctrl_Chan_BER,
+    "CU Metric":            1032,   // MEASID_TCU_Dist_Metric,
+    "CU Bars":              1033,   // MEASID_TCU_Bars,
+
+
+
+};
+
+
+const   techMeasIdsLte =
+{
+    // TNRx_...
+    "DL RSSI":              5,      // MEASID_TNRA_LTE_DL_RSSI,
+    "Max DL RSCP":          7,      // MEASID_TNRA_Max_DL_LTE_RSRP,
+    "Max DL ECIO":          8,      // MEASID_TNRA_Max_DL_LTE_RSRQ,
+    "28 0":                 17,     // MEASID_TNRA_LTE_CellID28Bit,
+    "Lte ID":               23,     // MEASID_TNRA_LTE_PCI,
+    "RSRP":                 29,     // MEASID_TNRA_LTE_RSRP,
+    "RSRQ":                 35,     // MEASID_TNRA_LTE_RSRQ,
+    "SINR":                 41,     // MEASID_TNRA_LTE_SINR,
+    "Freq Err Res":         42,     // MEASID_TNRA_Freq_Err_Res,
+    "Freq Err Tot":         43,     // MEASID_TNRA_Freq_Err_Tot,
+    "MP Early":             44,     // MEASID_TNRA_MP_Early,
+    "MP Late":              45,     // MEASID_TNRA_MP_Late,
+    "MP Margin":            46,     // MEASID_TNRA_MP_Margin,
+    "CFI BER":              47,     // MEASID_TNRA_CFI_BER,
+    "SIB 1 Cnt":            48,     // MEASID_TNRA_SIB1_Cnt,
+    "SIB 2 Cnt":            49,     // MEASID_TNRA_SIB2_Cnt,            (not used)
+    "DCI":                  50,     // MEASID_TNRA_DCI,
+    "HARQ Comb":            51,     // MEASID_TNRA_HARQ_Comb,
+    "Lte Ant":              52,     // MEASID_TNRA_LTE_Ant,
+
+    // TC0Rx_
+    "UL RSSI":              74,     // MEASID_TCRA_LTE_UL_RSSI = 74,
+
+    // TNM_...
+
+    // TC0M_...
+};
+
+
+// ----------------------------------------------------------------------------------------------
+//   Match the data item text with the Azure measurement ID and return the ID.
+//   Return -1 if not found.
+//
+function GetMeasId(dataItemText) 
+{ 
+    var measId      = -1;       // Set an error.
+    var tempMeasId  = -1;
+    var iRadio      = -1;       // Set to 0 to 3 if on a radio data item...
+    
+    // Separate the TNRx_ heading from the actual value
+    var rawText = dataItemText.split("_");
+    
+    if( rawText.length == 2 )
+    {
+        var rawHead     = rawText[0];       // TNRx_ or TC0Rx_ or TNM_ TC0M_ 
+        var rawDataItem = rawText[1];
+        
+        if( rawHead.substring(0,3) == "TNR" )
+        {
+            // We have an NU radio data item...
+            iRadio = parseInt( rawHead.substring(3,4) );
+        }
+        else if( rawHead.substring(0,4) == "TC0R" )
+        {
+            // We have a CU radio data item...
+            iRadio = parseInt( rawHead.substring(4,5) );
+        }
+
+        if( (iRadio >= 0) && (iRadio <= 3) )
+        {
+            if( guiTechnologyTypes[iRadio] == 1 )
+            {
+                // LTE channel, Try the LTE array first...
+                tempMeasId = techMeasIdsLte[rawDataItem];
+                
+                if( tempMeasId == undefined )
+                {
+                    // Try the non-LTE array
+                    tempMeasId = techMeasIds[rawDataItem];
+                }
+            }
+            else
+            {
+                // Use the non-LTE array
+                tempMeasId = techMeasIds[rawDataItem];
+            }
+            
+            // See if we found something...
+            if( tempMeasId != undefined )
+            {
+                measId = tempMeasId;
+                if( tempMeasId < 1000 )
+                {
+                    // Add the radio offset...  
+                    // Items such as NU Temp(1044) and CU Temp (1054) do note get the radio offset. 
+                    measId = tempMeasId + (iRadio * 100);
+                }
+            }            
+        }
+        else
+        {
+            // Try the non-LTE array
+            tempMeasId = techMeasIds[rawDataItem];
+            
+            // See if we found something...
+            if( tempMeasId != undefined )
+            {
+                measId = tempMeasId;
+            }            
+            
+        }
+    
+        PrintLog(1, "GetMeasId(" + dataItemText + ") = " + measId );
+    
+    }
+    else
+    {
+        PrintLog(99, "GetMeasId() format error:  Single underscore not found.  Text:" + dataItemText );
+    }
+    
+    return( measId );
+}
+
+
+
+
 
 
 
