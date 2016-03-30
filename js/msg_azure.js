@@ -112,9 +112,9 @@ function SendCloudData(dataText)
 //PrintLog(1,"myHeader     =" + JSON.stringify(myHeader) );
 
 
-        PrintLog( 1, "SendCloudData: " + myDataUrl + "  " + myData );
+        PrintLog( 1, "SendCloudData (not really): " + myDataUrl + "  " + myData );
         
-        
+/*        
         SendNorthBoundData( 
             "POST",
             myDataUrl,
@@ -139,7 +139,7 @@ function SendCloudData(dataText)
                 PrintLog( 99, "Azure: Response error: SendCloudData()..." + JSON.stringify(response) );
             }
         );
-        
+*/        
 
     }
     else
@@ -210,7 +210,9 @@ function SendCloudTechData(dataText)
         
         for( j = 0; j < iNumMeas; j++ )
         {
-            var measPair = measList.split(":");
+            PrintLog(1, "MeasList[" + j + "] = " + measList[j] );
+            
+            var measPair = measList[j].split(":");
             
             if( measPair.length == 2 )
             {
@@ -986,7 +988,7 @@ function SendCloudData(dataText)
         var myData    = "{'data':[{'di': {" + dataText + "}}]}";
         var myDataUrl = myPlatformUrl + "data/1/" + myModel + "!" + mySn;
         
-        PrintLog( 1, "SendCloudData: " + myDataUrl + "  " + myData );
+        PrintLog( 1, "SendCloudData (Not really): " + myDataUrl + "  " + myData );
         
         SendNorthBoundData( 
             "POST",
@@ -1011,6 +1013,7 @@ function SendCloudData(dataText)
                 PrintLog( 99, "Response error: SendCloudData()..." + JSON.stringify(response) );
             }
         );
+
 
     }
     else
