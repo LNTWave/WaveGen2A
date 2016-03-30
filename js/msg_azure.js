@@ -161,6 +161,7 @@ function SendCloudTechData(dataText)
         var j              = 0;
         var measId         = 0;
         var measF32        = new Float32Array(10);
+        var iNumMeasActual = 0;
         
         PrintLog(1,  "Azure: SendCloudTechData( {" + dataText + "} )" );
     
@@ -169,7 +170,6 @@ function SendCloudTechData(dataText)
     
         var measList    = dataText.split(",");            // Build an array of meas values
         var iNumMeas    = measList.length;
-        var payloadSize = 4 + (iNumMeas * 8);             // iNumMeas size is 4 plus 8 bytes per meas.   
     
         // d2cMsg....................................
         // d2cMsgHdr size = 16 bytes
@@ -177,10 +177,10 @@ function SendCloudTechData(dataText)
         u8AzureTxBuff[i++] = D2CMSG_TECHDATA;               // type  
         u8AzureTxBuff[i++] = 0;                             // reserved
         u8AzureTxBuff[i++] = 0;                             // reserved
-        u8AzureTxBuff[i++] = (payloadSize >> 0);            // payloadSize in bytes
-        u8AzureTxBuff[i++] = (payloadSize >> 8);
-        u8AzureTxBuff[i++] = (payloadSize >> 16);
-        u8AzureTxBuff[i++] = (payloadSize >> 24);
+        u8AzureTxBuff[i++] = 0;                             // payloadSize in bytes
+        u8AzureTxBuff[i++] = 0;
+        u8AzureTxBuff[i++] = 0;
+        u8AzureTxBuff[i++] = 0;
         
         if( measList[0].substring(0,2) == "TC" )
         {
@@ -206,27 +206,27 @@ function SendCloudTechData(dataText)
         }
     
         // d2cMsg_Techdata
-        u8AzureTxBuff[i++] = (iNumMeas >> 0);               // numReports, i.e. number of measurements.
-        u8AzureTxBuff[i++] = (iNumMeas >> 8);
-        u8AzureTxBuff[i++] = (iNumMeas >> 16);
-        u8AzureTxBuff[i++] = (iNumMeas >> 24);
+        u8AzureTxBuff[i++] = 0;               // numReports, i.e. number of measurements.
+        u8AzureTxBuff[i++] = 0;
+        u8AzureTxBuff[i++] = 0;
+        u8AzureTxBuff[i++] = 0;
         
         for( j = 0; j < iNumMeas; j++ )
         {
-
-            
             var measPair = measList[j].split(":");
-            
             
             if( measPair.length == 2 )
             {
                 measId     = GetMeasId(measPair[0]);
                 measF32[0] = parseFloat(measPair[1]);
+                measF32[1] = measF32[0].getFloat32(0, true );
 
-                PrintLog(1, "MeasList[" + j + "] = " + measList[j] + " id=" + measId + " val=" + measF32[0] );
+                PrintLog(1, "MeasList[" + j + "] = " + measList[j] + " id=" + measId + " val=" + measF32[0] + " val Lil End=" + measF32[1] );
                             
                 if( measId != -1 )
                 {
+                    iNumMeasActual++;
+                
                     // Fill in the meas ID
                     u8AzureTxBuff[i++] = (measId >> 0);               
                     u8AzureTxBuff[i++] = (measId >> 8);
@@ -234,13 +234,26 @@ function SendCloudTechData(dataText)
                     u8AzureTxBuff[i++] = (measId >> 24);
         
                     // Fill in the meas value
-                    u8AzureTxBuff[i++] = (measF32[0] >> 24);              
-                    u8AzureTxBuff[i++] = (measF32[0] >> 16);
-                    u8AzureTxBuff[i++] = (measF32[0] >> 8);
-                    u8AzureTxBuff[i++] = (measF32[0] >> 0);
+                    u8AzureTxBuff[i++] = (measF32[1] >> 0);              
+                    u8AzureTxBuff[i++] = (measF32[1] >> 8);
+                    u8AzureTxBuff[i++] = (measF32[1] >> 16);
+                    u8AzureTxBuff[i++] = (measF32[1] >> 24);
                 }
             }
         }
+
+
+        var payloadSize = 4 + (iNumMeasActual * 8);             // iNumMeas size is 4 plus 8 bytes per meas.   
+        u8AzureTxBuff[4] = (payloadSize >> 0);                  // payloadSize in bytes
+        u8AzureTxBuff[5] = (payloadSize >> 8);
+        u8AzureTxBuff[6] = (payloadSize >> 16);
+        u8AzureTxBuff[7] = (payloadSize >> 24);
+
+        u8AzureTxBuff[16] = (iNumMeasActual >> 0);              // numReports, i.e. number of measurements.
+        u8AzureTxBuff[17] = (iNumMeasActual >> 8);
+        u8AzureTxBuff[18] = (iNumMeasActual >> 16);
+        u8AzureTxBuff[19] = (iNumMeasActual >> 24);
+
     
         GenerateSasDevTokenHourly( "/devices/" + nxtyNuUniqueId );
             
