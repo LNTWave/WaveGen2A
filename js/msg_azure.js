@@ -164,6 +164,9 @@ function SendCloudTechData(dataText)
         
         PrintLog(1,  "Azure: SendCloudTechData( {" + dataText + "} )" );
     
+        // Remove all ' characters...
+        dataText = dataText.replace(/'/g, "" );
+    
         var measList    = dataText.split(",");            // Build an array of meas values
         var iNumMeas    = measList.length;
         var payloadSize = 4 + (iNumMeas * 8);             // iNumMeas size is 4 plus 8 bytes per meas.   
@@ -210,26 +213,32 @@ function SendCloudTechData(dataText)
         
         for( j = 0; j < iNumMeas; j++ )
         {
-            PrintLog(1, "MeasList[" + j + "] = " + measList[j] );
+
             
             var measPair = measList[j].split(":");
+            
             
             if( measPair.length == 2 )
             {
                 measId     = GetMeasId(measPair[0]);
                 measF32[0] = parseFloat(measPair[1]);
-                
-                // Fill in the meas ID
-                u8AzureTxBuff[i++] = (measId >> 0);               
-                u8AzureTxBuff[i++] = (measId >> 8);
-                u8AzureTxBuff[i++] = (measId >> 16);
-                u8AzureTxBuff[i++] = (measId >> 24);
-    
-                // Fill in the meas value
-                u8AzureTxBuff[i++] = (measF32[0] >> 0);              
-                u8AzureTxBuff[i++] = (measF32[0] >> 8);
-                u8AzureTxBuff[i++] = (measF32[0] >> 16);
-                u8AzureTxBuff[i++] = (measF32[0] >> 24);
+
+                PrintLog(1, "MeasList[" + j + "] = " + measList[j] + " id=" + measId + " val=" + measF32[0] );
+                            
+                if( measId != -1 )
+                {
+                    // Fill in the meas ID
+                    u8AzureTxBuff[i++] = (measId >> 0);               
+                    u8AzureTxBuff[i++] = (measId >> 8);
+                    u8AzureTxBuff[i++] = (measId >> 16);
+                    u8AzureTxBuff[i++] = (measId >> 24);
+        
+                    // Fill in the meas value
+                    u8AzureTxBuff[i++] = (measF32[0] >> 0);              
+                    u8AzureTxBuff[i++] = (measF32[0] >> 8);
+                    u8AzureTxBuff[i++] = (measF32[0] >> 16);
+                    u8AzureTxBuff[i++] = (measF32[0] >> 24);
+                }
             }
         }
     
