@@ -234,10 +234,10 @@ function SendCloudTechData(dataText)
                     u8AzureTxBuff[i++] = (measId >> 24);
         
                     // Fill in the meas value
-                    u8AzureTxBuff[i++] = (measF32[1] >> 0);              
-                    u8AzureTxBuff[i++] = (measF32[1] >> 8);
-                    u8AzureTxBuff[i++] = (measF32[1] >> 16);
-                    u8AzureTxBuff[i++] = (measF32[1] >> 24);
+                    u8AzureTxBuff[i++] = 0x3F; //(measF32[1] >> 0);              
+                    u8AzureTxBuff[i++] = 0x80; //(measF32[1] >> 8);
+                    u8AzureTxBuff[i++] = 0x00; //(measF32[1] >> 16);
+                    u8AzureTxBuff[i++] = 0x00; //(measF32[1] >> 24);
                 }
             }
         }
