@@ -160,7 +160,7 @@ function SendCloudTechData(dataText)
         var i              = 0;
         var j              = 0;
         var measId         = 0;
-        var measF32        = new Float32Array(10);
+        var measVal        = 0;
         var iNumMeasActual = 0;
         
         PrintLog(1,  "Azure: SendCloudTechData( {" + dataText + "} )" );
@@ -218,25 +218,59 @@ function SendCloudTechData(dataText)
             if( measPair.length == 2 )
             {
                 measId     = GetMeasId(measPair[0]);
-                measF32[0] = parseFloat(measPair[1]);
-
-                PrintLog(1, "MeasList[" + j + "] = " + measList[j] + " id=" + measId + " val=" + measF32[0] + " val Lil End=" + measF32[1] );
-                            
-                if( measId != -1 )
-                {
-                    iNumMeasActual++;
+                measVal    = parseInt(measPair[1]);
                 
-                    // Fill in the meas ID
-                    u8AzureTxBuff[i++] = (measId >> 0);               
-                    u8AzureTxBuff[i++] = (measId >> 8);
-                    u8AzureTxBuff[i++] = (measId >> 16);
-                    u8AzureTxBuff[i++] = (measId >> 24);
-        
-                    // Fill in the meas value
-                    u8AzureTxBuff[i++] = 0xc3; //(measF32[0] >> 0);              
-                    u8AzureTxBuff[i++] = 0xf5; //(measF32[0] >> 8);
-                    u8AzureTxBuff[i++] = 0x48; //(measF32[0] >> 16);
-                    u8AzureTxBuff[i++] = 0x40; //(measF32[0] >> 24);
+                // Special processing to handle the error code...
+                if( (measId == 1064) && (measVal == 0) )
+                {
+                    // Clear all 12 error meas IDs.
+                    for( ; measId < (1064 + 12); measId++ )
+                    {
+                        iNumMeasActual++;
+                    
+                        // Fill in the meas ID
+                        u8AzureTxBuff[i++] = (measId >> 0);               
+                        u8AzureTxBuff[i++] = (measId >> 8);
+                        u8AzureTxBuff[i++] = (measId >> 16);
+                        u8AzureTxBuff[i++] = (measId >> 24);
+            
+                        // Fill in the meas value
+                        u8AzureTxBuff[i++] = (measVal >> 0);              
+                        u8AzureTxBuff[i++] = (measVal >> 8);
+                        u8AzureTxBuff[i++] = (measVal >> 16);
+                        u8AzureTxBuff[i++] = (measVal >> 24);
+                        PrintLog(1, "MeasList[" + j + "] = " + measList[j] + " id=" + measId + " val=" + measVal );
+                    }
+
+                
+                }
+                else
+                {
+                    if( measId == 1064 )
+                    {
+                        // Error code so set the associated measId.
+                        measId += (measVal - 1);
+                        measVal = 1;
+                    }
+                    
+                    PrintLog(1, "MeasList[" + j + "] = " + measList[j] + " id=" + measId + " val=" + measVal );
+                                
+                    if( measId != -1 )
+                    {
+                        iNumMeasActual++;
+                    
+                        // Fill in the meas ID
+                        u8AzureTxBuff[i++] = (measId >> 0);               
+                        u8AzureTxBuff[i++] = (measId >> 8);
+                        u8AzureTxBuff[i++] = (measId >> 16);
+                        u8AzureTxBuff[i++] = (measId >> 24);
+            
+                        // Fill in the meas value
+                        u8AzureTxBuff[i++] = (measVal >> 0);              
+                        u8AzureTxBuff[i++] = (measVal >> 8);
+                        u8AzureTxBuff[i++] = (measVal >> 16);
+                        u8AzureTxBuff[i++] = (measVal >> 24);
+                    }
                 }
             }
         }
@@ -846,7 +880,7 @@ const   techMeasIds =
     "Radar Detect Cnt":     1006,   // MEASID_TNU_Radar_Detect_Cnt,
     "NU Dist Metric":       1007,   // MEASID_TNU_Dist_Metric,
     "NU Bars":              1008,   // MEASID_TNU_Bars,
-    "NU ES Err":            1063,   // MEASID_TM_Error_Code_Legacy = 1063,
+    "NU ES Err":            1064,   // MEASID_TM_Error_Code_E1 = 1064,
 
     // TC0M_...
     "CU UNII State":        1028,   // MEASID_TCU_UNII_State = 1028,
@@ -922,6 +956,7 @@ function GetMeasId(dataItemText)
             iRadio = parseInt( rawHead.substring(4,5) );
         }
 
+        // Check to see if the data is radio, i.e. 0 to 3, based.
         if( (iRadio >= 0) && (iRadio <= 3) )
         {
             if( guiTechnologyTypes[iRadio] == 1 )
@@ -955,6 +990,7 @@ function GetMeasId(dataItemText)
         }
         else
         {
+            // Non-radio, just UNII or misc data.
             // Try the non-LTE array
             tempMeasId = techMeasIds[rawDataItem];
             
