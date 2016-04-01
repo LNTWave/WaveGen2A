@@ -599,22 +599,22 @@ function ProcessTechData()
                         {
                             if( iVal & 0x01 )
                             {
-                                iVal = 1; //"True";
+                                iVal = "True";
                             }
                             else
                             {
-                                iVal = 0; //"False";
+                                iVal = "False";
                             }
                         }
                         else if( tag == "Ext Ant In Use" )
                         {
                             if( iVal & 0x81 )   // 0x80 bit to indicate valid and 0x01 to indicate yes.
                             {
-                                iVal = 1; //"Yes";
+                                iVal = "Yes";
                             }
                             else
                             {
-                                iVal = 0; //"No";
+                                iVal = "No";
                             }
                         }
                         
@@ -701,11 +701,11 @@ function ProcessTechData()
                         {
                             if( iVal & 0x01 )   
                             {
-                                iVal = 1; //"Up";
+                                iVal = "Up";
                             }
                             else
                             {
-                                iVal = 0; //"Down";
+                                iVal = "Down";
                             }
                         }
 

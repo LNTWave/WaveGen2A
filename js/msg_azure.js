@@ -217,6 +217,7 @@ function SendCloudTechData(dataText)
             
             if( measPair.length == 2 )
             {
+                measPair   = StandardizeValues(measPair);
                 measId     = GetMeasId(measPair[0]);
                 measVal    = parseInt(measPair[1]);
                 
@@ -231,8 +232,8 @@ function SendCloudTechData(dataText)
                         // Fill in the meas ID
                         u8AzureTxBuff[i++] = (measId >> 0);               
                         u8AzureTxBuff[i++] = (measId >> 8);
-                        u8AzureTxBuff[i++] = (measId >> 16);
-                        u8AzureTxBuff[i++] = (measId >> 24);
+                        u8AzureTxBuff[i++] = 0;                 // reserved
+                        u8AzureTxBuff[i++] = 0;
             
                         // Fill in the meas value
                         u8AzureTxBuff[i++] = (measVal >> 0);              
@@ -262,8 +263,8 @@ function SendCloudTechData(dataText)
                         // Fill in the meas ID
                         u8AzureTxBuff[i++] = (measId >> 0);               
                         u8AzureTxBuff[i++] = (measId >> 8);
-                        u8AzureTxBuff[i++] = (measId >> 16);
-                        u8AzureTxBuff[i++] = (measId >> 24);
+                        u8AzureTxBuff[i++] = 0;                     // reserved
+                        u8AzureTxBuff[i++] = 0;
             
                         // Fill in the meas value
                         u8AzureTxBuff[i++] = (measVal >> 0);              
@@ -1015,8 +1016,62 @@ function GetMeasId(dataItemText)
 
 
 
-
-
+// ----------------------------------------------------------------------------------------------
+//   Convert data values to a common format for Azure.
+//     Input mPair[0] contains the data item and mPair[1] contains the data value.
+//   - Convert True/Yes/Up to 1
+//   - Convert False/No/Down to 0
+//   - Convert all frequencies to 100KHz values
+//   - All power, dB/dBm/Power, multiply by 8.
+//
+function StandardizeValues(mPair) 
+{ 
+    
+    // Separate the TNRx_ heading from the actual tag
+    var rawText = mPair[0].split("_");
+    
+    if( rawText.length == 2 )
+    {
+        var tag     = rawText[1];
+        var tVal    = mPair[1];
+        
+        if( (tVal == "True") || (tVal == "Yes") || (tVal == "Up") )
+        {
+            mPair[1] = 1;
+        }
+        else if( (tVal == "False") || (tVal == "No") || (tVal == "Down") )
+        {
+            mPair[1] = 0;
+        }
+        
+        // If tag contains "Freq" then the following are stored in MHz, need to convert to 100 KHz.
+        //   - DL Center Freq
+        //   - UL Center Freq
+        //   - DL Freq 0 to DL Freq 4
+        //   - Lte Freq
+        //   - Freq Err Res (In units of Hz so do not use. Freq is at index 0)
+        //   - Freq Err Tot (In units of Hz so do not use. Freq is at index 0)
+        else if( (tag.indexOf("Freq") > 0) || (tag == "Bandwidth") )      // -1 no match, 0 indicates that Freq starts at index 0 which we do not want to adjust.
+        {
+            mPair[1] *= 10;     // Convert from MHz to 100 KHz, i.e. 874.0 --> 8740
+        }
+        
+        else if( (tag == "NU 5G") || (tag == "CU 5G") )      
+        {
+            mPair[1] *= 10000;     // Convert from GHz to 100 KHz, i.e. 5.28 --> 52800
+        }
+        
+        else if( (tag.indexOf("RSSI") >= 0) || (tag.indexOf("RSCP") >= 0) || (tag.indexOf("ECIO") >= 0)   || (tag.indexOf("Gain") >= 0) || 
+                 (tag.indexOf("RSRP") >= 0) || (tag.indexOf("RSRQ") >= 0) || (tag.indexOf("Tx Pwr") >= 0) || (tag.indexOf("Tx Power") >= 0) )      // -1 no match
+        {
+            mPair[1] *= 8;     // Convert power to *8
+        }
+        
+        
+    }
+    
+    return(mPair);
+}
 
 
 
