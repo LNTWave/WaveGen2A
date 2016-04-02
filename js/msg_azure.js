@@ -1056,7 +1056,7 @@ function StandardizeValues(mPair)
             mPair[1] *= 10;     // Convert from MHz to 100 KHz, i.e. 874.0 --> 8740
         }
         
-        else if( (tag.indexOf("NU 5G") > 0) || (tag.indexOf("CU 5G") > 0) )      
+        else if( (tag.indexOf("NU 5G") >= 0) || (tag.indexOf("CU 5G") >= 0) )      
         {
             mPair[1] *= 10000;     // Convert from GHz to 100 KHz, i.e. 5.28 --> 52800
         }
